@@ -1,0 +1,51 @@
+﻿@using TypeMasterAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@using PagedList
+@using PagedList.Mvc;
+
+@{
+    Layout = null;
+    db_KISDEntities objContext = new db_KISDEntities();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+
+    int TypeMasterID = Convert.ToInt32(TypeMasterAlias.Video);
+    var Videos = objContext.GalleryListings.Where(x => x.IsDeletedInd == false
+              && x.StatusInd == true && x.TypeMasterID.Value == TypeMasterID)
+              .OrderBy(x => x.DisplayOrderNbr).ToList();
+    int PageSize = 20;//KISD.Areas.Admin.Models.Common._pageSize;
+    var IsPagingVisible = Videos.Count > PageSize;
+    int pageNumber = (!string.IsNullOrEmpty(Request.QueryString["page"]) ? Convert.ToInt32(Request.QueryString["page"]) : KISD.Areas.Admin.Models.Common._currentPage);
+    IPagedList<GalleryListing> PagedVideos = Videos.ToPagedList(pageNumber, PageSize);
+}
+
+@if (PagedVideos.Count() > 0)
+{
+    <ul class="video-list">
+        @foreach (var item in PagedVideos)
+        {
+            <li>
+                <div class="audio-container">
+                    <div class="video_top_title">
+                        <div class="audio_top_buttton">
+                            <a href="@item.URLTxt"><span id="play" class="video-play-btn"></span></a>
+                        </div>
+                        <div class="video-title">
+                            <a href="@item.URLTxt">@item.TitleTxt</a>
+                        </div>
+                    </div>
+                    <div class="audio_bottom_details">
+                        <div class="audio-author">By: <span class="audio-author-name">@item.AuthorTxt</span></div>
+                        <div class="audio-date-added">@item.ListingCreateDate.Value.ToString("MM/dd/yyyy")</div>
+                    </div>
+                </div>
+            </li>
+        }
+    </ul>
+
+    if (IsPagingVisible && PagedVideos.PageCount > 1)
+    {
+        <div class="pagination-listing">           
+                @Html.PagedListPager(PagedVideos, page => Url.Action("Content", new { page }))            
+        </div>
+    }
+}

@@ -1,0 +1,101 @@
+﻿@using TypeMasterAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@using PagedList
+@using PagedList.Mvc;
+
+@{
+    Layout = null;
+    db_KISDEntities objContext = new db_KISDEntities();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+
+    int TypeMasterID = Convert.ToInt32(TypeMasterAlias.FAQ);
+    var FAQs = objContext.GalleryListings.Where(x => (x.IsDeletedInd == false || x.IsDeletedInd == null)
+      && x.StatusInd == true && x.TypeMasterID == TypeMasterID)
+      .OrderBy(x => x.DisplayOrderNbr).ToList();
+    int PageSize = 20;// KISD.Areas.Admin.Models.Common._pageSize;
+    var IsPagingVisible = FAQs.Count > PageSize;
+    int pageNumber = (!string.IsNullOrEmpty(Request.QueryString["page"]) ? Convert.ToInt32(Request.QueryString["page"]) : KISD.Areas.Admin.Models.Common._currentPage);
+    IPagedList<GalleryListing> PagedFAQs = FAQs.ToPagedList(pageNumber, PageSize);
+    int counter = 1;
+
+    bool FAQByCategory = !string.IsNullOrEmpty(ViewBag.FAQByCategory) ? true : false;
+    int FAQCategoryTypeMasterID = Convert.ToInt32(TypeMasterAlias.FAQCategory);
+    var FAQCategories = objContext.GalleryListings.Where(x => (x.IsDeletedInd == false || x.IsDeletedInd == null)
+     && x.StatusInd == true && x.TypeMasterID == FAQCategoryTypeMasterID)
+     .OrderBy(x => x.DisplayOrderNbr).ToList();
+    IPagedList<GalleryListing> PagedCategories = FAQCategories.ToPagedList(pageNumber, PageSize);
+    var IsPagedCategoriesPagingVisible = FAQCategories.Count > PageSize;
+}
+
+<link href="~/scripts/Frontend/css/accordion.css" rel="stylesheet" />
+
+@if (PagedFAQs.Count() > 0)
+{
+
+    if (!FAQByCategory)
+    {
+        <ul class="faq-cont without-cate">
+            @foreach (var item in PagedFAQs)
+            {
+                var _id = "accordion" + @item.ListingID;
+                <li>
+                    <div class="faq-box-que" id=@_id>
+                        <h3>@item.TitleTxt</h3>
+                        <div>
+                            <p>@item.DescriptionTxt</p>
+                        </div>
+                    </div>
+                </li>
+
+            }
+        </ul>
+
+        if (IsPagingVisible && PagedFAQs.PageCount > 1)
+        {
+            <div class="pagination-listing">
+                <div class="pagination-container">
+                    @Html.PagedListPager(PagedFAQs, page => Url.Action("Content", new { page }))
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <ul class="faq-cont">
+            @foreach (var item in PagedCategories)
+            {
+                if (FAQs.Where(x => x.ParentID == @item.ListingID).ToList().Count() > 0)
+                {
+                    <li>
+                        <div class="faq-box">@item.TitleTxt</div>
+
+                        @foreach (var cat in FAQs.Where(x => x.ParentID == @item.ListingID).ToList())
+                        {
+
+                            var _Qid = "accordionx" + @cat.ListingID;
+
+                            <div class="faq-box-que" id=@_Qid>
+                                <h3>@cat.TitleTxt</h3>
+                                <div>
+                                    <p>@cat.DescriptionTxt</p>
+                                </div>
+                            </div>
+                        }
+                    </li>
+                }
+
+            }
+        </ul>
+        if (IsPagedCategoriesPagingVisible && PagedCategories.PageCount > 1)
+        {
+            <div class="pagination-listing">
+                <div class="pagination-container">
+                    @Html.PagedListPager(PagedCategories, page => Url.Action("Content", new { page }))
+                </div>
+            </div>
+        }
+
+    }
+
+}
+

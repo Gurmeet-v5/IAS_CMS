@@ -1,0 +1,65 @@
+﻿@using KISD.Areas.Blog.Models;
+
+@model ContentModel
+@{
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : "")) + "/Blog";
+    AppPath = KISD.Areas.BlogAdmin.Models.Common.ReturnValidPath(AppPath);
+    var IsSearchEnabled = Model.SettingList == null ? false : Model.SettingList.Select(x => x.IsSearchEnabled).FirstOrDefault();
+    var ImgAppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+}
+<header id="header">
+    <!-- #Header -->
+    <div class="container">
+        <!-- container -->
+        @if (Model.HeaderList.Any())
+        {
+            foreach (var item in Model.HeaderList)
+            {
+                <h1 class="logo"><a href="@AppPath"><img src="@ImgAppPath@Html.Raw(item.ImagePathTxt.Replace("~/", "/"))" alt="@Html.Raw(item.AltImgTxt)" title="@Html.Raw(item.TitleTxt)" /><span hidden>Logo</span></a></h1>
+
+                @Html.Raw(item.DescriptionTxt)
+            }
+        }
+    </div><!-- end container -->
+
+
+    <div class="blue main-menu">
+        <!-- main-menu -->
+        <div class="container">
+            <!-- container -->
+            <nav class="shift-left">
+                <!-- shift-left -->
+                <div class="toggle-menu">
+                    <!-- toggle-menu -->
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div><!-- end toggle-menu -->
+                <ul class="menu">
+                    <li>
+                        <a href="@AppPath">Home</a>
+                    </li>
+                </ul>
+            </nav><!-- end shift-left -->
+            @using (Html.BeginForm("Index", "Home", routeValues: new {  },method: FormMethod.Get, htmlAttributes: new { id = "formHeader", name = "formHeader", enctype = "multipart/form-data", @class = "head-search" }))
+            {
+                if (IsSearchEnabled == true)
+                {
+                    @*<form action="" class="head-search" method="get">*@
+                <!-- search -->
+                    <input type="text" name="search" placeholder="Search" title="Search" id="search-header" maxlength="200" />
+                    <input type="Submit" value="Submit" id="btnSearch" />
+                    <input type="hidden" value="Blog_Search" id="hdnSearchType" />
+                    @*</form>*@<!-- end search -->
+                }
+            }
+        </div><!-- end container -->
+    </div><!-- end main-menu -->
+</header>
+
+<script type="text/javascript">
+
+
+</script>

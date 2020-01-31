@@ -1,0 +1,234 @@
+﻿@using System.Web.Optimization;
+@using KISD.Areas.BlogAdmin.Contexts;
+@{
+    var RoleID = string.Empty;
+    var UsersRolesContext = new UsersRolesContext().GetUsersRoles();
+    var UsersContexts = new UsersContexts().GetAccountUsers();
+    var IsLoginUserCount = UsersContexts.Where(x => x.StatusInd == true && x.UserNameTxt == User.Identity.Name.ToString()).Count();
+    var UserType = from ur in UsersRolesContext join uc in UsersContexts on ur.UserID equals uc.UserID where ur.RoleID == 1 && uc.UserNameTxt == User.Identity.Name.ToString() && uc.StatusInd == true select (uc.UserNameTxt);
+
+    if (UserType.Count() > 0)
+    {
+        RoleID = "1";// For Administrator
+    }
+    else
+    {
+        RoleID = "0";
+    }
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Killeen ISD</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0;" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--[if lt IE 9]>
+        <script src="https://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="~/Areas/BlogAdmin/Scripts/dist/css/normalize.css" rel="stylesheet" />
+    <link href="~/Areas/BlogAdmin/Scripts/dist/css/stylesheet.css" rel="stylesheet" />
+    <link href="~/Areas/BlogAdmin/Scripts/dist/css/selectize.default.css" rel="stylesheet" />
+
+    @Styles.Render("~/Scripts/BlogAdmin/css/default.css")
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css' />
+    <link href="@Href("~/Scripts/Frontend/images/favicon.png")" rel="shortcut icon" type="image/x-icon" />
+    <script type="text/javascript" src="@Url.Content("~/Areas/BlogAdmin/Scripts/jquery-1.10.2.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Areas/BlogAdmin/Scripts/menu/classie.js")"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+</head>
+<body ontouchstart>
+    <header>
+        <!-- header -->
+        <div class="meanmenu-reveal">
+            <button id="showLeft"></button>
+        </div>
+        <div class="logo">
+            <a id="anklogo" href='@Url.Action("Index", "Home")'>
+                <img src="~/scripts/Admin/images/admin-logo.png" />
+            </a>
+        </div>
+        @Html.Partial("_LoginPartial")
+    </header>
+    <!-- header Ends -->
+
+    <section>
+        <div class="success message" id="notifyDiv" style="display: none;">
+            <h3 id="notifyMsg"></h3>
+        </div>
+
+        <!-- Section -->
+        <div class="sidebar " id="divmenu">
+            <!-- Sidebar -->
+            <nav id="cbp-spmenu-s1" class="hidemeanmenu">
+                <ul>
+                    <li>
+                        <a id="ankMainDash" href='@Url.Action("Index", "Home", null)'>
+                            <i class="icon-th"></i>Dashboard
+                        </a>
+                    </li>
+                    <li id="blog_managemaster">
+                        <a href="#" id="ankmaster"><i class="icon-reorder"></i>Manage Masters</a>
+                        <ul>
+                            <li>
+                                @Html.ActionLink("Categories", "BlogCategoriesListing", "Categories", null, new { id = "ankcategories" })
+                            </li>
+
+                            <li>
+                                @Html.ActionLink("Tags", "BlogTagsListing", "Tags", null, new { id = "anktags" })
+                            </li>
+                        </ul>
+                    </li>
+
+                    @if (RoleID == "1")
+                    {
+                        <li>
+                            <a href="@Url.Action("BlogUserListing", "User", null)" id="blog_usermanagement"><i class="fa fa-users"></i>User Management</a>
+                        </li>
+                    }
+
+                    @if (RoleID == "1")
+                    {
+                        <li id="blog_emails">
+                            <a href="#" id="ankmasteremails"><i class="icon-envelope"></i>Email</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("From Email", "BlogEmailListing", "Emails", new { emailtype = Convert.ToInt32(EmailsContexts.EmailType.From_Email) }, new { id = "ankfromemail" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("To Email", "BlogEmailListing", "Emails", new { emailtype = Convert.ToInt32(EmailsContexts.EmailType.To_Email) }, new { id = "anktoemail" })
+                                </li>
+                            </ul>
+                        </li>
+                        <li id="blogcontent">
+                            <a href="#" id="ankmasterecontent"><i class="icon-file-alt"></i>Content</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("Header", "CreateContent", "Content", new { ContentType = Convert.ToInt32(ContentContexts.ContentType.Header), Contentid = 0 }, new { id = "ankheader" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Footer", "CreateContent", "Content", new { ContentType = Convert.ToInt32(ContentContexts.ContentType.Footer), Contentid = 0 }, new { id = "ankfooter" })
+                                </li>
+                            </ul>
+                        </li>
+                    }
+
+                    <li>
+                        <a href="@Url.Action("BlogsListing", "Blogs", null)" id="ankmasterposts"><i class="icon-edit"></i>Post</a>
+                    </li>
+
+                    <li id="blog_settings">
+                        <a href="#" id="ankmastersetting"><i class="fa 	icon-cog "></i>Settings</a>
+                        <ul>
+                            <li>
+                                @Html.ActionLink("Basic", "CreateContent", "Content", new { ContentType = Convert.ToInt32(ContentContexts.ContentType.BasicSetting) }, new { id = "ankbasicsetting" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Theme", "CreateContent", "Content", new { ContentType = Convert.ToInt32(ContentContexts.ContentType.ThemeSetting) }, new { id = "ankthemesetting" })
+                            </li>
+                            <li>
+                                @Html.ActionLink("Email", "CreateContent", "Content", new { ContentType = Convert.ToInt32(ContentContexts.ContentType.EmailSetting) }, new { id = "ankemailsetting" })
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- Sidebar Ends -->
+
+        <div class="content" id="divcontent">
+            @RenderBody()
+        </div>
+
+    </section>
+    <!-- Section Ends -->
+    <footer>
+        <!-- Footer -->
+        @*  Copyright
+            @System.DateTime.Now.Year.ToString(). All Rights Reserved<br />*@
+    </footer>
+    <!-- Footer Ends -->
+    <script>
+        $(document).ready(function () {
+            if ('@IsLoginUserCount' == 0)
+            {
+                var url = '@Url.Action("Login", "Account", new {  })';
+                window.location.href = url;
+            }
+        });
+
+        $(document).ready(function () {
+            $('#cbp-spmenu-s1').mouseover(function () {
+                $('select').blur();
+            });
+        });
+
+        $(document).ready(function () {
+            $('.message').click(function () {
+                $(this).animate({ top: -$(this).outerHeight() }, 500);
+                $('#notifyDiv').hide();
+            });
+            setmenuheight();
+            setInterval('setmenuheight()', 1000);
+            $('.suggestion').click(function () {
+                if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                    $('.mobiletooltip').html('');
+                    $('.mobiletooltip').append('<span class="suggestiontitle">' + $(this).attr("title") + '</span>');
+                }
+                window.setTimeout("RemoveMobileTooltip()", 5000);
+            });
+        });
+        function setmenuheight() {
+            var mheight = $('#divmenu').height();
+            var cheight = $('#divcontent').height();
+            var winheight = $(window).height();
+            if (cheight > mheight) {
+                var h = (parseFloat(cheight) + 100) + 'px';
+                $('#divmenu').height(h);
+            }
+            else if (winheight > mheight) {
+                var h = (parseFloat(winheight)) + 'px';
+                $('#divmenu').height(h);
+            }
+        }
+
+        function RemoveMobileTooltip() {
+            $('.mobiletooltip').html('');
+        }
+
+        function RemoveFileuploader() {
+            $('.cropedfileupload').val('');
+        }
+
+        function RentalTypeRemoveFileuploader(name) {
+            $('.' + name).val('');
+        }
+
+        function showprogress() {
+            $('#uploaderprocess').show();
+            $('.customprogressbar').show();
+        }
+        function hideprogress() {
+            $('#uploaderprocess').hide();
+            $('.customprogressbar').hide();
+        }
+
+        $(document).ready(function () {
+            $('#cbp-spmenu-s1').mouseover(function () {
+                $('select').blur();
+            });
+        });
+
+    </script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/js/menu/meanmenu.js")"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#cbp-spmenu-s1').mouseover(function () {
+                $('select').blur();
+            });
+        });
+    </script>
+</body>
+</html>

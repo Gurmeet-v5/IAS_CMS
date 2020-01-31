@@ -1,0 +1,503 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using NewsEventTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+
+@model PagedViewModel<NewsEventModel>
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    string Listingtype = Convert.ToString(ViewBag.ImageTypeId) ?? string.Empty;
+    var TypeMasterID = Request.QueryString["mt"] != null ? Request.QueryString["mt"].ToString() : EncryptDecrypt.Encrypt("0");
+    var DepartmentID = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : EncryptDecrypt.Encrypt("0");
+    var type = EncryptDecrypt.Decrypt(TypeMasterID);
+    var SortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "EventCreateDate";
+    var SortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Descending";
+    var Pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var PagerID = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "")
+                   + "/Admin/NewsEvent/Index?mt=" + TypeMasterID + "&pid="+DepartmentID+"&page=1&Column=" + SortColumn + "&Direction=" + SortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+    var initialPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+(HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+}
+
+<div class="Main_PartialHeader">
+    <!-- widget-header Ends -->
+    <div class="pager paging-top">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style" id="divPager">
+                <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+        }
+        <!-- pagination -->
+    </div>
+    @*wrapper*@
+    <div class="wrapper_partial">
+        <div class="tab-pane active">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.News).ToString())
+               {
+                   column.For(x => !string.IsNullOrEmpty(x.ImageURLTxt) ?
+                       "<img width='100px' height='70px' src='" + @Href(x.ImageURLTxt).Replace("~/", "").Replace("images", "thumbnails") + "' title='" + x.TitleTxt + "' alt='" + (!string.IsNullOrEmpty(x.AltBannerImageTxt) ? x.AltBannerImageTxt : x.TitleTxt) + "'>" :      /**/
+                       "<img src=\"" + @Href("~/WebData/Images/NoImage.jpg") + "\">").Named("Image").Encode(false).Sortable(false).HeaderAttributes(@style => "width:10%", @align => "left").Attributes(@class => "left");
+               }
+               column.For(x => x.TitleTxt).Named("Title").SortColumnName("TitleTxt").Sortable(true).HeaderAttributes(@style => "width:25%", @class => "left sort", @align => "left").Attributes(@class => "left maxtitletxt");
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.Events).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.ManageEvents).ToString())
+               {
+                   column.For(x => x.EventDate.Value).Named("Event Date").SortColumnName("EventDate").HeaderAttributes(@class => "sort", @style => "width:15%", @align => "center").Attributes(@align => "center");
+               }
+               if (EncryptDecrypt.Decrypt(TypeMasterID) != Convert.ToInt32(NewsEventTypeAlias.ManageEvents).ToString())
+               {
+                   column.For(x => Html.CheckBox("showonhome", x.ShowOnHomeInd.Value, new { @class = "checkboxhome", @text = AppPath, @value = x.NewsEventID })).Encode(false).Header("<th data-hide='phone' style='width:10%' align='center'>Show On Home</th>").Attributes(@align => "center");
+               }
+               column.For(x => Html.CheckBox("mycheckbox", x.StatusInd.Value, new { @class = "checkbox", @value = x.NewsEventID, @text = AppPath })).Encode(false).Header("<th data-hide='phone' style='width:10%' align='center'>Status</th>").Attributes(@align => "center");
+               column.For(x => x.EventCreateDate.Value.ToShortDateString()).Named("Date Added").SortColumnName("EventCreateDate").HeaderAttributes(@class => "sort", @style => "width:15%", @align => "center").Attributes(@align => "center");
+               //if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.News).ToString())
+               //{
+               //    column.For(x => Html.ActionLink("Manage", "RightSectionListing", "RightSection"
+               //                              , new
+               //                              {
+               //                                  ct = EncryptDecrypt.Encrypt(x.NewsEventID.ToString()),
+               //                                  mtid = EncryptDecrypt.Encrypt((Convert.ToInt64(NewsEventTypeAlias.NewsListing)).ToString()),
+               //                                  pagesize = Request.QueryString["pagesize"] ?? "10",
+               //                                  page = Request.QueryString["page"] ?? "1",
+               //                                  Column = Request.QueryString["Column"] ?? "RightSectionCreateDate",
+               //                                  Direction = Request.QueryString["Direction"] ?? "Descending"
+               //                              }, new { target = "_blank" })).Named("Manage Right Section").Sortable(false)
+               //                                     .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+               //                                     .Attributes(@align => "center", @title => "Manage Right Section");
+               //}
+               column.For(x => Html.ActionLink("Edit", "Create", "NewsEvent",
+                   new
+                   {
+                       mt = EncryptDecrypt.Encrypt(x.TypeMasterID.ToString()),
+                       nid = EncryptDecrypt.Encrypt(x.NewsEventID.ToString()),
+                       pid = EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                       pagesize = Pagesize,
+                       page = PagerID,
+                       Column = SortColumn,
+                       Direction = SortDirection
+                   }
+                   , new { @class = "edit", @title = "Edit" })).Named("Edit").Sortable(false)
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                        .Attributes(@align => "center");
+               column.For(x => Html.ActionLink("Delete", "Delete", "NewsEvent",
+                   new
+                   {
+                       mt = EncryptDecrypt.Encrypt(x.TypeMasterID.ToString()),
+                       nid = EncryptDecrypt.Encrypt(x.NewsEventID.ToString()),
+                       pagesize = Pagesize,
+                       page = PagerID,
+                       Column = SortColumn,
+                       Direction = SortDirection
+                   }, new { @class = "delete PostLink", @val = x.TitleTxt, @title = "Delete" })).Sortable(false).Named("Delete")
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" } })
+                       .Attributes(@align => "center");
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @*wrapper end *@
+    <div class="pager">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style">
+                <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+        }
+        <!-- pagination -->
+    </div>
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+    <div class="shadow common_hide"></div>
+    <div id="loader" class="loader common_hide"> </div>
+    <div id="manage-sections" class="common_hide manage-sections">
+        <a href="#" class="close_popup" title="Close"><span hidden>Close</span></a>
+        <div id='page-content'></div>
+    </div>
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+</div>
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+
+
+    $(document).ready(function () {
+        var txt = $('.PageURLTxtww').text();
+        if (txt != '') {
+            var path = '@initialPath';
+            $('.PageURLTxtww').prepend(path + "/");
+        }
+    });
+
+
+    //Confirmation for deleting the image
+    $(document).ready(function () {
+        $("a.PostLink").click(function (e) {
+            e.preventDefault();
+            if (window.confirm('Do you want to delete ' + $(this).attr('val') + '?')) {
+                $.post($(this).attr("href"), function (data) {
+                    // got the result in data variable.
+                    //redirect to the index action method of Image Controller
+                    window.location.href = data;
+                });
+            }
+        });
+    });
+
+    var alertmessage = '@alertmessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".checkbox").prop("disabled", true);
+        $(".checkboxhome").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".checkbox").prop("disabled", false);// Make status check box enable after message hides
+        $(".checkboxhome").prop("disabled", false);
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+    var _FilterUserName = $("#Title").val();
+    var _Date = $("#strDate").val();
+    var _FilterFromDate = $("#strFromDate").val();
+    var _FilterToDate = $("#strToDate").val();
+    var _CreateDate = $("#strCreateDate").val();
+    var _Status = $("#status").val();
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _FilterFromDate,
+            qs_FilterToDate: _FilterToDate,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status,
+            qs_CreateDate: _CreateDate,
+            qs_Date:_Date
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _FilterFromDate,
+            qs_FilterToDate: _FilterToDate,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status,
+            qs_CreateDate: _CreateDate,
+            qs_Date: _Date
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _FilterFromDate,
+            qs_FilterToDate: _FilterToDate,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status,
+            qs_CreateDate: _CreateDate,
+            qs_Date: _Date
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax call for status check box Active/Inactive
+    $('.checkbox').click(function () {
+        var qs_shownonhomevalue; var qs_checkboxselected; var qs_value;
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        pager = pager == 'All' ? '0' : pager;
+        var hfid; var hfvalue;
+        var qs_Type = $(this).attr('id');
+        var chkshowonhone = $(this).parent().prevAll().has(":checkbox").first().find(":checkbox");
+        if (chkshowonhone.is(':checked')) {
+
+            qs_shownonhomevalue = "1";
+        }
+        else {
+
+            qs_shownonhomevalue = "0";
+        }
+        if ($(this).is(':checked')) {
+            qs_checkboxselected = $(this).attr('value');
+            qs_value = "1";
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            qs_checkboxselected = $(this).attr('value');
+            qs_value = "0";
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager + '&hfid=' + hfid + '&hfvalue=' + hfvalue;//passing pager =(dropdown page no value), hfid=image ID, hfvalue= 1,0 for active or inactive
+        //url = url + '&ajaxcall=status';//ajaxcall parameter is used to define which ajax call if posted ;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: qs_shownonhomevalue,
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: 'status',
+            qs_FilterFromDate: _FilterFromDate,
+            qs_FilterToDate: _FilterToDate,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status,
+            qs_CreateDate: _CreateDate,
+            qs_Date: _Date
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax call for status check box Show On Home
+    $('.checkboxhome').click(function () {
+        var qs_shownonhomevalue; var qs_checkboxselected; var qs_value;
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        pager = pager == 'All' ? '0' : pager;
+        var hfid; var hfvalue;
+        var qs_Type = $(this).attr('id');
+        var chkactive = $(this).parent().nextAll().has(":checkbox").first().find(":checkbox");
+        if (chkactive.is(':checked')) {
+
+            qs_value = "1";
+        }
+        else {
+
+            qs_value = "0";
+        }
+        if ($(this).is(':checked')) {
+            qs_checkboxselected = $(this).attr('value');
+            qs_shownonhomevalue = "1";
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            qs_checkboxselected = $(this).attr('value');
+            qs_shownonhomevalue = "0";
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager + '&hfid=' + hfid + '&hfvalue=' + hfvalue;//passing pager =(dropdown page no value), hfid=image ID, hfvalue= 1,0 for active or inactive
+        //url = url + '&ajaxcall=status';//ajaxcall parameter is used to define which ajax call if posted ;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: qs_shownonhomevalue,
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type,
+            qs_FilterFromDate: _FilterFromDate,
+            qs_FilterToDate: _FilterToDate,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status,
+            qs_CreateDate: _CreateDate,
+            qs_Date: _Date
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+
+            }
+        });
+
+        return false;
+    });
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    function ShowInnerPages(cid, tmid) {
+        $('.shadow').removeClass('common_hide');
+        $('.shadow').addClass('common_show');
+        $('.loader').removeClass('common_hide');
+        $('.loader').addClass('common_show');
+        var URL = '/Admin/NewsEvent/ManageRightSections';
+        $(function () {
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: URL,
+                data: { "ContentID": cid, "TypeMasterID": tmid, "IsFromMenu": false },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $('#page-content').html(data);
+                    $('.shadow').removeClass('common_hide');
+                    $('.shadow').addClass('common_show');
+                    $('.loader').removeClass('common_show');
+                    $('.loader').addClass('common_hide');
+                    $('#manage-sections').removeClass('common_hide');
+                    $('#manage-sections').addClass('common_show');
+                    return false;
+                },
+                error: function () {
+                    $('.shadow').removeClass('common_show');
+                    $('.shadow').addClass('common_hide');
+                    $('.loader').removeClass('common_show');
+                    $('.loader').addClass('common_hide');
+                    $('#manage-sections').removeClass('common_show');
+                    $('#manage-sections').addClass('common_hide');
+                }
+            });
+        });
+    }
+
+    $('.close_popup').click(function () {
+        //location.reload();
+        $('.shadow').removeClass('common_show');
+        $('.shadow').addClass('common_hide');
+        $('.loader').removeClass('common_show');
+        $('.loader').addClass('common_hide');
+        $('#manage-sections').removeClass('common_show');
+        $('#manage-sections').addClass('common_hide');
+    });
+</script>

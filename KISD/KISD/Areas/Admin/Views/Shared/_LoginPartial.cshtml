@@ -1,0 +1,27 @@
+﻿@{ Layout = null; }
+
+
+<div class="dropdown-user" onClick="return true">
+    <ul>
+        <li>
+            <i class="icon-male"></i>
+            <span class="username">Welcome @Html.Label(User.Identity.Name)</span>
+            <i class="icon-caret-down"></i>
+            <ul>
+                <li>
+                    <a id="ankChangePassword" href='@Url.Action("ChangePassword", "Account")'>
+                        <i class="icon-tasks"></i>
+                        Change Password
+                    </a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a id="anklogout" href='@Url.Action("LogOff", "Account")'>
+                        <i class="icon-key"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

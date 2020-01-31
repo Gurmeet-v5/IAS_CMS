@@ -1,0 +1,54 @@
+﻿@using TypeMasterAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@using PagedList
+@using PagedList.Mvc;
+
+@{
+    Layout = null;
+    db_KISDEntities objContext = new db_KISDEntities();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+
+    int TypeMasterID = Convert.ToInt32(TypeMasterAlias.Podcast);
+    var Podcasts = objContext.GalleryListings.Where(x => x.IsDeletedInd == false
+              && x.StatusInd == true && x.TypeMasterID.Value == TypeMasterID)
+              .OrderBy(x => x.DisplayOrderNbr).ToList();
+    int PageSize = 20;//KISD.Areas.Admin.Models.Common._pageSize;
+    var IsPagingVisible = Podcasts.Count > PageSize;
+    int pageNumber = (!string.IsNullOrEmpty(Request.QueryString["page"]) ? Convert.ToInt32(Request.QueryString["page"]) : KISD.Areas.Admin.Models.Common._currentPage);
+    IPagedList<GalleryListing> PagedPodcasts = Podcasts.ToPagedList(pageNumber, PageSize);
+}
+
+@if (PagedPodcasts.Count() > 0)
+{
+    <ul class="video-list">
+        @foreach (var item in PagedPodcasts)
+        {
+            <li>
+                <div class="audio-container">
+                    <a href="@item.URLTxt">
+                        <div class="audio_top_title">
+                            <div class="audio_top_buttton">
+                              &nbsp;
+                            </div>
+
+                        </div>
+                    </a>
+                        <div class="audio_bottom_details">
+                            <div class="audio-title">
+                                <a href="@item.URLTxt">@item.TitleTxt</a>
+                            </div>
+                            <div class="audio-author">By: <span class="audio-author-name">@item.AuthorTxt</span></div>
+                            <div class="audio-date-added">@item.ListingCreateDate.Value.ToString("MM/dd/yyyy")</div>
+                        </div>
+</div>
+            </li>
+        }
+    </ul>
+
+    if (IsPagingVisible && PagedPodcasts.PageCount > 1)
+    {
+        <div class="pagination-listing">           
+                @Html.PagedListPager(PagedPodcasts, page => Url.Action("Content", new { page }))            
+        </div>
+    }
+}

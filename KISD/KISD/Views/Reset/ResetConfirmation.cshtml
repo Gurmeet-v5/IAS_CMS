@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = "~/Views/Shared/ResetLayout.cshtml";
+    ViewBag.Title = "Reset Password";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+}
+@using (Html.BeginForm("ResetPassword", "Reset"))
+{
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+    <div class="logo">
+        <img alt="KISD" title="KISD" src="~/scripts/Frontend/images/Kisd-logo.png" />
+    </div>
+    <div class="box">
+        <!-- Wrapper -->
+        <div class="content">
+            <!-- widget -->
+            <h3 class="form-title">Reset Password Confirmation</h3>
+           
+            <div class="row">
+                <div class="wrapper">
+                    <label>
+                        <div style="display:inline-block; width:100%; text-align:center; font-weight:bold;color:#575757;">
+                            Your password has been updated successfully. A confirmation email sent to your registered email address.
+                        </div>
+                    </label>
+                </div>
+                <div class="col40">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="common-center">
+                    @Html.ActionLink("Back to Login", "Login", "Account", new {Area="Admin" }, new { @class = "common-bold" })
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script src="~/Scripts/js/jquery.jgrowl.min.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.js"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js"></script>
+<script type="text/javascript">
+    $("#OldPassword").focus();
+    var message = '@message';
+
+    if (message)
+        $.jGrowl(message, true);
+
+</script>
+

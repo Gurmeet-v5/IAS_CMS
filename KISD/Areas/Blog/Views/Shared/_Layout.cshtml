@@ -1,0 +1,42 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=@ViewBag.NevigationBarFontFamily">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=@ViewBag.SidebarTitleFontFamily">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=@ViewBag.PostTitleFontFamily">
+    @*<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>*@
+
+    <title>@ViewBag.Title</title>
+    @*<meta title="@ViewBag.MetaTitle" />*@
+    <meta name="description" content='@ViewBag.MetaDescription' />
+    <!-- CSS styles -->
+    <link rel='stylesheet' type='text/css' href="~/Scripts/BlogFrontEnd/css/base.css">
+    <!-- /CSS styles -->
+    <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+    <link href="@Href("~/Scripts/Frontend/images/favicon.png")" rel="shortcut icon" type="image/x-icon" />
+    <script src="~/Scripts/BlogFrontEnd/js/jquery-1.12.3.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.toggle-menu').click(function () {
+                $('.menu').toggle(100);
+            });
+            $('.message').click(function () {
+                $(this).animate({ top: -$(this).outerHeight() }, 3000);
+                $('#notifyDiv').hide();
+            });
+        }); 
+    </script>
+</head>
+<body>
+    <div class="success message common_hide" id="notifyDiv">
+        <h3 id="notifyMsg"></h3>
+    </div>
+    @{Html.RenderAction("HeaderSection", "Content");}@*For header*@
+    <main id="main" tabindex="-1">
+        @RenderBody()  @*For content pages*@
+    </main>
+    @{Html.RenderAction("FooterSection", "Content");}@*For Footer*@
+</body>
+</html>

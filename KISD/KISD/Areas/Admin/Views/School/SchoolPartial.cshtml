@@ -1,0 +1,431 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using KModel = KISD.Areas.Admin.Models;
+@using TypeMasterAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+
+@model KModel.PagedViewModel<KModel.SchoolModel>
+@{
+    Layout = null;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+
+    var si = Request.QueryString["si"] != null ? Request.QueryString["si"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var tmi = Request.QueryString["tmi"] != null ? Request.QueryString["tmi"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var decrytedtmi = Request.QueryString["tmi"] != null ? KModel.EncryptDecrypt.Decrypt(Request.QueryString["tmi"].ToString()) : "0";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) +
+          (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+          (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : "")) +
+          "/Admin/School/Index?si=" + si + "&tmi=" + tmi + "&page=1&Column=" +
+          (Request.QueryString["Column"] ?? "SchoolCreateDate") + "&Direction=" + (Request.QueryString["Direction"] ?? "Descending") + "&pagesize=";
+
+    var initialPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) +
+                      (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                      (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    initialPath = KModel.Common.ReturnValidPath(initialPath);
+    AppPath = KModel.Common.ReturnValidPath(AppPath);
+}
+
+<div class="Main_PartialHeader">
+    <!-- widget-header Ends -->
+    @if (Model != null)
+    {
+        <div class="pager paging-top">
+            <!-- pager -->
+            @if (Model.PagedList.Any())
+            {
+                <div class="select-style" id="divPager">
+                    <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                        <option value="@(AppPath)10" text="10">10</option>
+                        <option value="@(AppPath)25" text="25">25</option>
+                        <option value="@(AppPath)50" text="50">50</option>
+                        <option value="@(AppPath)100" text="100">100</option>
+                        <option value="@(AppPath)0" text="0">All</option>
+                    </select>
+                </div>
+                @*<div class="pagination">*@
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+                @*</div>*@
+            }
+            <!-- pagination -->
+        </div>
+        @*wrapper*@
+        <div class="wrapper_partial">
+            <div class="tab-pane active">
+                @if (Model.PagedList.Any())
+                {
+                    @Html.Grid(Model.PagedList).Columns(column =>
+               {
+                   column.For(x => x.NameTxt).Named(decrytedtmi == @Convert.ToInt32(TypeMasterAlias.SchoolCategory).ToString() ? "School Category" : "School Name").SortColumnName("NameTxt").HeaderAttributes(@style => "width:" + (decrytedtmi == @Convert.ToInt32(TypeMasterAlias.SchoolCategory).ToString() ? "55%" : "27%"), @class => "left sort", @align => "left").Attributes(@class => "left maxPageTitleTxt");
+
+                   if (decrytedtmi == @Convert.ToInt32(TypeMasterAlias.School).ToString())
+                   {
+                       column.For(x => x.SchoolCategoryName).Named("School Category").SortColumnName("SchoolCategoryName").HeaderAttributes(@style => "width:27%", @class => "left sort", @align => "left").Attributes(@class => "left maxPageTitleTxt");
+                   }
+
+                   column.For(x => Html.CheckBox("mycheckbox", x.StatusInd, new { @class = "checkbox status", @text = AppPath, @value = x.SchoolID })).Encode(false).Header("<th style='width:10%'  data-hide='phone'>Status</th>").Attributes(@align => "center");
+
+                   column.For(x => x.SchoolCreateDate.ToShortDateString()).Named("Date Added").SortColumnName("SchoolCreateDate").HeaderAttributes(@class => "sort", @style => "width:15%").Attributes(@align => "center");
+
+                   column.For(x => Html.ActionLink("Edit", "Create", "School"
+                   , new
+                   {
+                       tmi = KModel.EncryptDecrypt.Encrypt(x.TypeMasterID.ToString()),
+                       si = KModel.EncryptDecrypt.Encrypt(x.SchoolID.ToString()),
+                       pagesize = Request.QueryString["pagesize"] ?? "10",
+                       page = Request.QueryString["page"] ?? "1",
+                       Column = Request.QueryString["Column"] ?? "SchoolCreateDate",
+                       Direction = Request.QueryString["Direction"] ?? "Descending"
+                   }
+                   , new { @class = "edit", @title = "Edit" })).Named("Edit").Sortable(false)
+                   .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                   .Attributes(@align => "center");
+
+                   column.For(x => Html.ActionLink("Delete", "Delete", "School"
+                   , new
+                   {
+                       tmi = KModel.EncryptDecrypt.Encrypt(x.TypeMasterID.ToString()),
+                       si = KModel.EncryptDecrypt.Encrypt(x.SchoolID.ToString()),
+                       pagesize = Request.QueryString["pagesize"] ?? "10",
+                       page = Request.QueryString["page"] ?? "1",
+                       Column = Request.QueryString["Column"] ?? "SchoolCreateDate",
+                       Direction = Request.QueryString["Direction"] ?? "Descending",
+                   }
+                   , new { @class = "delete PostLink", @title = "Delete", @val = x.NameTxt })).Sortable(false).Named("Delete")
+                   .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" } })
+                   .Attributes(@align => "center");
+
+               }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+
+                }
+                else
+                {
+                    <div>
+                        <div class="nodatafound">
+                            No Data Found.
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        @*wrapper end *@
+        <div class="pager">
+            <!-- pager -->
+            @if (Model.PagedList.Any())
+                {
+                <div class="select-style">
+                    <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                        <option value="@(AppPath)10" text="10">10</option>
+                        <option value="@(AppPath)25" text="25">25</option>
+                        <option value="@(AppPath)50" text="50">50</option>
+                        <option value="@(AppPath)100" text="100">100</option>
+                        <option value="@(AppPath)0" text="0">All</option>
+                    </select>
+                </div>
+                @*<div class="pagination">*@
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+                @*</div>*@
+            }
+            <!-- pagination -->
+        </div>
+        @Html.Hidden("returnUrl", this.Request.RawUrl)
+        <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+            <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+            <input type="hidden" name="hdnType" id="hdnType" value="" />
+    }
+</div>
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+
+    //Delete Menu Content Section
+    $(document).ready(function () {
+        $("a.PostLink").click(function (e) {
+            e.preventDefault();
+            var mastertypeid = '@decrytedtmi';
+            var msg = '';
+            if (mastertypeid == '@Convert.ToInt32(TypeMasterAlias.School).ToString()') {
+                msg = 'Do you want to delete school ' + $(this).attr('val') + '?'
+            }
+            else {
+                msg = 'Do you want to delete school category ' + $(this).attr('val') + '?'
+            }
+            if (window.confirm(msg)) {
+                $.post($(this).attr("href"), function (data) {
+                    window.location.href = data;
+                });
+            }
+        });
+    });
+
+    // Attach AppPath Before url
+    $(document).ready(function () {
+        var txt = $('.PageURLTxtww').text();
+        if (txt != '') {
+            var path = '@initialPath';
+            $('.PageURLTxtww').prepend(path + "/");
+        }
+    });
+
+    var alertmessage = '@alertmessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".status").prop("disabled", true);// Make status check box enable after message hides
+        $(".displayOrder").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".status").prop("disabled", false);// Make status check box enable after message hides
+        $(".displayOrder").prop("disabled", false);
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    // Ajax call for display order section
+    $('.displayOrder').change(function () {
+        var qs_pager = $(".ddlPgr").find("option:selected").prop("text");//qs_pager =(dropdown page no value
+        if (qs_pager == 'All') {
+            qs_pager = '0';
+        }
+        var qs_Type; var qs_checkboxselected; var qs_value;
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'displayOrder';
+
+        var url = $(this).attr('text') + qs_pager;
+
+        // String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'displayorder',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    $('.status').change(function () {
+        var qs_pager = $(".ddlPgr").find("option:selected").prop("text");//qs_pager =(dropdown page no value
+        if (qs_pager == 'All') {
+            qs_pager = '0';
+        }
+        var qs_Type; var qs_checkboxselected; var qs_value;
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'status';
+
+        var skillsSelect = document.getElementById(this.id);
+        var selected = skillsSelect.options[skillsSelect.selectedIndex].text;
+
+        if (selected == 'Active') {
+            hfid = qs_checkboxselected;
+            hfvalue = '1';
+        } else if (selected == 'InActive') {
+            hfid = qs_checkboxselected;
+            hfvalue = '0';
+        }
+        else if (selected == 'Hide From Feed') {
+            hfid = qs_checkboxselected;
+            hfvalue = '2';
+        }
+
+        var url = $(this).attr('text') + qs_pager;
+
+        // String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax call for status check box Active/Inactive
+    $('.checkbox').click(function () {
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        pager = pager == 'All' ? '0' : pager;
+        var hfid; var hfvalue;
+
+        if ($(this).is(':checked')) {
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+</script>

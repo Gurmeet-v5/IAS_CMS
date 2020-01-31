@@ -1,0 +1,60 @@
+.footable {
+ border-collapse: collapse; 
+  width: 100%; 
+  font-size: 14px; border:0!important;
+} 
+.footable.breakpoint > tbody > tr > td.expand {
+  background: url('../images/plus.png') no-repeat 5px center;
+  padding-left: 40px;
+} 
+.footable.breakpoint > tbody > tr.footable-detail-show > td.expand {
+  background: url('../images/minus.png') no-repeat 5px center;
+} 
+.footable.breakpoint > tbody > tr:hover:not(.footable-row-detail) {
+  cursor: pointer;
+} 
+.footable > tbody img {
+  vertical-align:middle;
+}
+
+
+/* Filter Table */
+
+.filter-table th{
+	height:60px;
+	padding:0 14px;
+}
+.filter-table th,.filter-table td{
+	border-right:1px solid #e7e7e7;
+	border-bottom:1px solid #e7e7e7;
+	text-align:center;
+	font-weight:400;
+}
+.filter-table th:last-child,.filter-table td:last-child{
+	border-right:0px; 
+}
+.bgcabi-headings th { 
+	font-size:13px;
+	font-weight:700;
+	line-height: 14px;
+	}
+ 
+.filter-table th:first-child{
+	text-align:left;
+	width:50%;
+}
+.filter-table td{ 
+	vertical-align:middle;
+	padding:0 14px;
+	width:12%;
+	 height:80px;
+}
+.bgcabi-explore-box{
+	background:#f2f2f2;
+	padding:10px;
+}
+.filter-table td:first-child{
+	text-align:left;
+	width:53%;
+	font-weight:bold;
+}

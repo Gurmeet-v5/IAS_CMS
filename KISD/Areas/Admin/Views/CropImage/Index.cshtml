@@ -1,0 +1,115 @@
+﻿@model KISD.Areas.Admin.Models.CropImageModel
+
+@{ 
+    Layout = null;
+}
+@if (Model.IsFileCroped)
+{
+    <script type="text/javascript">
+        parent.$.fancybox.close();
+    </script>
+}
+else if (Model.IsCancelled)
+{
+    <script type="text/javascript">
+        var val = '@Model.FileUploaderCss';
+        if (val) {
+            parent.RentalTypeRemoveFileuploader(val);
+        }
+        else {
+            parent.RemoveFileuploader();
+        }
+        parent.$.fancybox.close();
+    </script>
+}
+else
+{
+    <style>
+        .submit {
+            background: #333;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px 13px;
+            border: none;
+            width: auto;
+            min-width: 70px;
+            -webkit-appearance: none;
+        }
+            .submit:hover {
+                background: #666;
+            }
+        .cancel {
+            background: #CC3300;
+            color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 6px 13px;
+            border: none;
+            width: auto;
+            min-width: 70px;
+            -webkit-appearance: none;
+        }
+            .cancel:hover {
+                background: #a6310a;
+            }
+    </style>
+
+    using (Html.BeginForm("Index", "CropImage"))
+    {
+        <div>
+            <div class="widget-header" style="text-align:center">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>Ideal Image size is @Model.Width px*@Model.Height px   </h4>
+
+                <input type="submit" value="Crop Image" id="btnsubmit" class="submit-btn submit" />
+
+                <input type="submit" value="Cancel" id="btnCancel" class="cancel cancel-btn" name="command" />
+            </div>
+            <br />
+            <br />
+            <img src="@Href(Model.Imagepath)" id="imgFile" alt="sample image" />
+
+            @Html.HiddenFor(m => m.ImageName)
+            @Html.HiddenFor(m => m.Xaxis, new { id = "hdnx" })
+            @Html.HiddenFor(m => m.Yaxis, new { id = "hdny" })
+            @Html.HiddenFor(m => m.Width, new { id = "hdnw" })
+            @Html.HiddenFor(m => m.Height, new { id = "hdnh" })
+            @Html.HiddenFor(m => m.FileUploaderCss)
+
+            <script src="@Href("~/Scripts/jquery-1.10.2.js")" type="text/javascript"></script>
+            <script src="@Href("~/Scripts/CropImage/jquery.Jcrop.js")" type="text/javascript"></script>
+            <link href="@Href("~/Scripts/CropImage/jquery.Jcrop.css")" rel="stylesheet" />
+
+        </div>
+
+        <script type="text/javascript">
+        $(function () {
+            $('#imgFile').Jcrop({
+                onSelect: getcroparea,
+                onRelease: onRelease,
+                allowMove: true,
+                setSelect: [0, 0, @Model.Width, @Model.Height],
+                allowSelect: false,
+                allowResize: false
+            });
+            setInterval('RemoveStyle()', 1000);
+        })
+
+        function onRelease() {
+            this.setOptions({ setSelect: [$('#hdnx').val(), $('#hdny').val(), $('#hdnw').val(), $('#hdnh').val()] });
+        }
+
+        function getcroparea(c) {
+            $('#hdnx').val(c.x);
+            $('#hdny').val(c.y);
+            $('#hdnw').val(c.w);
+            $('#hdnh').val(c.h);
+        };
+
+        function RemoveStyle() {
+            $('body').removeAttr("style");
+        }
+        </script>
+    }
+}

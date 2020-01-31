@@ -1,0 +1,480 @@
+﻿@using ModuleTypeAlias = KISD.Areas.Admin.Models.Common.ModuleType;
+@using KISD.Areas.Admin.Models;
+@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType;
+
+@{
+    ViewBag.Title = "Masters Dashboard";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var ID = !string.IsNullOrEmpty(ViewBag.ID) ? ViewBag.ID : "0";
+
+    db_KISDEntities objDB = new db_KISDEntities();
+    var userId = objDB.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
+    var RoleID = objDB.UserRoles.Where(x => x.UserID == userId).Select(x => x.RoleID).FirstOrDefault();
+    var IsDeptUser = RoleID == Convert.ToInt32(Common.UserType.DepartmentUser) ? true : false;
+
+    var AboutKISDContent = Convert.ToInt64(ContentTypeAlias.AboutKISD);
+    var AboutKISDContentID = objDB.Contents.Where(x => x.ContentTypeID == AboutKISDContent).Select(x => x.ContentID).FirstOrDefault();
+}
+
+<div class="breadcrumb">
+    <ul>
+        <li>
+            <i class="icon-th"></i>
+            @ViewBag.DashboardTitle
+        </li>
+    </ul>
+</div>
+
+<div class="wrapper">
+    <div class="widget welcome-message">
+        <div class="icons-list">
+            <ul>
+                <!-- widget -->
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Images).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Index", "Image", new {it = EncryptDecrypt.Encrypt("1"), Column = "CreateDate", Direction = "Descending" })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/homeimages-icon.png">
+                            Home Page Banner Images
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Image", new {it = EncryptDecrypt.Encrypt("2"), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/img-icon.png">
+                            Inner Page Banner Images
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Email).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Emails", "Email", new {eid = EncryptDecrypt.Encrypt("0"), et = Convert.ToInt32(EmailService.EmailType.From_Email).ToString() })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/email-icon.png">
+                            From Email
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Emails", "Email", new {eid = EncryptDecrypt.Encrypt("0"), et = Convert.ToInt32(EmailService.EmailType.To_Email).ToString() })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/toemail-icon.png">
+                            To Email
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Masters).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Index", "GalleryListing", new {glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.ImageListing).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/img-icon.png">
+                            Image Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Image", new {it = EncryptDecrypt.Encrypt("3"), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/info-icon.png">
+                            Important Information Images
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Image", new {it = EncryptDecrypt.Encrypt("4"), Column = "CreateDate", Direction = "Descending" })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/checked-icon.png">
+                            Icons
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Announcement", new {it = EncryptDecrypt.Encrypt((Convert.ToInt64(GalleryListingService.TypeMaster.Announcement)).ToString()), Column = "AnnouncementCreateDate", Direction = "Descending" })' id="ankAnnouncement">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/ann-icon.png">
+                            Announcements
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Announcement", new {it = EncryptDecrypt.Encrypt((Convert.ToInt64(GalleryListingService.TypeMaster.OnscreenAlert)).ToString()), Column = "AnnouncementCreateDate", Direction = "Descending" })' id="ankOnscreenAlert">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/alert-icon.png">
+                            Onscreen Alerts
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "NewsEvent", new {mt = EncryptDecrypt.Encrypt(Convert.ToInt32(GalleryListingService.TypeMaster.News).ToString()), Column = "EventCreateDate", Direction = "Descending" })' id="ankNews">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/news-icon.png">
+                            News
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "NewsEvent", new {mt = EncryptDecrypt.Encrypt(Convert.ToInt32(GalleryListingService.TypeMaster.Events).ToString()), Column = "EventCreateDate", Direction = "Descending" })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/event-icon.png">
+                            Events
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "School",new {  tmi = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.SchoolCategory).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/school-icon.png">
+                            School Category
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "GalleryListing", new {glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.PhotoGallery).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/gallery-icon.png">
+                            Photo Gallery
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "GalleryListing", new {glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.Podcast).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/podcast-icon.png">
+                            Podcast
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.Video).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/video-icon.png">
+                            Videos
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.FAQCategory).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/question-icon.png">
+                            FAQ
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.DocumentViewer).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/file-icon.png">
+                            Document Viewer
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Users).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Index", "UsersManagement", new {Column = "CreateDate", Direction = "Descending" })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/users-icon.png">
+                            User Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Image", new {it = EncryptDecrypt.Encrypt("2"), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/roles-icon.png">
+                            Role Management
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Home).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create","Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.Home).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            Home Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Create","Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.HomeRightSection).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/right-icon.png">
+                            Home Page Right Section
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Create","Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.Header).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/header-icon.png">
+                            Header Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Create","Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.Footer).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/footer-icon.png">
+                            Footer Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.HomeMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.HomeSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            Home Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.AboutKISD).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.AboutKISD).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            About KISD Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("RightSectionListing", "RightSection",
+                                 new { ct = EncryptDecrypt.Encrypt(AboutKISDContentID.ToString()),
+                                     mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutKISD).ToString()),
+                                     Column = "RightSectionCreateDate", Direction = "Descending" })' id="RightSection" @if (AboutKISDContentID > 0) {<text>class ='disabled_link'</text> }")>
+<img class="icons-list-img" src="/scripts/Admin/images/content-icon.png">
+                            Content Right Section
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutKISDMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutKISDSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            About KISD Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.School).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.School).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            School Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "School", new { tmi = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.School).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/school-icon.png">
+                            School Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            School Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.NewToKISD).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.NewToKISD).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            New To KISD Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/opportunity.png">
+                            Exceptional Opportunities Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "ExceptionOpportunity", new {Column = "ExOpportunityCreateDate", Direction = "Descending"})' id="ankExopp">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/listing-icon.png">
+                            Exceptional Opportunities Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.NewToKISDMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.NewToKISDSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            New To KISD Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Departments).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.Departments).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            Departments Page Content
+                        </a>
+                    </li>
+
+                    if (!IsDeptUser)
+                    {
+                        <li>
+                            <a href='@Url.Action("DepartmentListing", "Department", new { Column = "DepartmentCreateDate", Direction = "Descending" })' id="ankBannerImages1">
+                                <img class="icons-list-img" src="~/scripts/Admin/images/listing-icon.png">
+                                Department Listing
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <a href='@Url.Action("StaffListing", "Staff", null)' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/users-icon.png">
+                            View Staff
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DepartmentsMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DepartmentsSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            Departments Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.ParentStudents).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.ParentStudents).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            Parent & Students Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.Staff).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            Staff Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Staff")' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/listing-icon.png">
+                            Staff Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ParentStudentsMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ParentStudentsSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            Parent & Students Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.SchoolBoard).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.SchoolBoard).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            School Board Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.BoardMembers).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            Board Members Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "BoardMembers")' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/listing-icon.png">
+                            Board Members Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Announcement", new {it = EncryptDecrypt.Encrypt(((Convert.ToInt64(GalleryListingService.TypeMaster.BoardSchedule)).ToString())), Column = "AnnouncementCreateDate", Direction = "Descending"})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/listing-icon.png">
+                            Board Schedule Listing
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolBoardMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolBoardSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            School Board Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Employment).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.Employment).ToString()) })' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/content-icon.png">
+                            Employment Page Content
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.EmploymentMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.EmploymentSubMenu).ToString()), Column = "CreateDate", Direction = "Descending" })' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/menu-icon.png">
+                            Employment Menus
+                        </a>
+                    </li>
+                }
+
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.Reports).ToString())
+                {
+                    <li>
+                        <a href='@Url.Action("Index", "Reports", new {rt = EncryptDecrypt.Encrypt(Convert.ToInt32(ReportsModel.ReportType.SystemAccessLogReport).ToString())})' id="ankBannerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/report-icon.png">
+                            System Access Log
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href='@Url.Action("Index", "Reports", new { rt = EncryptDecrypt.Encrypt(Convert.ToInt32(ReportsModel.ReportType.SystemChangeLogReport).ToString())})' id="ankInnerImages1">
+                            <img class="icons-list-img" src="~/scripts/Admin/images/report1-icon.png">
+                            System Change Log
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <!-- widget Ends-->
+</div>
+<script type="text/javascript">
+    var mid = '@ID';
+    if (mid == "1") {
+        $("#ankMasterImages").addClass('select');
+    }
+    else if (mid == "2") {
+        $("#ankEmails").addClass('select');
+    }
+    else if (mid == "3") {
+        $("#ankMasters").addClass('select');
+    }
+    else if (mid == "4") {
+        $("#ankUserManagement").addClass('select');
+    }
+    else if (mid == "5") {
+        $("#ankHome").addClass('select');
+    }
+    else if (mid == "6") {
+        $("#ankAboutKISD").addClass('select');
+    }
+    else if (mid == "7") {
+        $("#ankSchool").addClass('select');
+    }
+    else if (mid == "8") {
+        $("#ankNewToKISD").addClass('select');
+    }
+    else if (mid == "9") {
+        $("#ankDepartments").addClass('select');
+    }
+    else if (mid == "10") {
+        $("#ankParentStudents").addClass('select');
+    }
+    else if (mid == "11") {
+        $("#ankSchoolBoard").addClass('select');
+    }
+    else if (mid == "12") {
+        $("#ankEmployment").addClass('select');
+    }
+    else if (mid == "13") {
+        $("#ankReports").addClass('select');
+    }
+</script>

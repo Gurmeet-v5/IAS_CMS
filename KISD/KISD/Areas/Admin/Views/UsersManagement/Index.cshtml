@@ -1,0 +1,107 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+
+@model PagedViewModel<UsersModel>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    var SortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "UserCreateDate";
+    var SortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Descending";
+    var Pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var PagerID = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "")
+                   + "/Admin/UsersManagement/Index?page=1&Column=" + SortColumn + "&Direction=" + SortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("Index", "UsersManagement",
+                        new
+                        {
+                            pagesize = Pagesize,
+                            page = PagerID,
+                            Column = SortColumn,
+                            Direction = SortDirection
+                        },
+                         FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <div class="breadcrumb">
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Raw(Convert.ToString(@ViewBag.PageTitle))
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>
+                    @Html.Raw(Convert.ToString(@ViewBag.PageTitle))
+                </h4>
+                <div class="btn-group">
+                    <a href='@Url.Action("Create", "UsersManagement"
+                    , new
+                                            {
+                                                UserID = EncryptDecrypt.Encrypt("0"),
+                                                pagesize = Pagesize,
+                                                page = PagerID,
+                                                Column = SortColumn,
+                                                Direction = SortDirection
+                                            }
+                    )
+                        '>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+            </div>
+            <div class="row border-bottom">
+                <div class="col20">
+                    <label><b>User Type:</b></label><br /> @Html.DropDownList("RoleId", ViewBag.Rolllist as SelectList, new { })
+                </div>
+                <div class="col20">
+                    <label><b>Username:</b></label><br/> <input type="text" name="NameTxt" id="NameTxt" placeholder="Username" />                   
+                </div>
+                <div class="col20">  
+                    <label>&nbsp;</label><br />                 
+                    <input type="submit" name="btnsearch" class="submit-btn submit formsearch" id="btnsearch" value="Search" />
+                    <input type="button" name="command" class="cancel cancel-btn" id="btnCancel" value="Cancel" onclick="location.href='@Url.Action("Index", "UsersManagement", new { Column = SortColumn, Direction = SortDirection })'" />
+                </div>
+            </div>
+            @*Calling Partial View For Ajax Call backs or Postback*@
+            @Html.Partial("UserListingPartial", Model)
+        </div>
+    </div>
+
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+}
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut();
+    });
+</script>
+<script type="text/javascript">
+    //.. for pager dropdown selectedvalue
+    $('#ankUsers').addClass('select');
+    $('#ankUserManagement').addClass('select');
+
+</script>
+<script src="~/Scripts/js/footable.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('table').footable();
+    });
+</script>

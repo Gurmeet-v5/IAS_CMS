@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Emails>
+  <Email>
+    <EmailID>3</EmailID>
+    <EmailTxt>pms1.bt@gmail.com</EmailTxt>
+    <EmailTypeID>1</EmailTypeID>
+  </Email>
+  <Email>
+    <EmailID>4</EmailID>
+    <EmailTxt>pms1.bt@gmail.com</EmailTxt>
+    <EmailTypeID>2</EmailTypeID>
+  </Email>
+  <Email>
+    <EmailID>5</EmailID>
+    <EmailTxt>Test@gmail.com</EmailTxt>
+    <EmailTypeID>1</EmailTypeID>
+  </Email>
+</Emails>

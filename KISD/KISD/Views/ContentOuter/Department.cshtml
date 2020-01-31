@@ -1,0 +1,110 @@
+﻿@using PagedList
+@using PagedList.Mvc;
+@using TypeMasterAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@model KISD.Areas.Admin.Models.ContentModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    ViewBag.InnerImgPath = string.IsNullOrEmpty(ViewBag.InnerImgPath) ? "" : ViewBag.InnerImgPath;
+    ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ViewBag.InnerImgTitleTxt) ? "" : ViewBag.InnerImgTitleTxt;
+    db_KISDEntities objContext = new db_KISDEntities();
+    bool IsListingParameterExists = false;
+}
+@if (Model != null)
+{
+    <div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath)){<text>main-banner</text>}else{<text>no-inner-banner</text>}">
+        @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+        {
+            <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@Model.AltBannerImageTxt" />
+            <div class="container">
+                <div class="inner-banner-abstract">
+                    @Html.Raw(Model.BannerImageAbstractTxt)
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div @if (Model.ParentRightSections.Count > 0 || Model.IsFacebookSharingInd || Model.IsGooglePlusSharingInd || Model.IsTwitterSharingInd || !string.IsNullOrEmpty(Model.RightSectionTitleTxt) || !string.IsNullOrEmpty(Model.RightSectionAbstractTxt)) { @Html.Raw("class='main-left'") ; }>
+                @if (!string.IsNullOrEmpty(Model.PageTitleTxt))
+                {
+                    <h1 class="campus-news-title">@Model.PageTitleTxt</h1>
+                }
+                <div class="breadcrumb">
+                    <a href="@AppPath" title="Home Page">Home</a><span class="breaddiv"></span>
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.MainURL) || !string.IsNullOrEmpty(@ViewBag.MainParentName))
+                {  <a href="@ViewBag.MainURL" title="@ViewBag.MainParentName">@ViewBag.MainParentName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.ParentURL) || !string.IsNullOrEmpty(@ViewBag.ParentName))
+                {  <a href="@ViewBag.ParentURL" title="@ViewBag.ParentName">@ViewBag.ParentName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.SearchParentCategoryURL) || !string.IsNullOrEmpty(@ViewBag.SearchParentCategoryName))
+                {  <a href="@ViewBag.SearchParentCategoryURL" title="@ViewBag.SearchParentCategoryName">@ViewBag.SearchParentCategoryName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.Main3rdCategoryURL) || !string.IsNullOrEmpty(@ViewBag.Main3rdCategoryParentName))
+                {  <a href="@ViewBag.Main3rdCategoryURL" title="@ViewBag.Main3rdCategoryParentName">@ViewBag.Main3rdCategoryParentName</a><span class="breaddiv"></span> }
+
+                    <span>@Model.PageTitleTxt</span>
+                </div>
+                <div class="content">
+                    @if (!string.IsNullOrEmpty(Model.DescriptionTxt))
+                    {
+                        string html = Model.DescriptionTxt;
+                        var ListingParameters = objContext.ListingParameters.Select(x => x.ListingParameterTxt).ToArray();
+                        foreach (var parameter in ListingParameters)
+                        {
+                            if (Model.DescriptionTxt.Trim().Contains(parameter.Trim()))
+                            {
+                                IsListingParameterExists = true;
+                                Model.ListingParemeterName = parameter.Replace("#", "");
+                                html = string.Format(html.Replace(parameter, "{0}"), Html.Partial("ListingParameterListing", Model));
+                            }
+                        }
+                        @Html.Raw(html)
+                    }
+
+                    @if (!IsListingParameterExists)
+                    {
+                        @Html.Raw(Model.DescriptionTxt)
+                    }
+
+                    @if (Model.DepartmentResult.Count > 0)
+                    {
+                        <div class="department-list-container">
+                            @foreach (var dept in Model.DepartmentResult.Where(x => x.StatusInd == true && x.IsDeletedInd == false && x.ParentID == null).GroupBy(x => x.NameTxt.Substring(0, 1).ToUpper()).Select(x => x.FirstOrDefault()).OrderBy(x => x.NameTxt.Substring(0, 1)).ToList())
+                            {
+                                <div class="content-department-title"><span>@dept.NameTxt[0]</span></div>
+                                foreach (var dep in Model.DepartmentResult.Where(x => x.NameTxt.StartsWith(dept.NameTxt.Substring(0,1))))
+                                {
+                                <div class="department-list-box">
+                                    <div class="department-name"><a href="@dep.URLTxt">@dep.NameTxt</a></div>
+                                    <div class="department-address">@dep.AddressTxt</div>
+                                    <div class="department-phone"><span class="bold">Phone:</span><a href="tel:@(dep.PhoneNumberTxt)"> @(dep.PhoneNumberTxt)</a></div>
+                                    <div class="department-fax"><span class="bold">FAX:</span> @(dep.FaxNumberTxt)</div>
+                                </div>
+                                }
+                            }
+                        </div>
+                    }
+
+                </div>
+                <!--content container end here-->
+            </div><!--main left end here-->
+
+            <div class="clearfix-mobile"></div>
+            @*Right Section*@
+            @{Html.RenderAction("RightSection", "ContentOuter", new { ListingID = Model.ContentID, ModuleType = "Content" });}
+
+        </div>
+    </div>
+    <!-- Main content container end here-->
+}
+<script type="text/javascript">
+    $("#ankDepartments").addClass('active');
+</script>

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Blogs>
+  <Blog>
+    <BlogID>1</BlogID>
+    <TitleTxt>New field</TitleTxt>
+    <AuthorNameTxt>1</AuthorNameTxt>
+    <BlogDescription>dfghdfhg</BlogDescription>
+    <ImagePathTxt>~/WebData/images/crop_c8922caf-cba3-4a7d-8b98-83be991c5fb4-.jpg</ImagePathTxt>
+    <PostedDate>2017-02-13T00:00:00</PostedDate>
+    <SlagTxt>Newfield</SlagTxt>
+    <IsActiveInd>true</IsActiveInd>
+    <MetaTitleTxt>New field</MetaTitleTxt>
+    <MetaKeywordTxt></MetaKeywordTxt>
+    <MetaDescriptionTxt>New field</MetaDescriptionTxt>
+    <IsCommentEnabledInd>true</IsCommentEnabledInd>
+    <SocialMediaTxt></SocialMediaTxt>
+    <CategoryID>2</CategoryID>
+    <AbstractTxt>gfhfhdfgh</AbstractTxt>
+  </Blog>
+  <Blog>
+    <BlogID>2</BlogID>
+    <TitleTxt>Testing</TitleTxt>
+    <AuthorNameTxt>1</AuthorNameTxt>
+    <BlogDescription>erwrewrewr</BlogDescription>
+    <ImagePathTxt>~/WebData/images/crop_2bf4ee53-02b8-4962-b70c-ac2b53decc77-.jpg</ImagePathTxt>
+    <PostedDate>2017-05-08T00:00:00</PostedDate>
+    <SlagTxt>Testing</SlagTxt>
+    <IsActiveInd>true</IsActiveInd>
+    <MetaTitleTxt>Testing</MetaTitleTxt>
+    <MetaKeywordTxt></MetaKeywordTxt>
+    <MetaDescriptionTxt></MetaDescriptionTxt>
+    <IsCommentEnabledInd>true</IsCommentEnabledInd>
+    <SocialMediaTxt></SocialMediaTxt>
+    <CategoryID>1</CategoryID>
+    <AbstractTxt></AbstractTxt>
+  </Blog>
+</Blogs>

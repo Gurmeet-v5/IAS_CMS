@@ -1,0 +1,526 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using KModel = KISD.Areas.Admin.Models;
+@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType;
+@using AnnouncementTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+
+@model KModel.PagedViewModel<KModel.DepartmentModel>
+@{
+    Layout = null;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) +
+                  (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                  (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : "")) +
+                  "/Admin/Department/DepartmentListing?page=1&Column=" +
+                  (Request.QueryString["Column"] ?? "DepartmentCreateDate") + "&Direction=" + (Request.QueryString["Direction"] ?? "Descending") + "&pagesize=";
+
+    var initialPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) +
+                      (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                      (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    initialPath = KModel.Common.ReturnValidPath(initialPath);
+    AppPath = KModel.Common.ReturnValidPath(AppPath);
+    var objContext = new db_KISDEntities();
+    var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
+    var RoleID = objContext.UserRoles.Where(x => x.UserID == userId).Select(x => x.RoleID).FirstOrDefault();
+}
+
+<div class="Main_PartialHeader">
+    <!-- widget-header Ends -->
+    <div class="pager paging-top">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style" id="divPager">
+                <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            @*<div class="pagination">*@
+            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            @*</div>*@
+        }
+        <!-- pagination -->
+    </div>
+    @*wrapper*@
+    <div class="wrapper_partial">
+        <div class="tab-pane active">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               column.For(x => x.NameTxt).Named("Department Name").SortColumnName("NameTxt").HeaderAttributes(@style => "width:15%", @class => "left sort", @align => "left").Attributes(@class => "left maxNameTxt");
+
+               column.For(x => x.PhoneNumberTxt).Named("Phone Number").SortColumnName("PhoneNumberTxt").Sortable(false).HeaderAttributes(@style => "width:15%", @class => "left ", @align => "left").Attributes(@class => "left ");
+
+               column.For(x => Html.ActionLink("Manage", "RightSectionListing", "RightSection"
+                                                           , new
+                                                           {
+                                                               ct = KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                                                               mtid = KModel.EncryptDecrypt.Encrypt((Convert.ToInt64(AnnouncementTypeAlias.DepartmentListing)).ToString()),
+                                                               pagesize = Request.QueryString["pagesize"] ?? "10",
+                                                               page = Request.QueryString["page"] ?? "1",
+                                                               Column = Request.QueryString["Column"] ?? "RightSectionCreateDate",
+                                                               Direction = Request.QueryString["Direction"] ?? "Descending"
+                                                           }, new { target = "_blank" })).Named("Manage Right Section").Sortable(false)
+                                                                  .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                                                                  .Attributes(@align => "center", @title => "Manage Right Section");
+
+               column.For(x => Html.ActionLink("Staff Event", "DepartmentContent", "Department", new { did = KModel.EncryptDecrypt.Encrypt(Convert.ToInt64(x.DepartmentID).ToString()), mt = KModel.EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DepartmentStaff).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { @class = "blue_head" }) + "<br /><br /><a id='history' href='" + @Url.Action("DepartmentContent", "Department", new { did = KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()), mt = KModel.EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DepartmentEvents).ToString()).ToString() }) + "' class='green_head' val=''>Event Content</a>").Encode(false).Header("<th data-hide='phone,tablet' data-sort-ignore='true' class='Checkouts_head'><div class='title_text'>Manage Content</div><div class='Checkouts_icon'><img src='/Content/images/icon04.png' alt=''  /></div></th>");
+
+               column.For(x => Html.ActionLink("Manage", "SubDepartmentListing", "Department"
+                                                                          , new
+                                                                          {
+                                                                              pid = KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                                                                              mpagesize = Request.QueryString["pagesize"] ?? "10",
+                                                                              mpage = Request.QueryString["page"] ?? "1",
+                                                                              mColumn = Request.QueryString["Column"] ?? "DepartmentCreateDate",
+                                                                              mDirection = Request.QueryString["Direction"] ?? "Descending"
+                                                                          }, null)).Named("Manage Sub Department").Sortable(false)
+                                                                                 .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                                                                                 .Attributes(@align => "center", @title => "Manage Sub Departments");
+
+               column.For(x => Html.ActionLink("Manage", "Index", "NewsEvent"
+                                                                          , new
+                                                                          {
+                                                                              mt = KModel.EncryptDecrypt.Encrypt(Convert.ToInt32(AnnouncementTypeAlias.ManageEvents).ToString()),
+                                                                              pid = KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                                                                              pagesize = Request.QueryString["pagesize"] ?? "10",
+                                                                              page = Request.QueryString["page"] ?? "1",
+                                                                              Column = Request.QueryString["Column"] ?? "EventCreateDate",
+                                                                              Direction = Request.QueryString["Direction"] ?? "Descending"
+                                                                          }, null)).Named("Manage Events").Sortable(false)
+                                                                                 .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                                                                                 .Attributes(@align => "center", @title => "Manage Events");
+               if (RoleID != Convert.ToInt16(KModel.Common.UserType.DepartmentUser))
+               {
+                   column.For(x => Html.DropDownList("ddldisplayorder_" + x.DepartmentID.ToString(), x.DisplayOrderNbrSelect, new { @class = "displayOrder", @value = x.DepartmentID, @text = AppPath, @style = "width:60px" })
+                            ).Encode(false).Attributes(@class => "center ").Sortable(true).Named("Display Order").SortColumnName("DisplayOrderNbr").HeaderAttributes(@align => "center", @style => "width:15%;", @class => "sort");
+               }
+               column.For(x => x.DepartmentCreateDate.Value.ToShortDateString()).Named("Date Added").SortColumnName("DepartmentCreateDate").HeaderAttributes(@class => "sort", @style => "width:15%").Attributes(@align => "center");
+               if (RoleID != Convert.ToInt16(KModel.Common.UserType.DepartmentUser))
+               {
+                   column.For(x => Html.CheckBox("mycheckbox", x.StatusInd, new { @class = "checkbox status", @text = AppPath, @value = x.DepartmentID })).Encode(false).Header("<th style='width:10%'  data-hide='phone'>Status</th>").Attributes(@align => "center");
+               }
+               column.For(x => Html.ActionLink("View", "StaffListing", "Staff", new { did=KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                   pagesize = Request.QueryString["pagesize"] ?? "10",
+                   page = Request.QueryString["page"] ?? "1",
+                   Column = Request.QueryString["Column"] ?? "StaffCreateDate",
+                   Direction = Request.QueryString["Direction"] ?? "Descending"
+               }, new { @id = "ankManageStaff" })).Named("View Staff").Sortable(false)
+                                                                                 .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                                                                                 .Attributes(@align => "center", @title => "Manage Events");
+               column.For(x => Html.ActionLink("Edit", "Create", "Department"
+                 , new
+                 {
+                     did = KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                     pagesize = Request.QueryString["pagesize"] ?? "10",
+                     page = Request.QueryString["page"] ?? "1",
+                     Column = Request.QueryString["Column"] ?? "DepartmentCreateDate",
+                     Direction = Request.QueryString["Direction"] ?? "Descending"
+                 }
+                 , new { @class = "edit" })).Named("Edit").Sortable(false)
+                 .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                      .Attributes(@align => "center");
+               if (RoleID != Convert.ToInt16(KModel.Common.UserType.DepartmentUser))
+               {
+                   column.For(x => Html.ActionLink("Delete", "Delete", "Department"
+                   , new
+                   {
+                       did = KModel.EncryptDecrypt.Encrypt(x.DepartmentID.ToString()),
+                       mtid = KModel.EncryptDecrypt.Encrypt((Convert.ToInt64(AnnouncementTypeAlias.DepartmentListing)).ToString()),
+                       pagesize = Request.QueryString["pagesize"] ?? "10",
+                       page = Request.QueryString["page"] ?? "1",
+                       Column = Request.QueryString["Column"] ?? "DepartmentCreateDate",
+                       Direction = Request.QueryString["Direction"] ?? "Descending",
+                   }
+                   , new { @class = "delete PostLink", @val = !string.IsNullOrEmpty(x.NameTxt) ? x.NameTxt : x.NameTxt })).Sortable(false).Named("Delete")
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" } })
+                       .Attributes(@align => "center");
+               }
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @*wrapper end *@
+    <div class="pager">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style">
+                <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            @*<div class="pagination">*@
+            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            @*</div>*@
+        }
+        <!-- pagination -->
+    </div>
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+
+    <div class="shadow common_hide"></div>
+    <div id="loader" class="loader common_hide"> </div>
+    <div id="manage-sections" class="common_hide manage-sections">
+        <a href="#" class="close_popup" title="Close"><span hidden>Close</span></a>
+        <div id='page-content'></div>
+    </div>
+
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+    <input type="hidden" name="hdnType" id="hdnType" value="" />
+</div>
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+
+    //Delete Department Content Section
+    $(document).ready(function () {
+        $("a.PostLink").click(function (e) {
+            e.preventDefault();
+            var msg = 'Do you want to delete Department ' + $(this).attr('val') + '?'
+            if (window.confirm(msg)) {
+                $.post($(this).attr("href"), function (data) {
+                    window.location.href = data;
+                });
+            }
+        });
+    });
+
+    // Attach AppPath Before url
+    $(document).ready(function () {
+        var txt = $('.PageURLTxtww').text();
+        if (txt != '') {
+            var path = '@initialPath';
+            $('.PageURLTxtww').prepend(path + "/");
+        }
+    });
+
+    var alertmessage = '@alertmessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".status").prop("disabled", true);// Make status check box enable after message hides
+        $(".displayOrder").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".status").prop("disabled", false);// Make status check box enable after message hides
+        $(".displayOrder").prop("disabled", false);
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    // Ajax call for display order section
+    $('.displayOrder').change(function () {
+        var qs_pager = $(".ddlPgr").find("option:selected").prop("text");//qs_pager =(dropdown page no value
+        if (qs_pager == 'All') {
+            qs_pager = '0';
+        }
+        var qs_Type; var qs_checkboxselected; var qs_value;
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'displayOrder';
+
+        var url = $(this).attr('text') + qs_pager;
+
+        // String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'displayorder',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    $('.status').change(function () {
+        var qs_pager = $(".ddlPgr").find("option:selected").prop("text");//qs_pager =(dropdown page no value
+        if (qs_pager == 'All') {
+            qs_pager = '0';
+        }
+        var qs_Type; var qs_checkboxselected; var qs_value;
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'status';
+
+        var skillsSelect = document.getElementById(this.id);
+        var selected = skillsSelect.options[skillsSelect.selectedIndex].text;
+
+        if (selected == 'Active') {
+            hfid = qs_checkboxselected;
+            hfvalue = '1';
+        } else if (selected == 'InActive') {
+            hfid = qs_checkboxselected;
+            hfvalue = '0';
+        }
+        else if (selected == 'Hide From Feed') {
+            hfid = qs_checkboxselected;
+            hfvalue = '2';
+        }
+
+        var url = $(this).attr('text') + qs_pager;
+
+        // String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax call for status check box Active/Inactive
+    $('.checkbox').click(function () {
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        pager = pager == 'All' ? '0' : pager;
+        var hfid; var hfvalue;
+
+        if ($(this).is(':checked')) {
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    function ShowRightSections(did) {
+        $('.shadow').removeClass('common_hide');
+        $('.shadow').addClass('common_show');
+        $('.loader').removeClass('common_hide');
+        $('.loader').addClass('common_show');
+        var URL = '/Admin/Department/ManageRightSections';
+        $(function () {
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: URL,
+                data: { "DepartmentID": did, "ParentID": '', "IsFromMenu": true },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $('#page-content').html(data);
+                    $('.shadow').removeClass('common_hide');
+                    $('.shadow').addClass('common_show');
+                    $('.loader').removeClass('common_show');
+                    $('.loader').addClass('common_hide');
+                    $('#manage-sections').removeClass('common_hide');
+                    $('#manage-sections').addClass('common_show');
+                    return false;
+                },
+                error: function () {
+                    $('.shadow').removeClass('common_show');
+                    $('.shadow').addClass('common_hide');
+                    $('.loader').removeClass('common_show');
+                    $('.loader').addClass('common_hide');
+                    $('#manage-sections').removeClass('common_show');
+                    $('#manage-sections').addClass('common_hide');
+                }
+            });
+        });
+    }
+
+    $('.close_popup').click(function () {
+        //location.reload();
+        $('.shadow').removeClass('common_show');
+        $('.shadow').addClass('common_hide');
+        $('.loader').removeClass('common_show');
+        $('.loader').addClass('common_hide');
+        $('#manage-sections').removeClass('common_show');
+        $('#manage-sections').addClass('common_hide');
+    });
+</script>

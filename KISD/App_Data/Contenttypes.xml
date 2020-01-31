@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentTypes>
+	<ContentType>
+  		<ContentTypeID>1</ContentTypeID>
+	  	<ContentTypeNameTxt>Header</ContentTypeNameTxt>
+	</ContentType>
+	<ContentType>
+  		<ContentTypeID>2</ContentTypeID>
+	  	<ContentTypeNameTxt>Footer</ContentTypeNameTxt>
+	</ContentType>
+</ContentTypes>

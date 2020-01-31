@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<SocialMedias>
+  <SocialMedia>
+    <SocialMediaID>1</SocialMediaID>
+    <SocialMediaNameTxt>Facebook</SocialMediaNameTxt>
+  </SocialMedia>
+  <SocialMedia>
+    <SocialMediaID>2</SocialMediaID>
+    <SocialMediaNameTxt>Twitter</SocialMediaNameTxt>
+  </SocialMedia>
+  <SocialMedia>
+    <SocialMediaID>3</SocialMediaID>
+    <SocialMediaNameTxt>Google Plus</SocialMediaNameTxt>
+  </SocialMedia>
+</SocialMedias>

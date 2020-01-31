@@ -1,0 +1,86 @@
+﻿@using TypeMasterAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@using PagedList
+@using PagedList.Mvc;
+
+@{
+    Layout = null;
+    db_KISDEntities objContext = new db_KISDEntities();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+
+    int PhotoGalleryCategoryTypeMasterID = Convert.ToInt32(TypeMasterAlias.PhotoGallery);
+    var PhotoGalleryCategories = objContext.GalleryListings.Where(x => x.IsDeletedInd == false
+      && x.StatusInd == true && x.TypeMasterID == PhotoGalleryCategoryTypeMasterID)
+      .OrderBy(x => x.DisplayOrderNbr).ToList();
+    int PageSize = 20;// KISD.Areas.Admin.Models.Common._pageSize;
+    var IsPagingVisible = PhotoGalleryCategories.Count > PageSize;
+    int pageNumber = (!string.IsNullOrEmpty(Request.QueryString["page"]) ? Convert.ToInt32(Request.QueryString["page"]) : KISD.Areas.Admin.Models.Common._currentPage);
+    IPagedList<GalleryListing> PagedPhotoGalleryCategories = PhotoGalleryCategories.ToPagedList(pageNumber, PageSize);
+    int counter = 1;
+
+    bool PhotoGalleryByCategory = !string.IsNullOrEmpty(ViewBag.PhotoGalleryByCategory) ? false : true;
+
+    int PhotoGalleryImagesTypeMasterID = Convert.ToInt32(TypeMasterAlias.PhotoGalleryImages);
+    var PhotoGalleryImages = objContext.GalleryListings.Where(x => x.IsDeletedInd == false
+                   && x.StatusInd == true && x.TypeMasterID == PhotoGalleryImagesTypeMasterID)
+                   .OrderBy(x => x.DisplayOrderNbr).ToList();
+    IPagedList<GalleryListing> PagedPhotoGalleryImages = PhotoGalleryImages.ToPagedList(pageNumber, PageSize);
+    var IsPhotoGalleryImagesPagingVisible = PhotoGalleryImages.Count > PageSize;
+}
+
+<link href="~/scripts/Frontend/css/fancybox.css" rel="stylesheet" type="text/css" />
+
+<div class="gallery-container">
+    @if (PagedPhotoGalleryCategories.Count() > 0)
+    {
+        if (!PhotoGalleryByCategory)
+        {
+            <ul>
+                @foreach (var item in PagedPhotoGalleryCategories)
+            {
+            <li>
+                <a href="@item.URLTxt">
+                    <img src="@item.FileURLTxt.Replace("~","")" alt="@item.AltImageTxt" title="@item.TitleTxt">
+                    <span class="box-title">@item.TitleTxt</span>
+                    <img src="~/scripts/frontend/images/magnify.png" class="zoom_img" alt="" border="0">
+                </a>
+            </li>
+                            counter++;
+
+                        }
+            </ul>
+
+                    if (IsPagingVisible && PagedPhotoGalleryCategories.PageCount > 1)
+                    {
+                        <div class="pagination-listing">
+                            <div class="pagination-container">
+                                @Html.PagedListPager(PagedPhotoGalleryCategories, page => Url.Action("Content", new { page }))
+                            </div>
+                        </div>
+                    }
+    }
+                    else
+                    {
+                        <ul>
+                            @foreach (var item in PagedPhotoGalleryImages)
+                                {
+                                    <li>
+                                        <a class="fancybox" href="@item.FileURLTxt.Replace("~","").Replace("cropped","images")" data-fancybox-group="gallery" title="@item.TitleTxt @Html.Raw("<br/>") @item.DescriptionTxt">
+                                            <img src="@item.FileURLTxt.Replace("~","")" alt="@item.AltImageTxt">
+                                            <span class="box-title">@item.TitleTxt</span>
+                                            <img src="~/scripts/frontend/images/magnify.png" class="zoom_img">
+                                        </a>
+                                    </li>
+                                }
+                        </ul>
+                                        if (IsPhotoGalleryImagesPagingVisible && PagedPhotoGalleryImages.PageCount > 1)
+                                        {
+                                            <div class="pagination-listing">
+                                                <div class="pagination-container">
+                                                    @Html.PagedListPager(PagedPhotoGalleryImages, page => Url.Action("Content", new { page }))
+                                                </div>
+                                            </div>
+                                         }
+                            }
+                  }
+</div>

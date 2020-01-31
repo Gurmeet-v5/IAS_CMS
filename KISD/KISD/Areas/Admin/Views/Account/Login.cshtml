@@ -1,0 +1,80 @@
+﻿@using KISD.Areas.Admin.Models;
+@model KISD.Areas.Admin.Models.AccountModel
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Login - Killeen Independent School District – Killeen, TX</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0;" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <link href='@Href("~/favicon.png")' rel="shortcut icon" type="image/x-icon" />
+    <link href="~/scripts/Admin/css/default.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css' />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+</head>
+
+<body class="login">
+    <section class="LoginSection">
+        <div class="logo">
+            <img alt="KISD" title="KISD" src="@AppPath/scripts/Frontend/images/Kisd-logo.png" />
+        </div>
+        <div class="box">
+            <!-- box -->
+            <div class="content">
+                <h3 class="form-title">Sign In to your Account</h3>
+                @using (Html.BeginForm(new { ReturnUrl = Request.QueryString["ReturnUrl"], defaultbutton = "submit-btn", i = Request.QueryString["i"] != null ? Request.QueryString["i"].ToString() : "" }))
+                {
+                    <div class="row">
+                        <div class="input-icon">
+                            <i class="icon-user"></i>
+                            @Html.TextBoxFor(m => m.UserNameTxt, new { @class = "required", placeholder = "Enter User Name" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.UserNameTxt, null, new { id = "valUsername", name = "valpassword" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-icon">
+                            <i class="icon-lock"></i>
+                            @Html.PasswordFor(m => m.Password, new { @class = "required", placeholder = "Enter Password", @Value = ViewBag.WebName })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.Password, null, new { id = "valpassword", name = "valpassword" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="submit" id="submit-btn" value="Sign In" class="submit pull-right" />
+                        <span>
+                            @Html.ValidationSummary(true)
+                            @Html.HiddenFor(m => m.IsCheckedRememberMe)
+                        </span>
+                    </div>
+
+                    <div class="row">
+                        <label class="checkbox pull-left">
+                            <span>
+                                @Html.CheckBoxFor(m => m.RememberMe, new { @class = "pull-left" })
+                            </span>
+                            Remember me
+                        </label>
+
+                        <div class="pull-right">
+                            <a href="/Admin/Account/ForgotPassword">Forgot Password?</a>
+                            @*@Html.ActionLink("Forgot Password?", "ForgotPassword", "Account", new { }, new { @class = "" })*@
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- box Ends -->
+    </section>
+</body>
+</html>
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script src="~/Scripts/js/jquery.validate.js"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js"></script>

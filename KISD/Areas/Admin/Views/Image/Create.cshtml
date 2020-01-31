@@ -1,0 +1,456 @@
+﻿@using System.Web.Mvc;
+@using KISD.Areas.Admin.Models;
+@using ImageTypeAlias = KISD.Areas.Admin.Models.ImageService.ImageType;
+@model ImageModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    string imagetype = Convert.ToString(ViewBag.ImageTypeId) ?? string.Empty;
+    var AlertTitle = TempData["Message"] ?? string.Empty;
+    var ImageID = Request.QueryString["iid"].ToString() ?? EncryptDecrypt.Encrypt("0");
+    var ImgTypeID = Request.QueryString["it"].ToString() ?? EncryptDecrypt.Encrypt("0");
+    var PageSize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var Page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var Column = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "TitleTxt";
+    var Direction = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+}
+
+@using (Html.BeginForm("Create", "Image",
+                                                                                       new
+                                                                                       {
+                                                                                           it = ImgTypeID,
+                                                                                           iid = ImageID,
+                                                                                           pagesize = PageSize,
+                                                                                           page = Page,
+                                                                                           Column = Column,
+                                                                                           Direction = Direction,
+                                                                                       },
+                                                                                        FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankMasterListing" href='@Url.Action("Index", "Image",
+                     new
+                     {
+                         it = ImgTypeID,
+                         iid = ImageID,
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                         )'>
+
+                    <text>
+                        @ViewBag.ImageTypeTitle
+                    </text>
+                </a>
+            </li>
+            <li>
+                @if (EncryptDecrypt.Decrypt(ImageID) != "0")
+                {
+                    {<text>@Model.TitleTxt - </text> }
+                }
+                @ViewBag.PageTitle
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>@ViewBag.PageTitle
+                </h4>
+
+                <div class="btn-group">
+                    <a id="ankback" href='@Url.Action("Index", "Image",
+                     new
+                     {
+                         it = ImgTypeID,
+                         iid = ImageID,
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                )'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Title:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.TitleTxt, new { @class = "required titleTxt", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    @Html.ValidationMessageFor(m => m.TitleTxt)
+                </div>
+            </div>
+
+            <div class="row dvimage" id="dvimage">
+                <div class="col20">
+                    <label>
+                        Upload Image:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    <input type="file" value="" accept=".jpg,.jpeg,.png,.gif"
+                           @if (Model != null && !string.IsNullOrEmpty(Model.ImgPathTxt)) { <text> class="cropedfileupload" name="imageupload" id="imageupload" </text>              } else { <text> class="fileinput required cropedfileupload" id="ImagePathTxt" name="ImagePathTxt" </text>                                     } />
+                    <span class="fontsize">
+                        @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.BannerImage))
+                        {
+                            <text>Ideal image size is 1025px * 460px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                        }
+                        @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.InnerImage))
+                        {
+                            <text>Ideal image size is 1370px * 300px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                        }
+                        @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.ImportantInfo))
+                        {
+                            <text>Ideal image size is 305px * 215px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                        }
+                        @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.Icon))
+                        {
+                            <text>Ideal image size is 80px * 80px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                        }
+                    </span>
+                  
+                    <span class="field-validation-error" style="display: none;" id="input_file_upload_error_img">This field is required.</span>
+                    
+                     @Html.ValidationMessageFor(m => m.ImgPathTxt)
+                    <br />
+                    @if (Model != null && !string.IsNullOrEmpty(Model.ImgPathTxt))
+                    {
+                        <div id="modelimage">
+                            @Html.Raw(string.Format("<text><img src=\"{0}\" alt=\"Image\" height=\"60px\"  width=\"100px\" /></text>", Url.Content(@Href(Model.ImgPathTxt).Replace("images", "thumbnails_small"))))
+                        </div>
+
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Alt Image Text:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.AltImageTxt, new { @class = "required", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                    @Html.ValidationMessageFor(m => m.AltImageTxt)
+                </div>
+            </div>
+            @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.ImportantInfo) || Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.Icon))
+            {
+                <div class="row tblexternalLink">
+                    <div class="col20">
+                        <label>
+                            URL:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.URLTxt, new { @class = " url nospace", maxlength = "300", @placeholder = "Maximum 300 characters" })
+                        <img src="~/scripts/Admin/images/tooltip.png" title="URL must be like http://www.abc.com" class="suggestion" />
+                        <div class="mobiletooltip">
+                        </div>
+                        @Html.ValidationMessageFor(m => m.URLTxt)
+                    </div>
+                </div>
+
+                <div class="row tblexternalLink">
+                    <div class="col20">
+                        <label>
+                            Target Window:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        <div class="select-style">
+                            @{
+                                var listItemss = new List<SelectListItem>
+                        { new SelectListItem { Text = "New", Value = "true" }, new SelectListItem { Text = "Same", Value = "false" } };
+                            }
+                            @Html.DropDownListFor(model => model.TargetWindowInd, listItemss)
+                        </div>
+                    </div>
+                </div>
+                                }
+                @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.ImportantInfo))
+                {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Display Start Date:
+                        </label>
+                    </div>
+                    <div class="col40" id="divCreatedDate">
+                        @Html.TextBoxFor(m => m.DisplayStartDate, new
+                   {
+                       @Value = ViewBag.StartDateStr,
+                       maxlength = "19",
+                       @class = "nospace datetimepicker",
+                       @placeholder = "MM/DD/YYYY hh:mm",
+                       @id = "DisplayStartDate",
+                       ondrop = "return false;",
+                       onpaste = "return false;"
+                   })
+                        <span id="DisplayStartDatemsg" style="display:none;" class="errors">This field is required.</span> 
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Display End Date:
+                        </label>
+                    </div>
+                    <div class="col40" id="divCreatedDate">
+                        @Html.TextBoxFor(m => m.DisplayEndDate, new
+                   {
+                       @Value = ViewBag.EndDateStr,
+                       maxlength = "19",
+                       @class = "nospace datetimepicker",
+                       @placeholder = "MM/DD/YYYY hh:mm",
+                       @id = "DisplayEndDate",
+                      
+                       ondrop = "return false;",
+                       onpaste = "return false;"
+                   })
+                        @Html.ValidationMessageFor(m => m.DisplayEndDate)
+                       <br /> <span id="spnHome" class="errors"></span>
+                        <span id="DisplayEndDatemsg" style="display:none;" class="errors">This field is required.</span>
+                    </div>
+                </div>
+                                }
+
+            @if (Convert.ToInt64(imagetype) == Convert.ToInt64(ImageTypeAlias.BannerImage) || Convert.ToInt64(imagetype) == Convert.ToInt64(ImageTypeAlias.InnerImage))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Image Abstract:
+                        </label>
+                    </div>
+                    <div class="col75">
+                        @Html.TextAreaFor(m => m.AbstractTxt,
+                                          new
+                                          {
+                                              @class = "AbstractTxt",
+                                              id = "AbstractTxt",
+                                              name = "AbstractTxt"
+                                          })
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Status:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.DropDownList("StatusInd", ViewBag.StatusInd as SelectList)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Date Added:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40" id="divCreatedDate">
+                    @Html.TextBoxFor(m => m.ImageCreateDate, new
+               {
+                   @Value = ViewBag.Date,
+                   maxlength = "10",
+                   @class = "nospace datepicker dateonly",
+                  
+                   @placeholder = "MM/DD/YYYY",
+                   @id = "ImageCreateDate",
+                   ondrop = "return false;",
+                   onpaste = "return false;"
+               })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">&nbsp;</div>
+                <div class="col40">
+                    <input type="submit" value="@ViewBag.Submit" id="btnsubmit"
+                           class="submit-btn submit CreateInner" />
+
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                    <input type="hidden" value="" name="hdnCreateDate" id="hdnCreateDate" />
+                    @Html.HiddenFor(m => m.ImageID)
+                    @Html.HiddenFor(m => m.ImageTypeID)
+                    @Html.HiddenFor(m => m.ImgPathTxt)
+                    @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.BannerImage))
+                    {
+                        <input type="hidden" value="460px" id="CropimgHeight">
+                        <input type="hidden" value="1025px" id="CropimgWidth">
+                    }
+                    @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.InnerImage))
+                    {
+                        <input type="hidden" value="300px" id="CropimgHeight">
+                        <input type="hidden" value="1370px" id="CropimgWidth">
+                    }
+                    @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.ImportantInfo))
+                    {
+                        <input type="hidden" value="215px" id="CropimgHeight">
+                        <input type="hidden" value="305px" id="CropimgWidth">
+                    }
+                    @if (Convert.ToInt32(imagetype) == Convert.ToInt32(ImageTypeAlias.Icon))
+                    {
+                        <input type="hidden" value="80px" id="CropimgHeight">
+                        <input type="hidden" value="80px" id="CropimgWidth">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+    </div>
+    <div class="customprogressbar" style="display: none;">
+        <div></div>
+    </div>
+    @*Div for blocking the user untill the page is not fully loaded.*@
+                                <div id="div" style="position: fixed; bottom: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; opacity: 0.5; background-color: #000; color: #fff; z-index: 9999;">
+                                </div>
+                                }
+
+<script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+@*<script src="~/Scripts/js/additional-methods.js"></script>*@
+
+<script src="~/Scripts/js/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/js/fancybox/jquery.fancybox.js" type="text/javascript"></script>
+<link href="~/Scripts/admin/css/jquery.fancybox.css" rel="stylesheet" />
+<script src="~/Scripts//js/jquery-ui-1.11.2.min.js"></script>
+<link href="~/Scripts/admin/css/jquery.datetimepicker.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/js/jquery.datetimepicker.full.min.js"></script>
+<script src="~/Scripts/js/Fileuploder.js"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+
+    var alertmessage = '@AlertTitle';
+    if (alertmessage) {
+        $('#ImageCreateDate').removeClass('input-validation-error');
+        alert(alertmessage);
+        $('#ImageCreateDate').removeClass('input-validation-error');
+
+    }
+
+    var type = '@imagetype';
+    $(function () {
+        if ($("#AbstractTxt").length != 0) {
+            CKEDITOR.replace('AbstractTxt',
+                   {
+                       toolbar: 'Basic',
+                       BasePath: '@Href("~/ckeditor/'")'
+                   });
+            CKEDITOR.config.allowedContent = true;
+        }
+
+        $('#ImageCreateDate').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+        });
+
+        $('.datetimepicker').datetimepicker({
+            format: 'm/d/Y h:i A',
+            step: 1
+        });
+
+        if (type == 1) {
+            $("#ankMasterImages").addClass('select');
+            $("#ankBannerImages").addClass('select');
+        }
+        else if (type == 2) {
+            $("#ankMasterImages").addClass('select');
+            $("#ankInnerImages").addClass('select');
+        }
+        else if (type == "3") {
+            $('#ankMasters').addClass('select');
+            $('#ankImportantInfoImages').addClass('select');
+        }
+        else if (type == "4") {
+            $('#ankMasters').addClass('select');
+            $('#ankIcons').addClass('select');
+        }
+    });
+ //    code for restrict show multiple error msgs on Image uploading.
+    $('#btnsubmit').on('click', function () {
+        var retfalse = 0;
+        if ($('#ImagePathTxt').hasClass('required') && $('#ImagePathTxt').val().length==0) {
+            retfalse = 1;
+            $('#input_file_upload_error_img').css({ 'display': 'block' });
+        }
+        else {
+            $('#input_file_upload_error_img').css({ 'display': 'none' });
+        }
+       
+       
+            //Code to check dispaly dates comaprision
+            var h_start_time = $('#DisplayStartDate').val();
+            var h_end_time = $('#DisplayEndDate').val();
+
+            if (h_start_time != '' && h_end_time != '') {
+                $('#DisplayEndDatemsg').css({ 'display': 'none' });
+                $('#DisplayStartDatemsg').css({ 'display': 'none' });
+                if (new Date(h_start_time) >= new Date(h_end_time)) {
+                    retfalse = 1;
+                    $('#spnHome').text('Display End Date & Time should be greater than Display Start Date & Time.');
+                }
+                else {
+                    $('#spnHome').text('');
+                }
+            }
+            else {
+                $('#spnHome').text('');
+                if (h_start_time == '' && h_end_time != '') {
+                    retfalse = 1;
+                    $('#DisplayStartDatemsg').css({ 'display': 'block' });
+                    $('#DisplayEndDatemsg').css({ 'display': 'none' });
+                }
+                else if (h_end_time == '' && h_start_time != '') {
+                    retfalse = 1;
+                    $('#DisplayStartDatemsg').css({ 'display': 'none' });
+                    $('#DisplayEndDatemsg').css({ 'display': 'block' });
+                }
+            }
+            if ($("#form1").valid()) {
+                if (retfalse == 1) {
+                    return false;
+                }
+            }
+    });
+
+    $("#TitleTxt").focus();
+    $('#ImageCreateDate').removeClass('input-validation-error');
+    $('#StatusInd').removeClass('input-validation-error');
+</script>
+@Html.Partial("_CropPartial")
+
+@if (imagetype == "1")
+{
+    <script>
+        CKEDITOR.env.isCompatible = true;
+    </script>
+}

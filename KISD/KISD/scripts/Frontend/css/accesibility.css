@@ -1,0 +1,107 @@
+.skip-container{display:block;padding:0;position:relative}
+.skip-link{background:#f5f5f5 none repeat scroll 0 0;border:1px solid #d5d5d5;border-radius:3px;float:right;font-size:.8125em;margin-left:-100%;padding:.5em;text-transform:uppercase}
+.screen-reader-text{clip:rect(1px,1px,1px,1px);position:absolute!important}
+
+.contrast_btn{background:url("../images/contrast.png") no-repeat;width:24px;height:23px;display:block;cursor:pointer}
+.grayscale_btn{background:url("../images/grayscale.png") no-repeat;width:24px;height:23px;display:block;cursor:pointer}
+.font_size_btn{background:url("../images/text_size.png") no-repeat;width:24px;height:23px;display:block;cursor:pointer}
+
+
+.ass_tools{background:#f2efeb none repeat scroll 0 0;border-radius:15px 0 0 15px;position:fixed;right:0;top:45%;z-index:999}
+.ass_tools ul{margin:0;padding:24px 0}
+.ass_tools ul li:last-child{margin-bottom:0}
+.ass_tools ul li{list-style:outside none none;margin-bottom:10px;padding:0 6px 0 12px}
+.ass_tools img{cursor:pointer}
+
+.desaturated{filter:grayscale(100%)!important;
+            -webkit-filter:grayscale(100%)!important;
+            -moz-filter:grayscale(100%)!important;
+            -ms-filter:grayscale(100%)!important;
+            -o-filter:grayscale(100%)!important;
+            filter:gray!important;
+            filter:url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' height='0'><filter id='greyscale'><feColorMatrix type='matrix' values='0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0' /></filter></svg>#greyscale");
+            -webkit-filter:grayscale(100%)!important;
+            height:auto;} 
+.font_size,
+.font_size h2,
+.font_size h3,
+.font_size h4,
+.font_size h5,
+.font_size h6,
+.font_size p,
+.font_size li:not(.ass_tools),
+.font_size label,
+.font_size input,
+.font_size select,
+.font_size textarea,
+.font_size legend,
+.font_size code,
+.font_size pre,
+.font_size dd,
+.font_size dt,
+.font_size blockquote,
+.font_size .welcome_text p,
+.font_size .p-title,
+.font_size .footer ul li a, .font_size .copyright, .font_size .breadcrumb {font-size:110%}
+.font_size h1{font-size:24px }
+.font_size .list_layout .list-discruption h3{font-size:18px}
+
+.font_size .slider-caption{top:38%;}
+.font_size .slider-caption h1{font-size:72px;}
+.font_size .slider-caption p{font-size:34px; }
+.font_size .slider-caption .top_caption{font-size:42px; }
+.font_size nav a{font-size:17px; }
+.font_size .slider-caption-button{font-size:19px; }
+
+.font_size .department-name,.font_size .department-address,.font_size .department-phone, .font_size #sidemenu > ul > li > a, .font_size .personnel-directory .sub-title{font-size:17px; }
+.font_size .campus-news-title{font-size:43px }
+.font_size .personnel-directory .title{font-size:23px }
+
+.font_size .featured-art-abstract,
+.font_size .list-title a,
+.font_size .videos-flud-container .head-abstract{font-size:25px; }
+.font_size .social-icon-container a { margin-right: 6px;}
+.font_size .address {font-size:18px; line-height: 26px;}
+.font_size .flex-control-nav li{font-size:0 }
+.font_size .event-right ul li a, .font_size .homeicon-list .homeicon-list-cont .homeicon-list-box .icon-title{font-size:18px; }
+
+.font_size .dcnews-rightcont .mission-statement p, .font_size .dcnews-rightcont .vision-statement p, .font_size .dcnews-rightcont .student-information p, .font_size .annoucment-items .annoucment-cont p, .font_size .parent-information ul li a, .font_size .exceptional-opportunities ul li a{font-size:18px;}
+
+
+
+.highcontrast{background-color:#000;color:#f3f3f3!important}
+.highcontrast a, .highcontrast a:visited{color:#fff!important;text-decoration:underline}
+.highcontrast div,
+.highcontrast .left_head::after,
+.highcontrast header,
+.highcontrast .footer,
+.highcontrast .right_content,
+.highcontrast .box4 ul li div,
+.highcontrast .white_button{background:none;color:#f3f3f3!important;box-shadow:none}
+.highcontrast .content ul li{color:#fff}
+.highcontrast .pagination ul li a{background:#3b3b3b}
+.highcontrast .pagination ul li.active a, .highcontrast .pagination ul li a:hover {background:#dc0816 none repeat scroll 0 0; color: #fff;}
+.highcontrast .homeicon-list .homeicon-list-cont .homeicon-list-box .icon-title{color:#000!important;}
+.highcontrast .footable-row-detail-inner div{color:#000!important;}
+
+
+
+.highcontrast  .inner_content_sec .content{margin-top:0; }
+.highcontrast h1,.highcontrast h2,.highcontrast h3,.highcontrast h4,.highcontrast h5,.highcontrast h6,.highcontrast .box4 ul li div,.highcontrast nav,.highcontrast p,.highcontrast .inner_sidebar{color:#f3f3f3!important}
+
+.highcontrast header,.highcontrast .flexslider{border-bottom:1px solid #858889}
+.highcontrast .search_box input[type="text"]{background:#000;color:#fff}
+.highcontrast .box4 ul li img{display:none}
+.highcontrast :-ms-input-placeholder, .highcontrast .main-title, .highcontrast .main-title span{color:#fff!important}
+.highcontrast .ass_tools{background:#dfdcd8 none repeat scroll 0 0}
+.highcontrast .our-community-bg{border-top:1px solid #fff;}
+.highcontrast button.slider-caption-button{background:#fff; color:#000!important;text-decoration:underline }
+.highcontrast .breadcrumb a:after,
+.highcontrast .table-row:nth-of-type(2n+1){background:none;}
+.highcontrast .list_layout .list-meta span:nth-child(1), .highcontrast .detail_layout .list-meta span:nth-child(1), .highcontrast .contact-form span{color:#fff}
+.highcontrast .tabledata table tbody tr td:nth-child(1), .highcontrast .tabledata table tbody tr td:nth-child(2){color:#000}
+.highcontrast .personnel-directory .title, .highcontrast ul.staffdirect-list li a, .highcontrast .school-list-container .school-main-title{color:#000!important}
+.highcontrast .main-banner {background-size: cover;   background-repeat: no-repeat;}
+
+.highcontrast .audio-detail-container{border:1px solid #fff;}
+    .highcontrast #sitemap li a {color:#000!important;}

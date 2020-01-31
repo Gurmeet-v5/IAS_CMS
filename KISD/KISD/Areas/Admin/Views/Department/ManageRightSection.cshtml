@@ -1,0 +1,86 @@
+﻿
+@using KISD.Areas.Admin.Models;
+@model ManageRightSectionModel
+
+@{
+    Layout = null;
+    var PageSize = Request.QueryString["pagesize"] ?? "10";
+    var Page = Request.QueryString["page"] ?? "1";
+    var Column = Request.QueryString["Column"] ?? "PageTitleTxt";
+    var Direction = Request.QueryString["Direction"] ?? "Ascending";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+   (":" + HttpContext.Current.Request.Url.Port.ToString()) : "") + "/Admin/";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ManageRightSections</title>
+</head>
+<body>
+    <div class="common-heading">Manage Right Sections</div>
+    <br />
+    @using (Html.BeginForm("ManageRightSections", "Department", new
+    {
+        pagesize = PageSize,
+        page = Page,
+        Column = Column,
+        Direction = Direction
+    },
+        FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+    {
+        <div class="wrapper">
+            <div class="widgets">
+                <div class="row">
+                    <div class="col40 common-right">
+                        <label>
+                            Right Section Title:
+                        </label>
+                    </div>
+                    <div class="col60">
+                        @Html.TextBoxFor(m => m.RightSectionTitleTxt, new { maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col40 common-right">
+                        <label>
+                            Right Section Abstract:
+                        </label>
+                    </div>
+                    <div class="col60">
+                        @Html.TextAreaFor(m => m.RightSectionAbstractTxt, new { maxlength = "200", @placeholder = "Maximum 200 characters" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col40 common-right">
+                        Manage Right Section:
+                    </div>
+                    <div class="col60">
+                        @Html.ListBoxFor(m => m.SelectedRightSections, new SelectList(Model.RightSections, "Value", "Text", Model.RightSections.SelectedValue),
+                    new { @Id = "lstRightSections" })
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col100 common-center">
+                        @Html.HiddenFor(m => m.ContentID)
+                        @Html.HiddenFor(m => m.ParentID)
+                        @Html.HiddenFor(m => m.IsFromMenu)
+
+                        <input type="submit" id="btnsubmit" value="@ViewBag.Submit"
+                               class="submit-btn submit" />
+                        <input type="submit" id="btnCancel" name="command" value="Cancel"
+                               class="cancel cancel-btn" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    }
+</body>
+</html>

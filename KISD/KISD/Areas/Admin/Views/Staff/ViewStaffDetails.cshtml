@@ -1,0 +1,115 @@
+﻿@using KISD.Areas.Admin.Models;
+@model StaffModel
+
+@{
+    Layout = null;
+}
+
+<div class="common-heading">Staff Details</div>
+<div class="wrapper">
+    <div class="staff-detailpopup-con">
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Staff Name:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.NameTxt)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Departments:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.DepartmentsName)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Sub Departments:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.SubDepartmentsName)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Designation:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.DesignationTxt)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    School Category:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.SchoolCategoryName)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    School:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.SchoolName)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Phone Number:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.PhoneTxt)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Email Address:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.EmailTxt)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Status:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.StatusInd == true ? "Active" : "Inactive")
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col50">
+                <label class="bold">
+                    Date Added:
+                </label>
+            </div>
+            <div class="col50 border-left-staff">
+                @Html.Raw(Model.strStaffCreateDate)
+            </div>
+        </div>
+    </div>
+</div>

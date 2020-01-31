@@ -1,0 +1,125 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using KModel = KISD.Areas.Admin.Models;
+@using AnnouncementTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+
+@model KModel.PagedViewModel<KModel.DepartmentModel>
+@{
+    var _ParentId = Request.QueryString["pid"] != null ? KModel.EncryptDecrypt.Decrypt(Request.QueryString["pid"].ToString()) : ("0");
+    var ParentId = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                    (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                    + "/Admin/Department/SubDepartmentListing?pid=" + ParentId
+                    + "&mpage=" + (Request.QueryString["mColumn"] ?? "DepartmentCreateDate") + "&mColumn=" + (Request.QueryString["mColumn"] ?? "DepartmentCreateDate") + "&mDirection=" + (Request.QueryString["mDirection"] ?? "Descending")
+                    + "&mpagesize=" + (Request.QueryString["mpagesize"] ?? "10") + "&page=1&Column=" + (Request.QueryString["Column"] ?? "DepartmentCreateDate") + "&Direction=" + (Request.QueryString["Direction"] ?? "Descending")
+                    + "&pagesize=";
+    AppPath = KModel.Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("SubDepartmentListing", "Department", new
+{
+    pid = ParentId,
+    pagesize = Request.QueryString["pagesize"] ?? "10",
+    page = Request.QueryString["page"] ?? "1",
+    Column = Request.QueryString["Column"] ?? "DepartmentCreateDate",
+    Direction = Request.QueryString["Direction"] ?? "Ascending"
+}, FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankbacktoMasterListing" href='@Url.Action("DepartmentListing", "Department", new {                                                                                               
+                                                                                                    pagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                                                                    page = Request.QueryString["mpage"] ?? "1",
+                                                                                                    Column = Request.QueryString["mColumn"] ?? "DepartmentCreateDate",
+                                                                                                    Direction = Request.QueryString["mDirection"] ?? "Descending" })'>
+                    @ViewBag.Title
+                </a>
+            </li>
+            <li>
+                @ViewBag.PageTitle Sub Department Listing
+            </li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>
+
+                    @Html.Raw(@ViewBag.PageTitle) <text> Sub Department Listing</text>
+                </h4>
+                <div class="btn-group">
+                    <a id="ankback" href='@Url.Action("DepartmentListing", "Department", new {
+                                                                                        pagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                                                        page = Request.QueryString["mpage"] ?? "1",
+                                                                                        Column = Request.QueryString["mColumn"] ?? "DepartmentCreateDate",
+                                                                                        Direction = Request.QueryString["mDirection"] ?? "Descending" })'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+
+                    <a href='@Url.Action("CreateSubDepartment", "Department", new {
+                                                                            pid = ParentId,
+                                                                            did = KModel.EncryptDecrypt.Encrypt("0"),
+                                                                            pagesize = Request.QueryString["pagesize"] ?? "10",
+                                                                            page = Request.QueryString["page"] ?? "1",
+                                                                            Column = Request.QueryString["Column"] ?? "DepartmentCreateDate",
+                                                                            Direction = Request.QueryString["Direction"] ?? "Descending",
+                                                                            mpagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                                            mpage = Request.QueryString["mpage"] ?? "1",
+                                                                            mColumn = Request.QueryString["mColumn"] ?? "DepartmentCreateDate",
+                                                                            mDirection = Request.QueryString["mDirection"] ?? "Descending" })'>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+            </div>
+
+            @Html.Partial("SubDepartmentPartial", Model)
+        </div>
+    </div>
+    <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+    </div>
+
+    @*@Html.Hidden("returnUrl", this.Request.RawUrl)*@
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+}
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script src="~/Scripts/js/jquery.jgrowl.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+</script>
+<script type="text/javascript">
+
+    $("#ankDepartments").addClass('select');
+    $("#ankDepartmentsListing").addClass('select');
+</script>
+<script src="~/Scripts/js/footable.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('table').footable();
+    });
+</script>

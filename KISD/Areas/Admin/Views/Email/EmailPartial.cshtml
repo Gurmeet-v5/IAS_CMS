@@ -1,0 +1,284 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using MvcContrib.Pagination
+
+@model PagedViewModel<EmailModel>
+@{
+    Layout = null;
+    var pager = TempData["pager"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var AlertMessage = TempData["Message"] ?? string.Empty;
+
+    var sortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "EmailTxt";
+    var sortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var emailtype = Request.QueryString["et"] != null ? Request.QueryString["et"].ToString() : "0";
+    var EmailTxt = emailtype == "1" ? "From Email" : "To Email";
+    var pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : KISD.Areas.Admin.Models.Common._pageSize.ToString();
+    var page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : KISD.Areas.Admin.Models.Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost)
+                                                + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                                                (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                                                + "/Admin/Email/Emails?et=" + emailtype
+                                                + "&page=1&Column=" + sortColumn + "&Direction=" + sortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+<div class="Main_PartialHeader">
+    <!-- widget-header Ends -->
+    <div class="pager paging-top">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style" id="divPager">
+                <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+        }
+        <!-- pagination -->
+    </div>
+    @*wrapper*@
+
+    <div class="wrapper">
+        <div class="tab-pane active scroll">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               column.For(x => x.EmailTxt).Named("Email").SortColumnName("EmailTxt").HeaderAttributes(@class => "left sort", @align => "left", @style => "width:80%").Attributes(@Class => "left maxtext td_width");
+
+               column.For(x => Html.ActionLink("Edit", "Emails", "Email", new { eid = EncryptDecrypt.Encrypt(x.EmailID.ToString()), et = emailtype, pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection },
+                                             new { @class = "edit", @title = "Edit" })).Named("Edit").Sortable(false)
+                                            .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                                            .Attributes(@align => "center");
+
+               column.For(x => Html.ActionLink("Delete", "Delete", "Email", new { eid = EncryptDecrypt.Encrypt(x.EmailID.ToString()), et = emailtype, pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection }
+                                               , new { @class = "PostLink delete", @val = x.EmailTxt, @title = "Delete" })).Named("Delete").Sortable(false)
+                                               .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" } })
+                                               .Attributes(@align => "center");
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    @*wrapper end *@
+    <div class="pager">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style">
+                <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+        }
+        <!-- pagination -->
+    </div>
+
+</div>
+
+<script type="text/javascript">
+    //Confirmation for deleting the image
+    $(document).ready(function () {
+        $("a.PostLink").click(function (e) {
+            e.preventDefault();
+            if (window.confirm('Do you want to delete email ' + $(this).attr('val') + '?')) {
+                $.post($(this).attr("href"), function (data) {
+                    // got the result in data variable.
+                    //redirect to the index action method of Image Controller
+                    window.location.href = data;
+                });
+            }
+        });
+    });
+
+    var alertmessage = '@AlertMessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".checkbox").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".checkbox").prop("disabled", false);// Make status check box enable after message hides
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    // Ajax call for display order section
+    $('.displayOrder').change(function () {
+        var qs_pager = $(".ddlPgr").find("option:selected").prop("text");//qs_pager =(dropdown page no value
+
+        var qs_Type; var qs_checkboxselected; var qs_value;
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'displayOrder';
+        var url = $(this).attr('text') + qs_pager;
+
+        // String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'displayorder',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+</script>
+

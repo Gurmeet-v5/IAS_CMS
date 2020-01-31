@@ -1,0 +1,37 @@
+﻿
+@{
+    Layout = null;
+}
+
+<div class="common-heading">System Change Log Details</div>
+<div class="wrapper">
+    <div class="widgets">
+        <div class="row sub-heading">
+            <div class="col50 common-right">
+                <label>
+                    Log Type:
+                </label>
+            </div>
+            <div class="col50">
+                @ViewBag.LogType
+            </div>
+        </div>
+        @if (!string.IsNullOrEmpty(ViewBag.LogType))
+        {
+            <div class="row">
+                <div class="col50 common-right">
+                    <label>
+                        Module:
+                    </label>
+                </div>
+                <div class="col50">
+                    @ViewBag.ModuleName
+                </div>
+            </div>
+
+            <div class="view-data">
+                @Html.Raw(@ViewBag.Data)
+            </div>
+        }
+    </div>
+</div>

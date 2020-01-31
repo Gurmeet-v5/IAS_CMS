@@ -1,0 +1,96 @@
+      .imageBox {
+            position: relative;
+            height: 460px;
+            max-width: 1275px;width:100%;
+            border: 1px solid #aaa;
+            background: #fff;
+            overflow: hidden;
+            background-repeat: no-repeat;
+            cursor: move;margin:0 auto;
+        }
+
+            .imageBox .thumbBox {
+                margin: auto;
+                box-sizing: border-box;
+                box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+                background: none repeat scroll 0% 0% transparent;
+                position: absolute;
+                top: 0;
+                right: 0;
+                left: 0;
+                bottom: 0;
+            }
+
+            .imageBox .spinner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                text-align: center;
+                line-height: 400px;
+                background: rgba(0,0,0,0.7);
+            }
+
+        .action {
+            width: 100%;
+            height: auto;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+    .btnCls {
+	background-color: #141414;
+	color: #fff;
+	padding:8px 15px;
+	border-radius: 4px;
+	border: 0;
+	font-size: 13px;
+	cursor: pointer;
+	text-decoration: none;
+	text-shadow: none;
+	display: inline-block;
+	width: 130px;
+	box-shadow: 0px 3px 1px #000;
+}
+.btnCls:hover{background-color: #424242;box-shadow: 0px 3px 1px #000;}
+.btnCls-cancel {background:#a6310a;color: #fff;
+	padding:8px 15px;
+	border-radius: 4px;
+	border: 0;
+	font-size: 13px;
+	cursor: pointer;
+	text-decoration: none;
+	text-shadow: none;
+	display: inline-block;
+	width: 130px;
+	box-shadow: 0px 3px 1px #941F00;}
+.btnCls-cancel:hover{background:#8B1600;box-shadow: 0px 3px 1px #941F00;}
+      .lbldimention {
+	color: red;
+	width: 100%;
+	display: inline-block;
+	text-align: center;
+	padding: 5px;
+}
+ #divload {
+    background: rgb(1, 1, 1);
+    background: rgba(0, 0, 0, 0.6);
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 10000;
+    background-origin:content-box;
+    display:none; 
+}
+
+.zoom-in {background-image:url("../../../Admin/images/zoom-plus.png");background-repeat:no-repeat;background-size:100%; width:35px;height:39px;display:inline-block;border:0; cursor:pointer;font-size:0;vertical-align: top;outline:0} 
+.zoom-out {background-image:url("../../../Admin/images/zoom-minus.png");background-repeat:no-repeat;background-size:100%; width:35px;height:39px;display:inline-block;border:0;cursor:pointer;font-size:0;vertical-align: top;outline:0}
+.action input:focus {outline:none;border:0;
+}
+.zoom-in:hover{background-image:url("../../../Admin/images/zoom-plus-hover.png");background-repeat:no-repeat;}
+.zoom-out:hover{background-image:url("../../../Admin/images/zoom-minus-hover.png");background-repeat:no-repeat;}

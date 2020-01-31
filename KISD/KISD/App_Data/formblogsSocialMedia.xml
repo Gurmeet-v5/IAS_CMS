@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<FormBlogsSocialMedias>
+  <FormBlogSocialMedia>
+    <BlogSocialMediaID>1</BlogSocialMediaID>
+    <BlogID>1</BlogID>
+    <SocialMediaID>1</SocialMediaID>
+  </FormBlogSocialMedia>
+  <FormBlogSocialMedia>
+    <BlogSocialMediaID>2</BlogSocialMediaID>
+    <BlogID>1</BlogID>
+    <SocialMediaID>3</SocialMediaID>
+  </FormBlogSocialMedia>
+  <FormBlogSocialMedia>
+    <BlogSocialMediaID>3</BlogSocialMediaID>
+    <BlogID>2</BlogID>
+    <SocialMediaID>1</SocialMediaID>
+  </FormBlogSocialMedia>
+  <FormBlogSocialMedia>
+    <BlogSocialMediaID>4</BlogSocialMediaID>
+    <BlogID>2</BlogID>
+    <SocialMediaID>3</SocialMediaID>
+  </FormBlogSocialMedia>
+  <FormBlogSocialMedia>
+    <BlogSocialMediaID>5</BlogSocialMediaID>
+    <BlogID>2</BlogID>
+    <SocialMediaID>2</SocialMediaID>
+  </FormBlogSocialMedia>
+</FormBlogsSocialMedias>

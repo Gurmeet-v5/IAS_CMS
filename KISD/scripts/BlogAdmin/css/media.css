@@ -1,0 +1,136 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+
+@media all and (max-width:1024px){
+
+.edit, .edit:hover{
+    top:-1px;
+    }
+
+.delete, .delete:hover{
+    bottom:-1px;
+    }
+
+
+
+}
+
+
+
+
+
+
+@media all and (max-width:840px){
+
+
+.meanmenu-reveal{
+	display:block;
+	}
+.content{
+	width:100%;
+	}
+.sidebar {
+    width:auto;
+    }
+.hidemeanmenu{display:none;}
+.block {
+    display:block;
+    }    
+
+
+}
+
+@media all and (max-width:740px){
+
+input, textarea, select{
+	max-width:none!important;
+	}
+label {
+    display: inline-block;
+    margin-bottom: 5px;
+}	
+.col25, .col10, .col15, .col20, .col25, .col30, .col40, .col50, .col60, .col75{
+	width:100%!important;
+	padding:0 10px!important;
+	}
+.margin-bottom .col15,.margin-bottom .col20,.margin-bottom .col25 {
+    margin-bottom:10px;
+    }
+.has-error{
+	float:left;
+	}
+.wrapper{
+	padding:15px 10px!important;
+	}	
+.widget-header h4{
+	padding:5px 10px;
+	}
+.pager{
+	padding:0 10px!important;
+	}			
+.pagination{
+	margin-top:15px;
+	}
+.table th, .table td{
+	padding:5px;
+	}		
+.table th{
+	font-size:11px;
+	}
+
+.login section {
+    padding-right:10px;
+    padding-left:10px;
+    }
+.login .logo {
+    display:block;
+    }
+.login .box {
+    width:100%!important;
+    }
+.suggestion{
+	right:16px;
+	}
+.breadcrumb {
+    display:none;
+    }
+.username label {
+    margin-bottom:0;
+    }
+.m-hide {
+    display:none;
+    }
+.block {
+    display:inline-block;
+    }   
+
+
+
+}
+
+@media all and (max-width:640px) {
+    header .logo { width:43%; padding-left:10px}
+    .footable-row-detail-row { line-height:2.5em!important}
+    header { padding-right:0px!important}
+    .mobile_hide { display:none}
+    .breadcrumb { position:static}
+    /*section { padding-top:10px!important}*/
+    .cbp-spmenu-vertical { height:80%!important}
+
+
+}
+
+@media all and (max-width:480px) {
+        .logo a { font-size:16px}
+    .paginationRight { float:left; width:100%}
+    .pagination { float:left!important; width:100%}
+    .fontsize {
+    font-size:10px;
+    }
+    
+}
+@media all and (max-width:360px) {
+    header .logo{ display:none}
+    .td_width { width:150px; float:left; overflow-x:scroll}
+}

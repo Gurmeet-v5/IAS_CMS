@@ -1,0 +1,108 @@
+﻿
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>@ViewBag.Title - KISD</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0;" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <!--[if lt IE 9]>
+        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link href="@Href("~/Scripts/Admin/css/default.css")" rel="stylesheet" />
+    <link href="@Href("~/Scripts/Admin/css/position.css")" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css' />
+    <link href="@Href("~/favicon.png")" rel="shortcut icon" type="image/x-icon" />
+    <link href="@Href("~/Scripts/Admin/css/footable.core.css")" rel="stylesheet" />
+
+    <script type="text/javascript" src="@Url.Content("~/Scripts/js/jquery-1.10.2.js")"></script>
+    <script type="text/javascript" src="@Url.Content("~/Scripts/js/classie.js")"></script>
+    <style>
+        .content {
+            float: none;
+            margin: auto;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $(".dropdown-toggle").click(function () {
+                $("#print_sec").toggle();
+            });
+        });
+    </script>
+</head>
+<body ontouchstart class="login">
+    <!-- header Ends -->
+    @*<header>
+        <!-- header -->
+        <div class="meanmenu-reveal">
+            <button id="showLeft"></button>
+        </div>
+        <div class="common-center">
+            <a id="anklogo" href="#" title="Killeen ISD">
+                <img alt="Killeen ISD" title="Killeen ISD" src="~/scripts/frontend/images/Kisd-logo.png" />
+            </a>
+        </div>
+    </header>*@
+    <section>
+        <div class="success message" id="notifyDiv" style="display: none;">
+            <h3 id="notifyMsg"></h3>
+        </div>
+        <!-- Section -->
+        <!-- Sidebar Ends -->
+        <div class="content" id="divcontent">
+            @RenderBody()
+        </div>
+    </section>
+    <!-- Section Ends -->
+    <footer>
+        <!-- Footer -->
+    </footer>
+    <!-- Footer Ends -->
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+
+        $('.message').click(function () {
+            $(this).animate({ top: -$(this).outerHeight() }, 500);
+            $('#notifyDiv').hide();
+        });
+        setmenuheight();
+        setInterval('setmenuheight()', 1000);
+    });
+    function setmenuheight() {
+        var mheight = $('#divmenu').height();
+        var cheight = $('#divcontent').height();
+        var winheight = $(window).height();
+        if (cheight > mheight) {
+
+            var h = (parseFloat(cheight) + 100) + 'px';
+            $('#divmenu').height(h);
+        }
+        else if (winheight > mheight) {
+            var h = (parseFloat(winheight)) + 'px';
+            $('#divmenu').height(h);
+        }
+    }
+</script>
+<style type="text/css" media="print">
+    .meanmenu-reveal {
+        display: none;
+    }
+
+    header {
+        background: #ffffff;
+        border-bottom: 4px solid #ffffff;
+    }
+
+    .logo a {
+        color: #808080;
+    }
+</style>

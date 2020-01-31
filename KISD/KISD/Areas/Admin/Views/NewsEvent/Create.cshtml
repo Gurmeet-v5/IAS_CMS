@@ -1,0 +1,1037 @@
+﻿@using System.Web.Mvc;
+@using KISD.Areas.Admin.Models;
+@model NewsEventModel
+@using NewsEventTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    string Listingtype = Convert.ToString(ViewBag.ImageTypeId) ?? string.Empty;
+    var TypeMasterID = Request.QueryString["mt"] != null ? Request.QueryString["mt"].ToString() : EncryptDecrypt.Encrypt("0");
+    var type = EncryptDecrypt.Decrypt(TypeMasterID);
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var SortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "EventCreateDate";
+    var SortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Descending";
+    var Pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var PagerID = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+            (":" + HttpContext.Current.Request.Url.Port.ToString()) : "") + "/Admin/";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("Create", "NewsEvent", new
+{
+    mt = Request.QueryString["mt"] != null ? Request.QueryString["mt"].ToString() : EncryptDecrypt.Encrypt("0"),
+    nid = Request.QueryString["nid"] != null ? Request.QueryString["nid"].ToString() : EncryptDecrypt.Encrypt("0"),
+    pid = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : EncryptDecrypt.Encrypt("0"),
+    pagesize = Pagesize,
+    page = PagerID,
+    Column = SortColumn,
+    Direction = SortDirection
+},
+    FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data", autocomplete = "off" }))
+{
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(NewsEventTypeAlias.ManageEvents))
+            {
+                <li>
+                    <a id="ankbacktoMasterListing" href='@Url.Action("DepartmentListing", "Department", new
+                                                    {
+                                                        pagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                        page = Request.QueryString["mpage"] ?? "1",
+                                                        Column = Request.QueryString["mColumn"] ?? "DepartmentCreateDate",
+                                                        Direction = Request.QueryString["mDirection"] ?? "Descending"
+                                                    })'>
+                        Department Listing
+                    </a>
+                </li>
+            }
+            <li>
+                <a id="anklisting" href='@Url.Action("Index", "NewsEvent", new
+                                    {
+                                        mt = TypeMasterID,
+                                        nid = Request.QueryString["nid"] != null ? Request.QueryString["nid"].ToString() : EncryptDecrypt.Encrypt("0"),
+                                        pid = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : EncryptDecrypt.Encrypt("0"),
+                                        pagesize = Pagesize,
+                                        page = PagerID,
+                                        Column = SortColumn,
+                                        Direction = SortDirection
+                                    })'>@Html.Raw(Convert.ToString(ViewBag.ImageTypeTitle)) Listing</a>
+                                </li>
+                                <li>
+                                    @Html.Raw(Convert.ToString(@ViewBag.PageTitle))
+                                </li>
+                            </ul>
+                        </div>
+    <!-- Breadcrumb Ends -->
+
+      <!-- page-header -->
+                        <div class="page-header">
+                            <div class="page-title">
+                            </div>
+                        </div>
+      <!-- page-header -->
+
+    <!-- Wrapper -->
+                        <div class="wrapper">
+                            <!-- Wrapper -->
+                            <div class="widget">
+                                <!-- widget -->
+                                <div class="widget-header">
+                                    <!-- widget-header -->
+                                    <h4><i class="icon-reorder"></i>@Html.Raw(Convert.ToString(@ViewBag.PageTitle)) </h4>
+                                    <div class="btn-group">
+                                        <a id="ankback" href='@Url.Action("Index", "NewsEvent", new
+                                                         {
+                                                             mt = TypeMasterID,
+                                                             nid = Request.QueryString["nid"] != null ? Request.QueryString["nid"].ToString() : EncryptDecrypt.Encrypt("0"),
+                                                             pid = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : EncryptDecrypt.Encrypt("0"),
+                                                             pagesize = Pagesize,
+                                                             page = PagerID,
+                                                             Column = SortColumn,
+                                                             Direction = SortDirection
+                                                         })'>
+                                            <i class="icon-arrow-left"></i>Back
+                                        </a>
+                                    </div>
+                                </div>
+                                @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News)
+|| Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.Events)
+|| Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
+                                {
+
+
+                                    <div class="row">
+                                        <div class="col20">
+                                            <label>
+                                             @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                             { <text>News</text>}
+                                             else
+                                             {
+                                                <text>Event</text>
+                                             }   Title:<span class="requiredstar">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="col40">
+                                            @Html.TextBoxFor(m => m.TitleTxt, new { @class = "required", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                                            <br />
+                                            @Html.ValidationMessageFor(m => m.TitleTxt)
+                                        </div>
+                                    </div>
+                                    if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                    {
+                                        if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                        {
+                                            <div class="row dvimage" id="dvimage">
+                                                <div class="col20">
+                                                    <label>
+                                                        Upload Image:
+                                                    </label>
+                                                </div>
+                                                <div class="col40">
+                                                    <input type="file" value="" accept=".jpg,.jpeg,.png,.gif"
+                                                           @if (Model != null && !string.IsNullOrEmpty(Model.ImageURLTxt))
+                                                           { <text> class="cropedfileupload" name="imageupload" id="imageupload" </text>                   }
+                                                           else
+                                                           { <text> class="cropedfileupload" id="ImagePathTxt" name="ImagePathTxt" </text>      } />
+                                                    <span class="fontsize">
+
+                                                        <text>Ideal image size is 840px * 380px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                                                    </span>
+                                                    <span class="field-validation-error" style="display: none;" id="input_file_upload_error_img">This field is required.</span>
+                                                    @Html.ValidationMessageFor(m => m.ImageURLTxt, null, new { @id = "err_ImagePathTxt" })
+                                                     <br />
+                                                    @if (Model != null && !string.IsNullOrEmpty(Model.ImageURLTxt))
+                                                    {
+                                                        <div id="modelimage">
+                                                            @Html.Raw(string.Format("<text><img src=\"{0}\" alt=\"Image\" height=\"60px\"  width=\"100px\" /></text>", Url.Content(@Href(Model.ImageURLTxt).Replace("images", "thumbnails"))))
+                                                        </div>
+
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col20">
+                                                    <label>
+                                                        Author Name:<span class="requiredstar">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col40">
+                                                    @Html.TextBoxFor(m => m.AuthorNameTxt, new { @class = "required", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                                                    <br />
+                                                    @Html.ValidationMessageFor(m => m.AuthorNameTxt)
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col20">
+                                                    <label>
+                                                        Abstract:<span class="requiredstar">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col40" id="tdCkEditor">
+                                                    @Html.TextAreaFor(m => m.AbstractTxt, new { @class = "AbstractTxt required", id = "AbstractTxt", name = "AbstractTxt", maxlength = "200", @placeholder = "Maximum 200 characters" })
+                                                @Html.ValidationMessageFor(m => m.AbstractTxt)
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="row">
+                                                <div class="col20">
+                                                    <label>
+                                                        Is External Link:<span class="requiredstar">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col40">
+                                                    <div class="select-style">
+                                                        @{
+                                                            var listItemExternalLink = new List<SelectListItem>
+                                                      {  new SelectListItem { Text = "No", Value = "false" }, new SelectListItem { Text = "Yes", Value = "true" },};
+                                                        }
+                                                        @Html.DropDownListFor(model => model.IsExternalLinkInd, listItemExternalLink, new { onchange = "setformOncahnge(this.value)" })
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row tblpagetitle">
+                                                <div class="col20">
+                                                    <label>
+                                                        Page URL:<span class="requiredstar">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col40">
+                                                    @Html.TextBoxFor(m => m.PageURLTxt, new { @class = "required alphanumeric nospace", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                                                    <br />
+                                                    @Html.ValidationMessageFor(m => m.PageURLTxt)
+                                                </div>
+                                            </div>
+                                            <div class="row tblexternalLink">
+                                                <div class="col20">
+                                                    <label>
+                                                        External Link URL:<span class="requiredstar">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col40">
+                                                    @Html.TextBoxFor(m => m.URLTxt, new { @class = "required url nospace", maxlength = "300", @placeholder = "Maximum 300 characters" })
+                                                    <img src="~/scripts/Admin/images/tooltip.png" title="URL must be like http://www.abc.com" class="suggestion" />
+                                                    <div class="mobiletooltip">
+                                                    </div>
+                                                    @Html.ValidationMessageFor(m => m.URLTxt)
+                                                </div>
+                                            </div>
+
+                                            <div class="row tblexternalLink">
+                                                <div class="col20">
+                                                    <label>
+                                                        External Link Target Window:<span class="requiredstar">*</span>
+                                                    </label>
+                                                </div>
+                                                <div class="col40">
+                                                    <div class="select-style">
+                                                        @{
+                                                            var listItemss = new List<SelectListItem>
+                        { new SelectListItem { Text = "New", Value = "true" }, new SelectListItem { Text = "Same", Value = "false" } };
+                                                        }
+                                                        @Html.DropDownListFor(model => model.ExternalLinkTargetInd, listItemss)
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @*<div class="common-fieldset metatitle">
+                                                <span>Right Section</span>
+                                                <div class="row metatitle">
+                                                    <div class="col20">
+                                                        <label>
+                                                            Right Section Title:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col40">
+                                                        @Html.TextBoxFor(m => m.RightSectionTitleTxt, new { maxlength = "100", @placeholder = "Maximum 100 characters" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="row metatitle">
+                                                    <div class="col20">
+                                                        <label>
+                                                            Right Section Abstract:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col40">
+                                                        @Html.TextAreaFor(m => m.RightSectionAbstractTxt, new { maxlength = "200", @placeholder = "Maximum 200 characters" })
+                                                    </div>
+                                                </div>
+                                            </div>*@
+                                            <div class="common-fieldset">
+                                                <span>Banner Image</span>
+                                                <div class="row tblpagetitle dvinnerimage">
+                                                    <div class="col20">
+                                                        <label>
+                                                            Banner Image:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col40">
+
+                                                        @{
+                                                            var list = new SelectList(ViewBag.InnerImagesTitle, "ImageID", "TitleTxt");
+                                                        }
+                                                        @Html.DropDownListFor(m => m.BannerImageID, list as SelectList, "--- Select Inner Image ---", new { @class = "ddl", onchange = "ddlInnerImagesChange(this.value)", @name = "ddlInnerImages" })
+                                                        <span id="ImageIDErrmsg" style="color:#C30; font-size:12px; font-family:Arial,sans-serif; display:none;">This field is required.</span>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="row tblpagetitle">
+                                                    <div class="col20">
+                                                        <label>
+                                                            Alt Banner Image Text:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col40">
+                                                        @Html.TextBoxFor(m => m.AltBannerImageTxt, new { @class = "common-width", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                                                    </div>
+                                                </div>
+
+                                                <div class="row tblpagetitle">
+                                                    <div class="col20">
+                                                        <label>
+                                                            Banner Image Abstract:
+                                                        </label>
+                                                    </div>
+                                                    <div class="col75" id="tdCkEditor">
+                                                        @Html.TextAreaFor(m => m.BannerImageAbstractTxt, new { @class = "AbstractTxt", id = "AbstractTxtInner", name = "AbstractTxt" })
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                                            }
+                                                            <div class="row metatitle">
+                                                                <div class="col20">
+                                                                    <label>
+                                                                        Description:<span class="requiredstar">*</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col75">
+                                                                    @Html.TextAreaFor(m => m.DescriptionTxt, new { @class = "ckeditor", @id = "ckDescriptionTxt", htmlEncodeOutput = true })
+                                                                    <span class="field-validation-error" id="spnDesc" style="display: none;">This field is required.</span>
+                                                                </div>
+                                                            </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                if (Model.TypeMasterID != Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
+                                                                {
+                                                                    <div class="row metatitle">
+                                                                        <div class="col20">
+                                                                            <label>
+                                                                                Description:
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col75">
+                                                                            @Html.TextAreaFor(m => m.DescriptionTxt, new { @class = "ckeditor", @id = "minickDescriptionTxt", htmlEncodeOutput = true })
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                                <div class="row">
+                                                                    <div class="col20">
+                                                                        <label>
+                                                                            @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.Events) || Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
+                                                                            {<text> Event</text>
+                                                                            } Date:<span class="requiredstar">*</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col40" id="divCreatedDate">
+                                                                        @Html.TextBoxFor(m => m.EventDate, new
+                                                                   {
+                                                                       @Value = ViewBag.EventDate,
+                                                                       maxlength = "20",
+                                                                       @class = "datepicker required",
+                                                                       @placeholder = "MM/DD/YYYY",
+                                                                       @id = "EventDate",
+                                                                       ondrop = "return false;",
+                                                                       onpaste = "return false;"
+                                                                   })
+                                                                        <br />
+                                                                        @Html.ValidationMessageFor(x => x.EventDate)
+                                                                        <span id="spnEventDate" class="errors"></span>
+                                                                    </div>
+                                                                </div>
+                                                            }
+
+                                                            if (Model.TypeMasterID != Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
+                                                            {
+                                                                <div class="row">
+                                                                    <div class="col20">
+                                                                        <label>
+                                                                            Display Start Date:
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col40" id="divCreatedDate">
+                                                                        @Html.TextBoxFor(m => m.DisplayStartDate, new
+                                                               {
+                                                                   @Value = ViewBag.StartDateStr,
+                                                                   maxlength = "20",
+                                                                   @class = "datetimepicker",
+                                                                   @placeholder = "MM/DD/YYYY hh:mm",
+                                                                   @id = "DisplayStartDate",
+
+                                                                   ondrop = "return false;",
+                                                                   onpaste = "return false;"
+                                                               })
+                                                                        @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                                        {
+                                                                            <img src='@Href("~/scripts/Admin/images/tooltip.png")' title="News will be visible in website from the date specified in Display Start date " class="suggestion tooltipinfo" />
+                                                                            <div class="mobiletooltip">
+                                                                            </div>
+                                                                        }
+                                                                        <span id="DisplayStartDatemsg" style="display:none;" class="errors">This field is required.</span>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col20">
+                                                                        <label>
+                                                                            Display End Date:
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col40" id="divCreatedDate">
+                                                                        @Html.TextBoxFor(m => m.DisplayEndDate, new
+                                                               {
+                                                                   @Value = ViewBag.EndDateStr,
+                                                                   maxlength = "20",
+                                                                   @class = "datetimepicker",
+                                                                   @placeholder = "MM/DD/YYYY hh:mm",
+                                                                   @id = "DisplayEndDate",
+                                                                   ondrop = "return false;",
+                                                                   onpaste = "return false;"
+                                                               })
+                                                                        @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                                        {
+                                                                            <img src='@Href("~/scripts/Admin/images/tooltip.png")' title="News will be visible in the website till the date specified in Display End date" class="suggestion tooltipinfo" />
+                                                                            <div class="mobiletooltip">
+                                                                            </div>
+                                                                        }
+                                                                        <span id="spnHome" class="errors"></span>
+                                                                        <span id="DisplayEndDatemsg" style="display:none;" class="errors">This field is required.</span>
+                                                                    </div>
+                                                                </div>
+
+                                    <div class="row">
+                                        <div class="col20">
+                                            <label>
+                                                Show On Home:<span class="requiredstar">*</span>
+                                            </label>
+                                        </div>
+                                        <div class="col40">
+                                            <div class="select-style">
+                                                @Html.DropDownList("ShowonHomeInd", ViewBag.ShowonHomeInd as SelectList)
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <div class="col20">
+                                        <label>
+                                            Status:<span class="requiredstar">*</span>
+                                        </label>
+                                    </div>
+                                    <div class="col40">
+                                        <div class="select-style">
+                                            @Html.DropDownList("StatusInd", ViewBag.IsActiveInd as SelectList)
+                                        </div>
+                                    </div>
+                                </div>
+                                                            if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
+                                                            {
+                                                                <div class="common-fieldset">
+                                                                    <span>Recurring</span>
+                                                                    <div class="row tblpagetitle dvinnerimage">
+                                                                        <div class="col20">
+                                                                            <label>
+                                                                                Is Recurring Event:<span class="requiredstar">*</span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col60">
+                                                                            @Html.RadioButtonFor(x => x.IsRecurringInd, true)Yes
+                                                                            @Html.RadioButtonFor(x => x.IsRecurringInd, false)No
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row tblpagetitle recurring">
+                                                                        <div class="col20">
+                                                                            <label>
+                                                                                Recurrence Type<span class="requiredstar">*</span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col60">
+                                                                            @Html.RadioButtonFor(x => x.RecurrenceTypeNbr, 1, new { @class = "required rbRecurrenceTypeNbr" })Daily<br />
+                                                                            @Html.RadioButtonFor(x => x.RecurrenceTypeNbr, 2, new { @class = "required rbRecurrenceTypeNbr" })Weekly<br />
+                                                                            @Html.RadioButtonFor(x => x.RecurrenceTypeNbr, 3, new { @class = "required rbRecurrenceTypeNbr" })Monthly<br />
+                                                                            @Html.RadioButtonFor(x => x.RecurrenceTypeNbr, 4, new { @class = "required rbRecurrenceTypeNbr" })Yearly<br />
+                                                                            @Html.ValidationMessageFor(x => x.RecurrenceTypeNbr)
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="row tblpagetitle weekly">
+                                                                        <div class="col20">
+                                                                            <label>
+                                                                                Choose Days:<span class="requiredstar">*</span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col75" id="tdCkEditor">
+                                                                            @Html.CheckBoxFor(x => x.NoIsSunday, new { @class = "chkweekdays" })Sunday
+                                                                            @Html.CheckBoxFor(x => x.NoIsMonday, new { @class = "chkweekdays" })Monday
+                                                                            @Html.CheckBoxFor(x => x.NoIsTuesday, new { @class = "chkweekdays" })Tuesday
+                                                                            @Html.CheckBoxFor(x => x.NoIsWednesday, new { @class = "chkweekdays" })Wednesday<br />
+                                                                            @Html.CheckBoxFor(x => x.NoIsThursday, new { @class = "chkweekdays" })Thursday
+                                                                            @Html.CheckBoxFor(x => x.NoIsFriday, new { @class = "chkweekdays" })Friday
+                                                                            @Html.CheckBoxFor(x => x.NoIsSaturday, new { @class = "chkweekdays" })Saturday<br />
+                                                                            <span id="spnerrchkdays" style="color:#C30; font-size:12px; font-family:Arial,sans-serif;"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row tblpagetitle monthly">
+                                                                        <div class="col20">
+                                                                            <label>
+                                                                                @Html.RadioButtonFor(x => x.MonthModeNbr, 1, new { @class = "required rbMonthModeNbr" })One Date:<span class="requiredstar">*</span><br /><br /><br /><br />
+                                                                                @Html.RadioButtonFor(x => x.MonthModeNbr, 2, new { @class = "required rbMonthModeNbr" })One Week Day:<span class="requiredstar">*</span><br />
+                                                                                @Html.ValidationMessageFor(x => x.MonthModeNbr)
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col75" id="tdCkEditor">
+                                                                            @Html.TextBoxFor(x => x.MonthdayNbr, new { @disabled = "disabled", @class = "required", @maxlength = "2" })<br />
+                                                                            @Html.ValidationMessageFor(x => x.MonthdayNbr)
+                                                                            <br /><br />
+                                                                            @Html.DropDownListFor(x => x.MonthondayNbr, ViewBag.MonthondayNbr as SelectList, new { style = "width: 100px;", @disabled = "disabled" })
+                                                                            @Html.DropDownListFor(x => x.MonthonNbr, ViewBag.MonthonNbr as SelectList, new { style = "width: 100px;", @disabled = "disabled" })
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row recurringenddate">
+                                                                        <div class="col20">
+                                                                            <label>
+                                                                                @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
+                                                                                {<text> Event End</text>
+                                                                                } Date:<span class="requiredstar">*</span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="col40" id="divCreatedDate">
+                                                                            @Html.TextBoxFor(m => m.EventsEndOnDate, new
+                                                                       {
+                                                                           @Value = ViewBag.EventEndDate,
+                                                                           maxlength = "20",
+                                                                           @class = "datetimepicker required",
+                                                                           @placeholder = "MM/DD/YYYY hh:mm",
+                                                                           @id = "EventsEndOnDate",
+                                                                           ondrop = "return false;",
+                                                                           onpaste = "return false;"
+                                                                       })
+                                                                            <br />
+                                                                            @Html.ValidationMessageFor(x=>x.EventsEndOnDate)
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            <div class="row">
+                                                                <div class="col20">
+                                                                    <label>
+                                                                        Date Added:<span class="requiredstar">*</span>
+                                                                    </label>
+                                                                </div>
+                                                                <div class="col40">
+                                                                    @Html.TextBoxFor(m => m.EventCreateDate, new
+                                                               {
+                                                                   @Value = ViewBag.Date,
+                                                                   maxlength = "10",
+                                                                   @class = "nospace datepicker dateonly",
+                                                                   @readonly = true,
+                                                                   @placeholder = "MM/DD/YYYY",
+                                                                   @id = "ListingCreateDate",
+                                                                   ondrop = "return false;",
+                                                                   onpaste = "return false;"
+                                                               })
+                                                                    @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                                    {
+                                                                        <img src='@Href("~/scripts/Admin/images/tooltip.png")' title="News will be sorted on the basis of Date Added in website" class="suggestion tooltipinfo" />
+                                                                        <div class="mobiletooltip">
+                                                                        </div>
+                                                                    }
+                                                                    <br />
+                                                                    @Html.ValidationMessageFor(m => m.EventCreateDate)
+                                                                </div>
+                                                            </div>
+                                                            if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                            {
+                                                                <div class="row metatitle">
+                                                                    <div class="col20">
+                                                                        <label>
+                                                                            Page Meta Title:<span class="requiredstar">*</span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col40">
+                                                                        @Html.TextBoxFor(m => m.PageMetaTitleTxt, new { @class = "required", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                                                                        <br />
+                                                                        @Html.ValidationMessageFor(m => m.PageMetaTitleTxt)
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="row metatitle">
+                                                                    <div class="col20">
+                                                                        <label>
+                                                                            Meta Description:
+                                                                        </label>
+                                                                    </div>
+                                                                    <div class="col40">
+                                                                        @Html.TextAreaFor(m => m.PageMetaDescriptionTxt, new { maxlength = "2000", @placeholder = "Maximum 2000 characters" })
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            <div class="row">
+                                                                <div class="col20">&nbsp;</div>
+                                                                <div class="col40">
+                                                                    @Html.HiddenFor(m => m.NewsEventID)
+                                                                    @Html.HiddenFor(m => m.TypeMasterID)
+                                                                    @Html.HiddenFor(m => m.ImageURLTxt)
+                                                                    @Html.HiddenFor(m => m.DepartmentID)
+                                                                    <input type="hidden" value="380px" id="CropimgHeight">
+                                                                    <input type="hidden" value="840px" id="CropimgWidth">
+                                                                    <input type="submit" id="btnsubmit" value="@ViewBag.Submit"
+                                                                           class="submit-btn submit" />&nbsp;&nbsp;&nbsp;
+                                                                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                                                                           class="cancel cancel-btn" />
+                                                                </div>
+                                                            </div>
+
+                                                            // Div for blocking the user untill the page is not fully loaded.
+                                                            <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+                                                            </div>
+                                                            }
+                            </div>
+                        </div>
+                        <script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+                        <script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+                        <script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+                        @*<script src="~/Scripts/js/additional-methods.js" type="text/javascript"></script>*@
+                                                            <script src="@Href(" ~/Scripts/js/ckeditor/ckeditor.js")"></script>
+                                                            <script src="@Href(" ~/Scripts/js/custom-validate.js")"></script>
+                                                            <script type="text/javascript" src="@Href(" ~/Scripts/js/ckfinder/ckfinder.js")"></script>
+                                                            <script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+                                                            <link href="~/Scripts/admin/css/jquery.datetimepicker.min.css" rel="stylesheet" />
+                                                            <script type="text/javascript" src="~/Scripts/js/jquery.datetimepicker.full.min.js"></script>
+                                                            <script src="~/Scripts/js/Fileuploder.js"></script>
+                                                            <script type="text/javascript">
+                                                                // code for blocking the user untill the page is not fully loaded.
+                                                                $(document).ready(function () {
+                                                                    var alertmessage = '@alertmessage';
+                                                                    if (alertmessage != '')
+                                                                        alert(alertmessage);
+                                                                    $("#div").fadeOut();
+                                                                    var type = '@EncryptDecrypt.Decrypt(TypeMasterID)';
+                                                                    if (type == "8") {
+                                                                        $("#ankMasters").addClass('select');
+                                                                        $('#ankNews').addClass('select');
+                                                                        $('#ankNewsListing').addClass('select');
+                                                                    }
+                                                                    else if (type == "9") {
+                                                                        $('#ankMasters').addClass('select');
+                                                                        $('#ankEvents').addClass('select');
+                                                                        $('#ankEventsListing').addClass('select');
+                                                                    }
+                                                                    else if (type == "18") {
+                                                                        $('#ankDepartments').addClass('select');
+                                                                        $('#ankDepartmentsListing').addClass('select');
+                                                                    }
+                                                                    if ($("#IsExternalLinkInd").val() == "false") {
+                                                                        $('#TitleTxt').on('change keyup', function () {
+                                                                            var url = this.value;
+                                                                            $.ajax({
+                                                                                url: '@(Url.Action("CheckURL"))',
+                                                                                type: 'POST',
+                                                                                data: JSON.stringify({ url: url.replace(/[\W_]/g, '_') }),
+                                                                                dataType: 'json',
+                                                                                contentType: 'application/json',
+                                                                                success: function (data) {
+                                                                                    if (data != "" || data != null) {
+                                                                                        if ($("#IsExternalLinkInd").val() == "false") {
+                                                                                            $("#PageURLTxt").val(data.toString().toLowerCase());
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            });
+                                                                        });
+                                                                    }
+
+                                                                });
+                                                                var isactive = '@Model.IsExternalLinkInd';
+                                                                var $ = jQuery.noConflict();
+                                                                $(document).ready(function () {
+                                                                    var nospace = $(".nospace");
+                                                                    var funcfb = function () {
+                                                                        $(this).val($(this).val().replace(/\s/g, ''));
+                                                                    }
+                                                                    if (nospace != null && nospace.length > 0) {
+                                                                        nospace.keyup(funcfb).blur(funcfb);
+                                                                    }
+                                                                    var type = '@EncryptDecrypt.Decrypt(TypeMasterID)';
+                                                                    if (type != "18") {
+                                                                        if ($("#ckDescriptionTxt").length != 0) {
+                                                                            var editor = CKEDITOR.replace('ckDescriptionTxt');
+                                                                            CKEDITOR.config.allowedContent = true;
+                                                                            CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/js/ckfinder/")', rememberLastFolder: false })
+                                                                        }
+                                                                        if ($("#minickDescriptionTxt").length != 0) {
+                                                                            CKEDITOR.replace('minickDescriptionTxt', { toolbar: 'Basic', BasePath: '@Href("~/Scripts/js/ckeditor/'")' });
+                                                                            CKEDITOR.config.allowedContent = true;
+                                                                        }
+                                                                        // for mini ck for header and footer for home page
+                                                                        if ($("#tdCkEditor").length != 0) {
+                                                                            CKEDITOR.replace('BannerImageAbstractTxt',
+                                                                               {
+                                                                                   toolbar: 'Basic',
+                                                                                   BasePath: '@Href("~/Scripts/js/ckeditor/'")'
+                                                                               });
+                                                                            CKEDITOR.config.allowedContent = true;
+                                                                        }
+                                                                    }
+                                                                    setform(isactive);
+                                                                    $('#IsActiveInd').removeClass('input-validation-error');
+                                                                    var isrecurring = '@Model.IsRecurringInd'
+                                                                    if (isrecurring == "" || isrecurring == "False") {
+                                                                        $(".recurring").hide();
+                                                                        $(".weekly").hide();
+                                                                        $(".monthly").hide();
+                                                                        $(".recurringenddate").hide();
+                                                                    }
+                                                                    else {
+                                                                        $(".recurring").show();
+                                                                        var recurringnbr = '@Model.RecurrenceTypeNbr'
+                                                                        if (recurringnbr == "2") {
+                                                                            $(".weekly").show();
+                                                                            $(".monthly").hide();
+                                                                        }
+                                                                        else if (recurringnbr == "3") {
+                                                                            $(".monthly").show();
+                                                                            $(".weekly").hide();
+                                                                            var monthmodenbr = '@Model.MonthModeNbr'
+                                                                            if (monthmodenbr == "1") {
+                                                                                $("#MonthdayNbr").prop('disabled', false);
+                                                                            }
+                                                                            if (monthmodenbr == "2") {
+                                                                                $("#MonthdayNbr").prop('disabled', true);
+                                                                                $("#MonthondayNbr").prop('disabled', false);
+                                                                                $("#MonthonNbr").prop('disabled', false);
+                                                                            }
+                                                                        }
+                                                                        else {
+                                                                            $(".monthly").hide();
+                                                                            $(".weekly").hide();
+                                                                        }
+                                                                    }
+                                                                    $('input[type=radio][name=IsRecurringInd]').change(function () {
+                                                                        if (this.value == 'True') {
+                                                                            $(".recurring").show();
+                                                                            $(".recurringenddate").show();
+                                                                        }
+                                                                        else if (this.value == '' || this.value == 'False') {
+                                                                            $(".rbRecurrenceTypeNbr").prop('checked', false);
+                                                                            $(".chkweekdays").prop('checked', false);
+                                                                            $(".rbMonthModeNbr").prop('checked', false);
+                                                                            $("#MonthdayNbr").val('');
+                                                                            $("#MonthdayNbr").prop('disabled', true);
+                                                                            $("select#MonthondayNbr")[0].selectedIndex = 0;
+                                                                            $("select#MonthonNbr")[0].selectedIndex = 0;
+                                                                            $("#MonthondayNbr").prop('disabled', true);
+                                                                            $("#MonthonNbr").prop('disabled', true);
+                                                                            $(".recurring").hide();
+                                                                            $(".weekly").hide();
+                                                                            $(".monthly").hide();
+                                                                            $(".recurringenddate").hide();
+                                                                        }
+                                                                    });
+                                                                    $('input[type=radio][name=RecurrenceTypeNbr]').change(function () {
+                                                                        if (this.value == '2') {
+                                                                            $(".weekly").show();
+                                                                            $(".monthly").hide();
+                                                                        }
+                                                                        else if (this.value == '3') {
+                                                                            $(".monthly").show();
+                                                                            $(".weekly").hide();
+                                                                        }
+                                                                        else {
+                                                                            $(".monthly").hide();
+                                                                            $(".weekly").hide();
+                                                                        }
+                                                                    });
+                                                                    $('input[type=radio][name=MonthModeNbr]').change(function () {
+                                                                        if (this.value == '1') {                                                                           
+                                                                            $("#MonthdayNbr").prop('disabled', false);
+                                                                            $("#MonthondayNbr").prop('disabled', true);
+                                                                            $("#MonthonNbr").prop('disabled', true);
+                                                                        }
+                                                                        else if (this.value == '2') {
+                                                                            $("#MonthdayNbr").attr('value','');
+                                                                            $("#MonthdayNbr").removeClass('input-validation-error');
+                                                                            $("#MonthdayNbr").addClass('field-validation-valid');
+                                                                            $("#MonthdayNbr").removeClass('field-validation-error');
+                                                                            $('span[data-valmsg-for="MonthdayNbr"]').text('');
+                                                                            $("#MonthdayNbr").prop('disabled', true);
+                                                                            $("#MonthondayNbr").prop('disabled', false);
+                                                                            $("#MonthonNbr").prop('disabled', false);
+                                                                        }
+                                                                    });
+                                                                });
+
+                                                                function setformOncahnge(isactive) {
+                                                                    debugger;
+                                                                    if (isactive == "True" || isactive == "true") {
+                                                                        $('.tblpagetitle').hide();
+                                                                        $('.metatitle').hide();
+                                                                        $('.tblexternalLink').show();
+                                                                        $('.dvinnerimage').hide();
+                                                                        $('#ImageIDErrmsg').hide();
+                                                                        $('.common-fieldset').hide();
+                                                                    }
+                                                                    else {
+                                                                        $('.tblpagetitle').show();
+                                                                        $('.metatitle').show();
+                                                                        $('.tblexternalLink').hide();
+                                                                        $('.dvinnerimage').show();
+                                                                        $('#ImageIDErrmsg').hide();
+                                                                        $('.common-fieldset').show();
+                                                                    }
+
+                                                                    $('.field-validation-error').empty();
+                                                                    $('.input-validation-error').each(function () {
+                                                                        $(this).removeClass('input-validation-error');
+                                                                    });
+                                                                }
+
+                                                                function setform(isactive) {
+                                                                    if (isactive == "True" || isactive == "true") {
+                                                                        $('.tblpagetitle').hide();
+                                                                        $('.metatitle').hide();
+                                                                        $('.tblexternalLink').show();
+                                                                        $('.dvinnerimage').hide();
+                                                                        $('.common-fieldset').hide();
+                                                                    }
+                                                                    else {
+                                                                        $('.tblpagetitle').show();
+                                                                        $('.metatitle').show();
+                                                                        $('.tblexternalLink').hide();
+                                                                        $('.dvinnerimage').show();
+                                                                        $('.common-fieldset').show();
+                                                                    }
+                                                                }
+
+                                                                $('.chkweekdays').change(function () {
+                                                                    if ($(".chkweekdays:checkbox:checked").length > 0) {
+                                                                        $("#spnerrchkdays").text("");
+                                                                        return true;
+                                                                    }
+                                                                    else {
+                                                                        $("#spnerrchkdays").text("This field is required.");
+                                                                        return false;
+                                                                    }
+                                                                });
+                                                                // Set Focus on URLTxt field on Postback
+                                                                $(document).ready(function () {
+                                                                    var urlfocus = '@ViewBag.FocusPageUrl';
+                                                                    if (urlfocus.toLowerCase() == "true") {
+                                                                        $("#PageURLTxt").focus();
+                                                                    }
+                                                                    $('#btnsubmit').on("click", function () {
+                                                                        var retfalse = 0;
+                                                                        //Code to check dispaly dates comaprision
+                                                                        var h_start_time = $('#DisplayStartDate').val();
+                                                                        var h_end_time = $('#DisplayEndDate').val();
+                                                                        var h_event_time = $('#EventDate').val();
+                                                                        var IsRecurringInd = $("#IsRecurringInd").val();
+
+                                                                        if (IsRecurringInd) {
+                                                                            debugger;
+                                                                            var event_startdate = $('#EventDate').val();
+                                                                            var event_enddate = $("#EventsEndOnDate").val();
+                                                                            if (new Date(event_startdate) >= new Date(event_enddate)) {
+                                                                                $('#spnEventDate').text('Event Start Date should be less than Event End Date.');
+                                                                                retfalse = 1;
+                                                                                //$('#spnHome').text('');
+                                                                                return false;
+                                                                            }
+                                                                        }
+
+                                                                        if (h_start_time != '' && h_end_time != '') {
+                                                                            $('#DisplayEndDatemsg').css({ 'display': 'none' });
+                                                                            $('#DisplayStartDatemsg').css({ 'display': 'none' });
+                                                                            if (new Date(h_start_time) >= new Date(h_end_time)) {
+                                                                                $('#spnHome').text('Display End Date & Time should be greater than Display Start Date & Time.');
+                                                                                retfalse = 1;
+                                                                            }
+                                                                            else if (h_event_time != '' && h_start_time != '' && h_end_time != '')
+                                                                            {
+                                                                                if (new Date(h_start_time) > new Date(h_event_time) ) {
+                                                                                    $('#spnEventDate').text('Event Date and Time should be greater than equal to Display Start Date and Time.');
+                                                                                    retfalse = 1;
+                                                                                    $('#spnHome').text('');
+                                                                                }
+                                                                                else if(new Date(h_end_time) < new Date(h_event_time)){
+                                                                                    $('#spnEventDate').text('Event End Date and Time should be greater than equal to Event Date and Time.');
+                                                                                    retfalse = 1;
+                                                                                    $('#spnHome').text('');
+                                                                                }
+                                                                                else {
+                                                                                    $('#spnEventDate').text('');
+                                                                                    $('#spnHome').text('');
+                                                                                }
+                                                                            }
+                                                                            else {
+                                                                                $('#spnHome').text('');
+                                                                                $('#spnEventDate').text('');
+                                                                            }
+                                                                        }
+                                                                        else {
+                                                                            $('#spnHome').text('');                                                                        
+                                                                            if (h_start_time == '' && h_end_time != '') {
+                                                                                retfalse = 1;
+                                                                                $('#DisplayStartDatemsg').css({ 'display': 'block' });
+                                                                                $('#DisplayEndDatemsg').css({ 'display': 'none' });
+                                                                            }
+                                                                            else if (h_end_time == '' && h_start_time != '') {
+                                                                                retfalse = 1;
+                                                                                $('#DisplayEndDatemsg').css({ 'display': 'block' });
+                                                                                $('#DisplayStartDatemsg').css({ 'display': 'none' });
+                                                                            }
+                                                                          
+                                                                        }
+                                                                        var RecurrenceTypeNbr = $('input[name=RecurrenceTypeNbr]:checked').val();
+                                                                        if (RecurrenceTypeNbr == "2") {
+                                                                            if ($('.chkweekdays').filter(':checked').length < 1) {
+                                                                                retfalse = 1;
+                                                                                $('#spnerrchkdays').text("This field is required.");
+                                                                            }
+                                                                            else {
+                                                                                $('#spnerrchkdays').text("");
+                                                                            }
+                                                                            if ($('.chkweekdays').filter(':checked').length < 1) {
+                                                                                retfalse = 1;
+                                                                                $('#spnerrchkdays').text("This field is required.");
+                                                                            }
+                                                                            else {
+                                                                                $('#spnerrchkdays').text("");
+                                                                            }
+                                                                        }
+                                                                        else if (RecurrenceTypeNbr == "3") {
+
+                                                                        }
+                                                                        var type = '@EncryptDecrypt.Decrypt(TypeMasterID)';
+                                                                        var isexternal = $("#IsExternalLinkInd").val();
+                                                                        if (type == "8" && isexternal=='false') {
+                                                                            var ckDescriptionTxt = CKEDITOR.instances.ckDescriptionTxt.getData();
+                                                                            if (ckDescriptionTxt.trim() == '') {
+                                                                                retfalse = 1;
+                                                                                $('#spnDesc').css({ 'display': 'block' })
+                                                                            }
+                                                                            else {
+                                                                                $('#spnDesc').css({ 'display': 'none' })
+                                                                            }
+                                                                        }
+                                                                        if ($("#form1").valid()) {
+                                                                            if (retfalse == 1) {
+                                                                                return false;
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                });
+
+                                                                function ddlInnerImagesChange(value) {
+                                                                    if (value == '') {
+                                                                        CKEDITOR.instances['AbstractTxtInner'].setData('');
+                                                                        $('#AltBannerImageTxt').val('');
+                                                                    }
+                                                                    else {
+                                                                        $.ajax({
+                                                                            url: '@AppPath' + 'Menu/GetDataForInnerImages',
+                                                                            data: { ImgId: value },
+                                                                            type: 'Get',
+                                                                            success: function (result) {
+                                                                                CKEDITOR.instances['AbstractTxtInner'].setData(result.AbstractTxt);
+                                                                                $("#AltBannerImageTxt").val(result.AltImageTxt);
+                                                                                $('#AltImageTxt').removeClass("input-validation-error");
+                                                                                $('#bannerAltImageTxt').css({ "display": "none" });
+                                                                                return false;
+                                                                            },
+                                                                            onerror: function () {
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                }
+                                                                // Alt banner image txt validation
+                                                                $(document).click(function () {
+                                                                    if ($('#AltImageTxt').val() == '') {
+                                                                        $('#bannerAltImageTxt').css({ "display": "block" });
+                                                                    }
+                                                                })
+
+                                                            </script>
+
+                                                            <script type="text/javascript">
+                                                                $(function () {
+                                                                    $('.datepicker').datepicker(
+                                                                        {
+                                                                            changeMonth: true,
+                                                                            changeYear: true,
+                                                                            yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+                                                                        });
+                                                                    $('.datetimepicker').datetimepicker({
+                                                                        format: 'm/d/Y h:i A',
+                                                                        step: 1
+                                                                    });
+                                                                });
+                                                            </script>
+                                                            @Html.Partial("_CropPartial")
+                                                            <script>
+                                                                CKEDITOR.env.isCompatible = true;
+                                                            </script>
+                                                            <script>
+                                                                // Set Focus and validation for IsActive and IsShowOnHome
+                                                                $("#StatusInd").change(function () {
+                                                                    var IsActive = $("#StatusInd option:selected").text();
+                                                                    var IsShoeHome = $("#ShowonHomeInd option:selected").text();
+
+                                                                    if (IsActive.toLowerCase() == "inactive" && IsShoeHome.toLowerCase() == "yes")
+                                                                    {
+                                                                        var type = '@type'
+                                                                        var strtype = "";
+                                                                        if (type == 8) {
+                                                                            strtype = "News";
+                                                                        }
+                                                                        else if (type == 9) {
+                                                                            strtype = "Event";
+                                                                        }
+                                                                        alert("Show on Home " + strtype + " cannot be set to Inactive.")
+                                                                        $("#StatusInd option[value='True']").prop("selected", "selected");
+                                                                    }
+                                                                });
+
+                                                                $("#ShowonHomeInd").change(function() {
+                                                                    var IsActive = $("#StatusInd option:selected").text();
+                                                                    var IsShoeHome = $("#ShowonHomeInd option:selected").text();
+
+                                                                    if (IsActive.toLowerCase() == "inactive" && IsShoeHome.toLowerCase() == "yes")
+                                                                    {
+                                                                        var type = '@type'
+                                                                        var strtype = "";
+                                                                        if (type == 8) {
+                                                                            strtype = "News";
+                                                                        }
+                                                                        else if (type == 9) {
+                                                                            strtype = "Event";
+                                                                        }
+                                                                        alert("Inactive "+ strtype +" cannot be set to Show on Home.")
+                                                                        $("#ShowonHomeInd option[value='False']").prop("selected", "selected");
+                                                                    }
+                                                                });
+
+
+                                                            </script>
+                                                            }

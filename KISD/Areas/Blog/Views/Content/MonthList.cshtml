@@ -1,0 +1,38 @@
+﻿@using KISD.Areas.Blog.Models;
+
+@model ContentModel
+@{  
+    var searchtxt = string.Empty;
+}
+<div class="blog-archive">
+    <!-- blog-archive -->
+    <h3 class="widget-title">
+        Month List
+        <i aria-hidden="true" class="fa fa-sort-desc"></i>
+    </h3>
+    <div class="padding20 white-bg">
+        <!-- white-bg -->
+        @if (Model.MonthList.Any())
+        {
+            foreach (var item in Model.MonthList)
+            {
+                <h4 class="bg-year">@item.Key</h4>
+                foreach (var inneritem in item.GroupBy(x => x.PostedDate.Month))
+                {
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(inneritem.Key), type_ID = "monthlist_search0" + @Html.Raw(inneritem.Key+ "_" + item.Key) })" name="@Html.Raw(inneritem.Key)">
+                                <span>@Html.Raw(inneritem.Key == 1 ? "January" : (inneritem.Key == 2 ? "February" : (inneritem.Key == 3 ? "March" : (inneritem.Key == 4 ? "April" : (inneritem.Key == 5 ? "May" : (inneritem.Key == 6 ? "June" : (inneritem.Key == 7 ? "July" : (inneritem.Key == 8 ? "August" : (inneritem.Key ==9 ? "September" : (inneritem.Key == 10 ? "October" : (inneritem.Key == 11 ? "November": (inneritem.Key == 12 ? "December" : ""))))))))))))</span>
+                            </a>
+                            <span class="monthcount">  (@Html.Raw(inneritem.Select(x => x.PostedDate).Count()))</span>
+                        </li>
+
+                        @*<li><a href="#">@inneritem.Key</a> <span>(@Html.Raw(inneritem.Select(x=> x.PostedDate).Count()))</span></li>*@
+                    </ul>
+                }
+
+            }
+        }
+
+    </div><!-- end white-bg -->
+</div><!-- end blog-archive -->

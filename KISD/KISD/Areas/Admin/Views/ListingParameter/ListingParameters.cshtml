@@ -1,0 +1,68 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+
+@model KISD.Areas.Admin.Models.PagedViewModel<KISD.Areas.Admin.Models.ListingParameterModel>
+@{
+    var pager = TempData["pager"] ?? string.Empty;
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var sortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "ListingParameterTxt";
+    var sortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : KISD.Areas.Admin.Models.Common._pageSize.ToString();
+    var page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : KISD.Areas.Admin.Models.Common._currentPage.ToString();
+    var AppPath = "http://" + (HttpContext.Current.Request.Url.DnsSafeHost)
+                                        + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                                        (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                                        + "/Admin/ListingParameter/ListingParameters?page=1&Column=" + sortColumn + "&Direction=" + sortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+<div class="breadcrumb">
+    <!-- Breadcrumb -->
+    <ul>
+        <li>
+            <i class="icon-th"></i>
+            <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+        </li>
+        <li>
+            @Html.Raw(Convert.ToString(@ViewBag.PageTitle))
+        </li>
+    </ul>
+</div>
+<div class="page-header">
+    <!-- page-header -->
+    <div class="page-title">
+    </div>
+</div>
+
+<div class="wrapper">
+    <!-- Wrapper -->
+    <div class="widget">
+        <!-- widget -->
+        <div class="widget-header">
+            <!-- widget-header -->
+            <h4><i class="icon-reorder"></i>@Html.Raw(Convert.ToString(@ViewBag.PageTitle))</h4>
+
+
+        </div>
+        @Html.Partial("ListingParameterPartial", Model)
+        <!-- widget-header Ends -->
+    </div>
+</div>
+<!-- Wrapper Ends -->
+@Html.Hidden("returnUrl", this.Request.RawUrl)
+
+<input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+<input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+<div id="div" style="position:absolute; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+</div>
+
+<script type="text/javascript">
+
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+    $("#ankListingParametrs").addClass('select');
+   
+</script>

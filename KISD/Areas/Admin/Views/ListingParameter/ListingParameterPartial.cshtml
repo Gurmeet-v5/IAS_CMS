@@ -1,0 +1,88 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+
+@model KISD.Areas.Admin.Models.PagedViewModel<KISD.Areas.Admin.Models.ListingParameterModel>
+@{
+    var pager = TempData["pager"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "ListingParameterTxt";
+    var sortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : KISD.Areas.Admin.Models.Common._pageSize.ToString();
+    var page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : KISD.Areas.Admin.Models.Common._currentPage.ToString();
+    var AppPath = "http://" + (HttpContext.Current.Request.Url.DnsSafeHost)
+                                                + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                                                (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                                                + "/Admin/ListingParameter/ListingParameters?page=1&Column=" + sortColumn + "&Direction=" + sortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+<div class="Main_PartialHeader">
+    <!-- widget-header Ends -->
+    @*wrapper*@
+
+    <div class="wrapper">
+        <div class="tab-pane active scroll">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               column.For(x => x.ListingParameterTxt).Named("Listing Parameter").SortColumnName("ListingParameterTxt").HeaderAttributes(@class => "left sort", @align => "left", @style => "width:40%").Attributes(@Class => "left maxtext td_width");
+               column.For(x => x.DescriptionTxt).Named("Description").SortColumnName("DescriptionTxt").HeaderAttributes(@class => "left sort", @align => "left", @style => "width:60%").Attributes(@Class => "left maxtext td_width");
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+
+    @*wrapper end *@
+
+
+</div>
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+
+</script>

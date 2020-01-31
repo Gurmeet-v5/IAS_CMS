@@ -1,0 +1,663 @@
+﻿
+@model KISD.Areas.Admin.Models.ContentModel
+@using ContentAlias = KISD.Areas.Admin.Models.ContentType
+@{
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+}
+
+@if (Model != null)
+{
+    <header id="main_header">
+        <div class="container">
+            <div class="logo">
+                @*<a href="@AppPath">
+                    <img src="@AppPath/scripts/frontend/images/Kisd-logo.png" alt="KISD Logo" title="Killeen Independent School District – Killeen, TX">
+                </a>*@
+            </div>
+            <div class="header-right">
+                <div class="header-right-top">
+                    @*<div class="language-box">
+                        <div id="google_translate_element"></div>
+                    </div>*@
+                    <div id="search" class="search-container">
+                             <form method="get" id="formSearch" class="saerch-box" action="test">
+                            <label for="searchbox" hidden="">searchbox</label>
+                            <input type="text" name="Search Box" id="searchbox" placeholder="Search" maxlength="200">
+                            <span><input type="submit" class="searchbtn" value="Search" id="anksearch" name="anksearch"></span>
+                            <input type="hidden" id="hfsearchurl" name="hfnamesearchurl" value="@AppPath/@Model.ContentList.Where(x=>x.ContentTypeID==Convert.ToInt64(ContentAlias.Search)).Select(x=>x.PageURLTxt).FirstOrDefault()" />
+                        </form>
+                    </div>
+                    <a href="SiteMap" class="hd-site-mp-btn" title="Site Map">Site Map</a>
+                </div>
+
+                @if (Model != null)
+                {
+                    <div class="navbar-container">
+                        @*@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt64(ContentAlias.Home)).Count() > 0)*@
+                        @if (Model.ContentList.Count > 0)
+                        {
+                            <nav id="cssmenu">
+                                <div id="head-mobile"></div>
+                                <div class="button"></div>
+                                <ul>
+                                    @foreach (var item in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt64(ContentAlias.Home)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.AboutKISD)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.School)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.NewToKISD)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.ParentStudents)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.Departments)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.SchoolBoard)
+                                        || x.ContentTypeID == Convert.ToInt64(ContentAlias.Employment)
+                                        ))
+                                    {
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.Home))
+                                        {
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.Home) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.Home) && x.StatusInd == true))
+                                                {
+                                                    <li id="ankHome">
+                                                        <a href="@AppPath" >
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+                                                        @*Check if Content Page contains menu listing or  not*@
+                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.HomeMenu) && x.StatusInd == true).Count() > 0)
+                                                        {
+                                                            <ul class="sub_menu">
+                                                                @*Content Second Level Menu Listing*@
+                                                                @foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.HomeMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                                {
+                                                                    <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.HomeSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                        @*Content Second Level Menu Name*@
+                                                                        <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                           @if (second_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>                     }>
+                                                                            @Html.Raw(second_menu.MenuTitleTxt)
+                                                                        </a>
+                                                                        @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.HomeSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                        {
+                                                                            @*Content Third Level Menu Listing*@
+                                                                            <ul class="thrd_lev">
+                                                                                @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.HomeSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                                {
+                                                                                    @*Content Third Level Menu Name*@
+                                                                                    <li>
+                                                                                        <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                            {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>            }>
+                                                                                            @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                        </a>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+
+
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.AboutKISD))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISD) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISD) && x.StatusInd == true))
+                                                {
+                                                    <li id="ankAboutKISD">
+                                                        <a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt; } else { @menuitem.ExternalLinkTxt}"
+                                                         @if (menuitem.ExternalLinkTargetInd)
+                                                         { @Html.Raw("target='_blank'") } >
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+                                                        
+                                                            @*Check if Content Page contains menu listing or  not*@
+                                                            @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISDMenu) && x.StatusInd == true).Count() > 0)
+                                                            {
+															<ul class="sub_menu">
+                                                                @*Content Second Level Menu Listing*@
+                                                            @foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISDMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                            {
+                                                                <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISDSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                    @*Content Second Level Menu Name*@
+                                                                    <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                       @if (second_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>                   }>
+                                                                        @Html.Raw(second_menu.MenuTitleTxt)
+                                                                    </a>
+
+                                                                    @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                    @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISDSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                    {
+                                                                        @*Content Third Level Menu Listing*@
+                                                                        <ul class="thrd_lev">
+                                                                            @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.AboutKISDSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                            {
+                                                                                @*Content Third Level Menu Name*@
+                                                                                <li>
+                                                                                    <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                           {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>          }>
+                                                                                        @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    }
+                                                                </li>
+                                                                }
+</ul>
+                                                            }
+                                                        
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.School))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.School) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.School) && x.StatusInd == true))
+                                                {
+                                                    <li id="ankSchool">
+                                                        <a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt;
+                                                        }
+                                                        else
+                                                        { @menuitem.ExternalLinkTxt}"
+                                                        @if (menuitem.ExternalLinkTargetInd)
+                                                        { @Html.Raw("target='_blank'") } >
+                                                        @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+
+                                                        @*Check if Content Page contains menu listing or  not*@
+                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolMenu) && x.StatusInd == true).Count() > 0)
+                                                        {
+                                                            <ul class="sub_menu">
+                                                                @*Content Second Level Menu Listing*@
+                                                                @foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                                {
+                                                                    <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                        @*Content Second Level Menu Name*@
+                                                                        <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                           @if (second_menu.ExternalLinkTargetInd==true) { <text> target="_blank" </text>                   }>
+                                                                        @Html.Raw(second_menu.MenuTitleTxt)
+
+                                                                    </a>
+
+                                                                        @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                        {
+                                                                            @*Content Third Level Menu Listing*@
+                                                                            <ul class="thrd_lev">
+                                                                                @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                                {
+                                                                                    @*Content Third Level Menu Name*@
+                                                                                    <li>
+                                                                                        <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                                           {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>          }>
+                                                                                        @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                    </a>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+
+
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.NewToKISD))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISD) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISD) && x.StatusInd == true))
+                                                {
+                                                    <li id="ankNewToKISD">
+                                                        @*Content Menu Name*@
+                                                        														
+														<a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt; } else { @menuitem.ExternalLinkTxt}"
+                                                         @if (menuitem.ExternalLinkTargetInd)
+                                                         { @Html.Raw("target='_blank'") } >
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+
+                                                       
+                                                            @*Check if Content Page contains menu listing or  not*@
+                                                            <ul class="sub_menu">
+@*ExceptionalOpportunities*@
+@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ExceptionalOpportunities) && x.StatusInd == true).Count() > 0)
+{
+    foreach (var contents in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ExceptionalOpportunities) && x.StatusInd == true))
+    {
+        @*Content Menu Listing*@
+        <li class="sub_lev">
+            @*Content Menu Name*@
+            <a href="@AppPath/@contents.PageURLTxt" id="ankExceptionalOpportunities">
+                @Html.Raw(contents.MenuTitleTxt)
+            </a>
+        </li>
+    }
+}
+        @*ExceptionalOpportunities end*@
+
+                                                                @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISDMenu) && x.StatusInd == true).Count() > 0)
+                                                                {
+                                                                    @*Content Second Level Menu Listing*@
+                                                                foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISDMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                                {
+                                                                    <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISDSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                        @*Content Second Level Menu Name*@
+                                                                        <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                           @if (second_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>                      }>
+                                                                            @Html.Raw(second_menu.MenuTitleTxt)
+
+                                                                        </a>
+
+                                                                        @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISDSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                        {
+                                                                            @*Content Third Level Menu Listing*@
+                                                                            <ul class="thrd_lev">
+                                                                                @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.NewToKISDSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                                {
+                                                                                    @*Content Third Level Menu Name*@
+                                                                                    <li>
+                                                                                        <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                            {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>             }>
+                                                                                            @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                        </a>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </li>
+                                                                    }
+
+                                                                }
+                                                            </ul>
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.ParentStudents))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudents) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudents) && x.StatusInd == true))
+                                                {
+                                                    @*Content Menu Listing*@
+                                                    //Check if Content menu contains Mneu listing or not, if yes provide class.
+                                                    <li id="ankParentStudents">
+                                                        @*Content Menu Name*@
+                                                        
+														<a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt; } else { @menuitem.ExternalLinkTxt}"
+                                                         @if (menuitem.ExternalLinkTargetInd)
+                                                         { @Html.Raw("target='_blank'") } >
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+                                                        
+                                                            @*Check if Content Page contains menu listing or  not*@
+                                                            @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudentsMenu) && x.StatusInd == true).Count() > 0)
+                                                            {
+															<ul class="sub_menu">
+                                                                @*Content Second Level Menu Listing*@
+                                                            @foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudentsMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                            {
+                                                                <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudentsSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                    @*Content Second Level Menu Name*@
+                                                                    <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                       @if (second_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>                    }>
+                                                                        @Html.Raw(second_menu.MenuTitleTxt)
+
+                                                                    </a>
+
+                                                                    @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                    @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudentsSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                    {
+                                                                        @*Content Third Level Menu Listing*@
+                                                                        <ul class="thrd_lev">
+                                                                            @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ParentStudentsSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                            {
+                                                                                @*Content Third Level Menu Name*@
+                                                                                <li>
+                                                                                    <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                            {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>           }>
+                                                                                        @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    }
+                                                                </li>
+                                                                }
+ </ul>
+                                                            }
+                                                       
+                                                    </li>
+
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.Departments))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.Departments) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.Departments) && x.StatusInd == true))
+                                                {
+                                                    @*Content Menu Listing*@
+                                                    //Check if Content menu contains Mneu listing or not, if yes provide class.
+                                                    <li id="ankDepartments">								
+														<a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt; } else { @menuitem.ExternalLinkTxt}"
+                                                         @if (menuitem.ExternalLinkTargetInd)
+                                                         { @Html.Raw("target='_blank'") } >
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+                                                        @*Check if Content Page contains menu listing or  not*@
+                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.DepartmentsMenu) && x.StatusInd == true).Count() > 0)
+                                                        {
+                                                            <ul class="sub_menu">
+                                                                @*Content Second Level Menu Listing*@
+                                                                @foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.DepartmentsMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                                {
+                                                                    <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.DepartmentsSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                        @*Content Second Level Menu Name*@
+                                                                        <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                           @if (second_menu.ExternalLinkTargetInd==true) { <text> target="_blank" </text>    }>
+                                                                        @Html.Raw(second_menu.MenuTitleTxt)
+                                                                    </a>
+
+                                                                        @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.DepartmentsSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                        {
+                                                                            @*Content Third Level Menu Listing*@
+                                                                            <ul class="thrd_lev">
+                                                                                @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.DepartmentsSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                                {
+                                                                                    @*Content Third Level Menu Name*@
+                                                                                    <li>
+                                                                                        <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                                           {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>            }>
+                                                                                        @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                    </a>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </li>
+                                                                }
+                                                            </ul>
+                                                        }
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.SchoolBoard))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoard) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoard) && x.StatusInd == true))
+                                                {
+                                                    <li id="ankSchoolBoard">								
+														<a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt; } else { @menuitem.ExternalLinkTxt}"
+                                                         @if (menuitem.ExternalLinkTargetInd)
+                                                         { @Html.Raw("target='_blank'") } >
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+
+                                                        <ul class="sub_menu">
+@*BoardMembers*@
+@*@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.BoardMembers) && x.StatusInd == true).Count() > 0)
+{
+    foreach (var contents in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.BoardMembers) && x.StatusInd == true))
+    {
+        <li class="sub_lev">
+            <a href="@AppPath/@contents.PageURLTxt" id="ankBoardMembers">
+                @Html.Raw(contents.MenuTitleTxt)
+            </a>
+        </li>
+    }
+}*@
+        @*BoardMembers end*@
+
+                                                    @*ExceptionalOpportunities*@
+                                                    @*@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ExceptionalOpportunities) && x.StatusInd == true).Count() > 0)
+                                                    {
+                                                        foreach (var contents in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.ExceptionalOpportunities) && x.StatusInd == true))
+                                                        {
+                                                            <li class="sub_lev">
+                                                                <a href="@AppPath/@contents.PageURLTxt" id="ankExceptionalOpportunities">
+                                                                    @Html.Raw(contents.MenuTitleTxt)
+                                                                </a>
+																
+																<a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt; } else { @menuitem.ExternalLinkTxt}"
+                                                         @if (menuitem.ExternalLinkTargetInd)
+                                                         { @Html.Raw("target='_blank'") } id="ankSchoolBoard">
+                                                            @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+                                                            </li>
+                                                        }
+                                                    }*@
+                                                    @*ExceptionalOpportunities end*@
+
+                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoardMenu) && x.StatusInd == true).Count() > 0)
+                                                        {
+                                                            
+                                                                @*Content Second Level Menu Listing*@
+                                                                foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoardMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                                {
+                                                                    <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoardSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                        @*Content Second Level Menu Name*@
+                                                                        <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                           @if (second_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>      }>
+                                                                            @Html.Raw(second_menu.MenuTitleTxt)
+                                                                        </a>
+
+                                                                        @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                        @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoardSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                        {
+                                                                            @*Content Third Level Menu Listing*@
+                                                                            <ul class="thrd_lev">
+                                                                                @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.SchoolBoardSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                                {
+                                                                                    @*Content Third Level Menu Name*@
+                                                                                    <li>
+                                                                                        <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                           {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>              }>
+                                                                                            @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                        </a>
+                                                                                    </li>
+                                                                                }
+                                                                            </ul>
+                                                                        }
+                                                                    </li>
+                                                                }
+                                                            
+                                                        }
+														</ul>
+
+                                                    </li>
+                                                }
+                                            }
+                                        }
+
+                                        if (item.ContentTypeID == Convert.ToInt64(ContentAlias.Employment))
+                                        {
+                                            // Check if Content Page Exist or not
+                                            if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.Employment) && x.StatusInd == true).Count() > 0)
+                                            {
+                                                foreach (var menuitem in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.Employment) && x.StatusInd == true))
+                                                {
+                                                    @*Content Menu Listing*@
+                                                    //Check if Content menu contains Mneu listing or not, if yes provide class.
+                                                    <li id="ankEmployment">
+                                                        <a href="@if (!menuitem.IsExternalLinkInd) { @AppPath@Html.Raw("/")@menuitem.PageURLTxt;
+                                                        }
+                                                        else
+                                                        { @menuitem.ExternalLinkTxt}"
+                                                        @if (menuitem.ExternalLinkTargetInd)
+                                                        { @Html.Raw("target='_blank'") } >
+                                                        @Html.Raw(menuitem.MenuTitleTxt)
+                                                        </a>
+                                                        
+                                                            @*Check if Content Page contains menu listing or  not*@
+                                                            @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.EmploymentMenu) && x.StatusInd == true).Count() > 0)
+                                                            {
+															<ul class="sub_menu">
+                                                                @*Content Second Level Menu Listing*@
+                                                            @foreach (var second_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.EmploymentMenu) && x.StatusInd == true).OrderBy(x => x.DisplayOrderNbr))
+                                                            {
+                                                                <li class="@if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.EmploymentSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                {<text>sub_lev</text>}">
+
+                                                                    @*Content Second Level Menu Name*@
+                                                                    <a href="@if (second_menu.IsExternalLinkInd == true)
+                                                            { @second_menu.ExternalLinkTxt}
+                                                            else {@AppPath<text>/</text>@second_menu.PageURLTxt;
+                                                            }"
+                                                                       @if (second_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>     }>
+                                                                        @Html.Raw(second_menu.MenuTitleTxt)
+                                                                    </a>
+
+                                                                    @*Check if Content Second Level Menu contains third level menu or not*@
+                                                                    @if (Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.EmploymentSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).Count() > 0)
+                                                                    {
+                                                                        @*Content Third Level Menu Listing*@
+                                                                        <ul class="thrd_lev">
+                                                                            @foreach (var third_menu in Model.ContentList.Where(x => x.ContentTypeID == Convert.ToInt32(ContentAlias.EmploymentSubMenu) && x.StatusInd == true && x.ParentID == second_menu.ContentID).OrderBy(x => x.DisplayOrderNbr))
+                                                                            {
+                                                                                @*Content Third Level Menu Name*@
+                                                                                <li>
+                                                                                    <a href="@if (third_menu.IsExternalLinkInd == true)
+                                                                           {<text>@third_menu.ExternalLinkTxt</text>}
+                                                                            else {
+                                                                                {<text>@AppPath/@third_menu.PageURLTxt</text>}
+                                                                            }" @if (third_menu.ExternalLinkTargetInd == true) { <text> target="_blank" </text>             }>
+                                                                                        @Html.Raw(third_menu.MenuTitleTxt)
+                                                                                    </a>
+                                                                                </li>
+                                                                            }
+                                                                        </ul>
+                                                                    }
+                                                                </li>
+                                                                }
+																</ul>
+                                                            }
+                                                        
+                                                    </li>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </ul>
+                            </nav>
+                        }
+                    </div>
+                }
+                <!--Navbar Container end here-->
+            </div><!--Header right end here-->
+        </div><!-- container end here-->
+    </header>
+}
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery("#searchbox").keydown(function (e) {
+            if (e.keyCode == 13) {
+                jQuery('#anksearch').click();
+            }
+        });
+        jQuery('#anksearch').click(function () {
+            var d = jQuery('#searchbox').val();
+            if (jQuery('#searchbox').val().trim() != "") {
+                window.location = jQuery('#hfsearchurl').val() + (jQuery('#searchbox').val() != "" ? '?s=' + jQuery('#searchbox').val() : "");
+            }
+            return false;
+        });
+    });
+
+    $(document).on("scroll", function(){
+		if
+      ($(document).scrollTop() > 100){
+		  $("header").addClass("header_scroll");
+		}
+		else
+		{
+			$("header").removeClass("header_scroll");
+		}
+	});
+</script>

@@ -1,0 +1,90 @@
+﻿@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType
+@model KISD.Areas.Admin.Models.BoardMembersModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    var query = Request.QueryString["s"] != null ? Request.QueryString["s"].ToString() : "";
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    ViewBag.InnerImgPath = string.IsNullOrEmpty(ViewBag.InnerImgPath) ? "" : ViewBag.InnerImgPath;
+    ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ViewBag.InnerImgTitleTxt) ? "" : ViewBag.InnerImgTitleTxt;
+}
+@if (Model != null)
+{
+    <div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+    {<text>main-banner</text>}
+    else
+    {<text>no-inner-banner</text>}">
+        @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+        {
+            <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@ViewBag.AltImgTxt" />
+            <div class="container">
+                <div class="inner-banner-abstract">
+                    @Html.Raw(Model.RightSectionAbstractTxt)
+                </div>
+            </div>
+        }
+    </div>
+        <div class="main-content">
+            <div class="container">
+                <div>
+                    @if (!string.IsNullOrEmpty(Model.NameTxt))
+                    {
+                        <h1 class="campus-news-title">@Model.NameTxt</h1>
+                    }
+                    <div class="breadcrumb">
+                        <a href="@AppPath" title="Home Page">Home</a><span class="breaddiv"></span>
+
+                        @if (!string.IsNullOrEmpty(@ViewBag.MainURL) || !string.IsNullOrEmpty(@ViewBag.MainParentName))
+                {  <a href="@ViewBag.MainURL" title="@ViewBag.MainParentName">@ViewBag.MainParentName</a><span class="breaddiv"></span> }
+
+                        @if (!string.IsNullOrEmpty(@ViewBag.ParentURL) || !string.IsNullOrEmpty(@ViewBag.ParentName))
+                {  <a href="@ViewBag.ParentURL" title="@ViewBag.ParentName">@ViewBag.ParentName</a><span class="breaddiv"></span> }
+
+                        <span>@Model.NameTxt</span>
+                    </div>
+                    <div class="content">
+                        <div class="row">
+                            @if (!string.IsNullOrEmpty(Model.ImageURLTxt))
+                            {
+                                <div class="col40">
+                                    <div class="image-wrap"><img src="@Model.ImageURLTxt.Replace("~/","")" alt="@Model.NameTxt" title="@Model.NameTxt" /></div>
+                                </div>
+                            }
+                            <div class="col50">
+                                <div class="profile">
+                                    @*<h2 class="member-name">@Model.NameTxt</h2>*@
+                                    <h4 class="subheader">@Model.TitleTxt</h4>
+                                    <h4 class="term">@Model.TermTxt</h4>
+                                    @if (!string.IsNullOrEmpty(Model.ContactInfoTxt))
+                                    {
+                                        <div class="address">
+                                            <strong class="red-color">Contact Information:</strong>
+                                            @Html.Raw(Model.ContactInfoTxt)
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.DescriptionTxt))
+                        {
+                            @Html.Raw(Model.DescriptionTxt)
+                        }
+                    </div>
+                    <!--content container end here-->
+                </div>
+                <div class="clearfix-mobile"></div>
+
+                @*Right Section*@
+                @*@{Html.RenderAction("RightSection", "ContentOuter", new { ListingID = Model.BoardMemberID, ModuleType = "BoardOfMembers" });}*@
+
+            </div>
+            <!-- District and Campus News container end here-->
+        </div>
+        <!-- Main content container end here-->
+}
+<script type="text/javascript">
+    $("#ankSchoolBoard").addClass('active');
+</script>

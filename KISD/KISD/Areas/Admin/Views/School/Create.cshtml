@@ -1,0 +1,305 @@
+﻿@using KISD.Areas.Admin.Models;
+@model SchoolModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var _sci = Request.QueryString["sci"] != null ? Request.QueryString["sci"] : EncryptDecrypt.Encrypt("0");
+    var _tmi = Request.QueryString["tmi"] != null ? Request.QueryString["tmi"] : EncryptDecrypt.Encrypt("0");
+    var PageSize = Request.QueryString["pagesize"] ?? "10";
+    var TypeMasterID = Request.QueryString["tmi"] != null ? Request.QueryString["tmi"].ToString() : EncryptDecrypt.Encrypt("0");
+    var Page = Request.QueryString["page"] ?? "1";
+    var message = TempData["Message"] ?? string.Empty;
+    var Column = Request.QueryString["Column"] ?? "SchoolCreateDate";
+    var Direction = Request.QueryString["Direction"] ?? "Descending";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") +
+                  (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+                  (":" + HttpContext.Current.Request.Url.Port.ToString()) : "") + "/Admin/";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("Create", "School", new
+{
+    sci = _sci,
+    tmi = _tmi,
+    pagesize = PageSize,
+    page = Page,
+    Column = Column,
+    Direction = Direction
+},
+    FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankdahboardli" href='@Url.Action("Index", "School",new { tmi = Request.QueryString["tmi"] ?? EncryptDecrypt.Encrypt("0")})'>@ViewBag.LiTitle</a>
+            </li>
+            <li>
+                @if (Model.SchoolID != 0)
+                {
+                    @Model.NameTxt @Html.Raw("-")
+                }
+                @Html.Raw(Convert.ToString(@ViewBag.PageTitle))
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>
+                    @Html.Raw(Convert.ToString(@ViewBag.PageTitle))
+                </h4>
+                <div class="btn-group">
+                    <a href='@Url.Action("Index", "School", new
+                            {
+                                tmi = Request.QueryString["tmi"] ?? EncryptDecrypt.Encrypt("0"),
+                                pagesize = Request.QueryString["pagesize"] ?? "10",
+                                page = Request.QueryString["page"] ?? "1",
+                                Column = Request.QueryString["Column"] ?? "SchoolCreateDate",
+                                Direction = Request.QueryString["Direction"] ?? "Descending"
+                            })'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+                </div>
+            </div>
+
+            @if (Model != null)
+            {
+                if (Model.TypeMasterID == Convert.ToInt32(GalleryListingService.TypeMaster.SchoolCategory))
+                {
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                School Category:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.NameTxt, new { @class = "required", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.NameTxt)
+                        </div>
+                    </div>
+                }
+
+                if (Model.TypeMasterID == Convert.ToInt32(GalleryListingService.TypeMaster.School))
+                {
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                School Category:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            <div class="select-style">
+                                @*@Html.DropDownList("SchoolID", ViewBag.SchoolCategory as SelectList)*@
+
+                                @Html.DropDownList("SchoolCategory", ViewBag.SchoolCategory as SelectList, "-- Select School Category --",
+                                                new { @class = "required" })
+                            </div>
+                            <span id="SchoolCategoryspan" class="field-validation-error" style="display:none;">This field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                School Name:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.NameTxt, new { @class = "required", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.NameTxt)
+                        </div>
+                    </div>
+                    @*<div class="row metatitle">
+                        <div class="col20">
+                            <label>
+                                Page URL:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.PageURLTxt, new { @class = "required alphanumeric nospace", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.PageURLTxt)
+                        </div>
+                    </div>*@
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Address:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextAreaFor(m => m.AddressTxt, new { @class = "required", maxlength = "500", @placeholder = "Maximum 500 characters" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.AddressTxt)
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Phone Number:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.PhoneNumberTxt, new { @class = "required phonenumber", @type="tel", @placeholder = "(XXX)-XXX-XXXX" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.PhoneNumberTxt)
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Website URL:
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.WebsiteURLTxt, new { @class = "web url nospace", maxlength = "300", @placeholder = "Maximum 300 characters" })
+                            <img src="~/scripts/Admin/images/tooltip.png" title="URL must be like http://www.abc.com" class="suggestion" />
+                            <div class="mobiletooltip">
+                            </div>
+                            @Html.ValidationMessageFor(m => m.WebsiteURLTxt)
+                        </div>
+                    </div>
+                }
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Status:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        <div class="select-style">
+                            @Html.DropDownList("StatusInd", ViewBag.IsActiveInd as SelectList)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Date Added:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.SchoolCreateDate, new { @Value = ViewBag.DateAdded, maxlength = "10", @readonly = true, @class = "required datepicker nospace", @placeholder = "MM/DD/YYYY", ondrop = "return false;", onpaste = "return false;" })                    
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">&nbsp;</div>
+                    <div class="col40">
+
+                        @Html.HiddenFor(m => m.SchoolID)
+                        @Html.HiddenFor(m => m.TypeMasterID)
+
+                        <input type="submit" value="@ViewBag.Submit" id="btnsubmit"
+                               class="submit-btn submit" />&nbsp;&nbsp;&nbsp;
+
+                        <input type="submit" id="btnCancel" name="command" value="Cancel"
+                               class="cancel cancel-btn" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+<script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+<script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+<script src="~/scripts/js/jquery.mask.min.js"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+@*<script src="~/scripts/js/jquery.maskedinput.min.js" type="text/javascript"></script>*@
+<script type="text/javascript">
+    var TypeMasterID = '@EncryptDecrypt.Decrypt(TypeMasterID)'
+    if (TypeMasterID == 11) {
+        $("#ankMasters").addClass('select');
+        $("#ankSchoolCategory").addClass('select');
+    }
+    if (TypeMasterID == 12) {
+        $("#ankSchool").addClass('select');
+        $("#ankSchoolListing").addClass('select');
+    }
+     var alertmessage = '@message';
+    if (alertmessage != '')
+        alert(alertmessage);
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker(
+            {
+                changeMonth: true,
+                changeYear: true,
+                yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+            });
+    });
+    $(document).ready(function () {
+        var nospace = $(".nospace");
+        var funcfb = function () {
+            $(this).val($(this).val().replace(/\s/g, ''));
+        }
+        if (nospace != null && nospace.length > 0) {
+            nospace.keyup(funcfb).blur(funcfb);
+        }
+        var phonenumber = $('.phonenumber');
+        if (phonenumber != null && phonenumber.length > 0) {
+            $('.phonenumber').mask("(999) 999-9999");
+        }
+    });
+
+
+    $('#btnsubmit').on('click', function () {
+        var TypeMasterID = '@EncryptDecrypt.Decrypt(TypeMasterID)'
+        if ($('#input_file_upload_error_img').css('display') == 'block') {
+            $('#input_file_upload_error_img').css({ 'display': 'none' });
+            $('#err_ImagePathTxt').css({ 'display': 'block' });
+        }
+        if (TypeMasterID == 12) {
+            var scoolcategoryval = $("#SchoolCategory option:selected").text();
+            if (scoolcategoryval == "-- Select School Category --")
+            {
+                $('#SchoolCategoryspan').css({ 'display': 'block' });
+            }
+            else {
+                $('#SchoolCategoryspan').css({ 'display': 'none' });
+            }           
+        }
+
+            //Code to check dispaly dates comaprision
+            var h_start_time = $('#DisplayStartDate').val();
+            var h_end_time = $('#DisplayEndDate').val();
+
+            if (h_start_time != '' && h_end_time != '') {
+                if (new Date(h_start_time) >= new Date(h_end_time)) {
+                    $('#spnHome').text('Display End Date & Time should be greater than Display Start Date & Time.');
+                    return false;
+                }
+                else {
+                    $('#spnHome').text('');
+                }
+            }
+
+
+        if ($('#imageupload').hasClass('required') && $('#imageupload').val().length == 0) {
+
+            $('#input_file_upload_error_img').css({ 'display': 'block' });
+        }
+        else {
+            $('#input_file_upload_error_img').css({ 'display': 'none' });
+        }
+    });
+</script>
+

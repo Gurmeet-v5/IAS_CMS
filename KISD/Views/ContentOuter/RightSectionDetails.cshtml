@@ -1,0 +1,72 @@
+﻿@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType
+@model KISD.Areas.Admin.Models.RightSectionModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    ViewBag.InnerImgPath = string.IsNullOrEmpty(ViewBag.InnerImgPath) ? "" : ViewBag.InnerImgPath;
+    ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ViewBag.InnerImgTitleTxt) ? "" : ViewBag.InnerImgTitleTxt;
+    db_KISDEntities objContext = new db_KISDEntities();
+}
+@if (Model != null)
+{
+    <div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+    {<text>main-banner</text>}
+    else
+    {<text>no-inner-banner</text>}">
+        @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+        {
+            <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@Model.AltBannerImageTxt" />
+
+            <div class="inner-banner-abstract">
+                <div class="container">
+                    @Html.Raw(Model.BannerImageAbstractTxt)
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div @if (Model.IsFacebookSharingInd || Model.IsGooglePlusSharingInd || Model.IsTwitterSharingInd || !string.IsNullOrEmpty(Model.RightSectionTitleTxt) || !string.IsNullOrEmpty(Model.RightSectionAbstractTxt)) { @Html.Raw("class='main-left'")     ; }>
+                <div>
+                    @if (!string.IsNullOrEmpty(Model.PageTitleTxt))
+                {
+                <h1 class="campus-news-title">@Model.PageTitleTxt</h1>
+                }
+        <div class="breadcrumb">
+            <a href="@AppPath" title="Home Page">Home</a><span class="breaddiv"></span>
+
+            @if (!string.IsNullOrEmpty(@ViewBag.ParentURL) || !string.IsNullOrEmpty(@ViewBag.ParentName))
+                    {  <a href="@ViewBag.ParentURL" title="@ViewBag.ParentName">@ViewBag.ParentName</a><span class="breaddiv"></span> }
+
+            @if (!string.IsNullOrEmpty(@ViewBag.MainURL) || !string.IsNullOrEmpty(@ViewBag.MainParentName))
+                    {  <a href="@ViewBag.MainURL" title="@ViewBag.MainParentName">@ViewBag.MainParentName</a><span class="breaddiv"></span> }
+
+            <span>@Model.TitleTxt</span>
+        </div>
+        <div class="content">
+            @Html.Raw(Model.DescriptionTxt)
+        </div>
+        <!--content container end here-->
+        </div>
+        </div>
+
+            <div class="clearfix-mobile"></div>
+
+            @*Right Section*@
+            @*@{Html.RenderAction("RightSection", "ContentOuter", new { ListingID = Model.RightSectionID, ModuleType = "RightSection" });}*@
+
+        </div>
+
+        <!-- District and Campus News container end here-->
+    </div>
+    <!-- Main content container end here-->
+}
+
+<script>
+
+</script>

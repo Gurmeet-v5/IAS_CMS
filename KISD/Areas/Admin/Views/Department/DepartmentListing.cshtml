@@ -1,0 +1,96 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using NModel = KISD.Areas.Admin.Models;
+@using AnnouncementTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@model NModel.PagedViewModel<NModel.DepartmentModel>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                  (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                  + "/Admin/Department/DepartmentListing?page=1&Column=" + (Request.QueryString["Column"] ?? "DepartmentCreateDate") + "&Direction=" +
+                  (Request.QueryString["Direction"] ?? "Descending") + "&pagesize=";
+    var initialPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                      (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    initialPath = NModel.Common.ReturnValidPath(initialPath);
+    AppPath = NModel.Common.ReturnValidPath(AppPath);
+    var objContext = new db_KISDEntities();
+    var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
+    var RoleID = objContext.UserRoles.Where(x => x.UserID == userId).Select(x => x.RoleID).FirstOrDefault();
+}
+
+@using (Html.BeginForm("DepartmentListing", "Department", new { pagesize = Request.QueryString["pagesize"] ?? "10", page = Request.QueryString["page"] ?? "1", Column = Request.QueryString["Column"] ?? "DepartmentCreateDate", Direction = Request.QueryString["Direction"] ?? "Descending" }, FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Raw(string.Format(@ViewBag.PageTitle))
+            </li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@Html.Raw(string.Format(@ViewBag.PageTitle))</h4>
+                @if (RoleID != Convert.ToInt16(NModel.Common.UserType.DepartmentUser))
+                {
+                <div class="btn-group">
+                    <a href='@Url.Action("Create", "Department", new
+                        {
+                            did = NModel.EncryptDecrypt.Encrypt("0"),
+                            pagesize = Request.QueryString["pagesize"] ?? "10",
+                            page = Request.QueryString["page"] ?? "1",
+                            Column = Request.QueryString["Column"] ?? "DepartmentCreateDate",
+                            Direction = Request.QueryString["Direction"] ?? "Descending"
+                        })'>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+                }
+            </div>
+
+            @Html.Partial("DepartmentPartial", Model)
+
+            <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+            </div>
+        </div>
+    </div>
+
+    @*@Html.Hidden("returnUrl", this.Request.RawUrl)*@
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+    <input type="hidden" name="hdnType" id="hdnType" value="" />
+}
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+    $("#ankDepartments").addClass('select');
+    $("#ankDepartmentsListing").addClass('select');
+</script>
+<script src="~/Scripts/js/footable.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('table').footable();
+    });
+</script>

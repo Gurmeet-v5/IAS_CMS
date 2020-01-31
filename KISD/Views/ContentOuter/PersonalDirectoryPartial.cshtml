@@ -1,0 +1,71 @@
+﻿@using PagedList.Mvc;
+@using KISD.Areas.Admin.Models;
+@model ContentModel
+@{
+    var objContext = new db_KISDEntities();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+                    (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = Common.ReturnValidPath(AppPath);
+    var strtype=ViewBag.Type ?? ViewBag.Type;
+    var strsearch = ViewBag.Search ?? ViewBag.Search;
+}
+<div class="Main_PartialHeader">
+@if (Model.StaffResult != null)
+{
+if (Model.StaffResult.Count > 0)
+{
+    <div class="pd-Campus-Department-result">
+        
+        <div class="content-main-title">
+            @if (strtype == "1")
+            {
+                <text>Search Results for "</text>@strsearch<text>"</text>
+            }
+            else
+            {
+                @ViewBag.Name<text>, Phone: </text>@ViewBag.Phone
+            }
+        </div>
+        <ul class="bsc-list">
+            @foreach (var staff in Model.StaffResult)
+            {
+            <li>
+                <div class="bsc-box">
+                    <div class="bsc name"><strong class="red-color">Name:</strong>@staff.FirstNameTxt @staff.LastNameTxt</div>
+                    <div class="bsc-time">@staff.DesignationTxt</div>
+                    <div class="bsc-vanue email red-color"><strong>Phone:</strong><a href="tel:@(staff.PhoneTxt)">@staff.PhoneTxt</a></div>
+                    <div class="bsc-vanue email red-color"><strong>Email:</strong><a href="mailto:@(staff.EmailTxt)">@staff.EmailTxt</a></div>
+                </div>
+            </li>
+            }
+            @Html.Hidden("hdnstrsearch",new { value = strsearch})
+            @Html.Hidden("hdntype", new { value = strtype })
+
+        </ul>
+
+    </div>
+    <!--Campus-Department-result end here-->
+    }
+    else
+    {
+        <text>No Data Found</text>
+    }
+    <!-- personal directory end here--->
+    <!--list_layout  end here-->
+    if (Model.IsPagingVisible && Model.StaffResult.PageCount > 1)
+    {
+        <!-- pagination section
+        ================================================== -->
+                <!-- pagination start -->
+
+        <div class="pagination-listing">
+            <div class="pagination">
+                <div class="pagination-container" id="contentPager">
+                    @Html.PagedListPager(Model.StaffResult, page => Url.Action("content", new { page }))
+                </div>
+            </div>
+        </div>
+    }
+                <!-- pagination -->
+                }
+            </div>

@@ -1,0 +1,102 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using NModel = KISD.Areas.Admin.Models;
+@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType;
+@model NModel.PagedViewModel<NModel.SchoolModel>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    var TypeMasterID = Request.QueryString["tmi"] != null ? Request.QueryString["tmi"].ToString() : NModel.EncryptDecrypt.Encrypt("0");
+    var initialPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                      (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    initialPath = NModel.Common.ReturnValidPath(initialPath);
+}
+
+@using (Html.BeginForm("Index", "School", new
+{
+    tmi = Request.QueryString["tmi"] ?? NModel.EncryptDecrypt.Encrypt("0"),
+    pagesize = Request.QueryString["pagesize"] ?? "10",
+    page = Request.QueryString["page"] ?? "1",
+    Column = Request.QueryString["Column"] ?? "SchoolCreateDate",
+    Direction = Request.QueryString["Direction"] ?? "Descending"
+},
+    FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home",new { tmi = Request.QueryString["tmi"] ?? NModel.EncryptDecrypt.Encrypt("0")})'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Raw(string.Format(@ViewBag.PageTitle))
+            </li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@Html.Raw(string.Format(@ViewBag.PageTitle))</h4>
+                <div class="btn-group">
+                    <a href='@Url.Action("Create", "School", new
+                            {
+                                tmi = Request.QueryString["tmi"] ?? NModel.EncryptDecrypt.Encrypt("0"),
+                                si = NModel.EncryptDecrypt.Encrypt("0"),
+                                pagesize = Request.QueryString["pagesize"] ?? "10",
+                                page = Request.QueryString["page"] ?? "1",
+                                Column = Request.QueryString["Column"] ?? "SchoolCreateDate",
+                                Direction = Request.QueryString["Direction"] ?? "Descending"
+                            })'>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+            </div>
+
+            @Html.Partial("SchoolPartial", Model)
+
+            <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+            </div>
+        </div>
+    </div>
+
+    @*@Html.Hidden("returnUrl", this.Request.RawUrl)*@
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+    <input type="hidden" name="hdnType" id="hdnType" value="" />
+}
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+
+    var TypeMasterID = '@NModel.EncryptDecrypt.Decrypt(TypeMasterID)'
+    if (TypeMasterID == 11) {
+        $("#ankMasters").addClass('select');
+        $("#ankSchoolCategory").addClass('select');
+    }
+    if (TypeMasterID == 12) {
+        $("#ankSchool").addClass('select');
+        $("#ankSchoolListing").addClass('select');
+    }
+</script>
+<script src="~/Scripts/js/footable.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('table').footable();
+    });
+</script>

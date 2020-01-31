@@ -1,0 +1,35 @@
+﻿
+@{
+    Layout = "~/Views/Shared/ResetLayout.cshtml";
+    ViewBag.Title = "Unsubscribed email";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+}
+
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+           
+            <div class="row" style="margin: 0 auto;"
+                 >
+                <div class="wrapper">
+                    <label>
+                        
+                        <div style="display:inline-block; border:1px dashed green; width:100%; padding:20px; text-align:center; font-weight:bold">
+                            Thank You!<br /><br />
+                            You have been successfully removed from this subscribed list. You will no longer hear from us.
+                        </div>
+                    </label>
+                </div>
+                <div class="col40">
+
+                </div>
+            </div>
+        </div>
+    </div>
+

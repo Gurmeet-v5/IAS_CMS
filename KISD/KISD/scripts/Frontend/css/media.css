@@ -1,0 +1,225 @@
+@media all and (max-width:1600px) {
+     .event-right ul {height:439px;}
+}
+@media all and (max-width:1400px){
+  #cssmenu > ul > li > a {padding: 13px 10px 18px 6px;}
+.owl-carousel .owl-nav .owl-prev{left: 15px;}
+.owl-carousel .owl-nav .owl-next{right:15px;}
+.gallery-container ul li{width:32%}
+.event-right ul {height: 371px;}
+}
+@media all and (max-width:1366px){
+    .event-right ul{padding-top:12px;height: 355px;}
+    .event-right ul li:last-child {margin-bottom: 7px;}
+    .event-right ul li{padding-bottom:13px;margin-bottom:3px  }
+    .header-right{width:78.5%;}
+    .owl-carousel .owl-nav .owl-prev{left: -50px;}
+    .owl-carousel .owl-nav .owl-next{right:-50px;}
+    .breadcrumb span.breaddiv {background-position:-20px -1264px;}
+    }
+@media all and (max-width:1360px) {
+    .event-right ul {height:358px;}
+}
+@media all and (max-width:1280px){
+    .event-right ul {height:331px;}
+    .event-right ul li{min-height:inherit;padding: 9px 0 6px 0; }
+    .owl-carousel .owl-nav .owl-prev { left: -25px;}
+    .owl-carousel .owl-nav .owl-next {right: -28px;}
+    
+}
+
+@media all and (max-width:1024px){
+    .event-right ul {height:auto;}
+    .alert-div .container {padding:0 15px;}
+     /*.alertclose{float:none;position:relative;right:auto;}*/
+    .logo {  float: left;  margin: 10px 0 7px;  width: 25%;}
+    #cssmenu > ul > li > a{ padding: 17px 17px 14px;}
+    .flex-caption .caption-container {padding:60px 0 0; }
+    #cssmenu > ul > li:first-child > a{padding-left:17px }
+    nav{width:100%; margin-top:0; }
+    .navbar-container{padding:0;background:#000;margin-top:0; }
+    /*.navbar-container { position: absolute;  top: 0;}*/
+    #cssmenu{width:100%}
+    #cssmenu ul{width:100%;display:none}
+    #cssmenu ul li{width:100%;border-top:1px solid #ccc; background:#454545}
+    #cssmenu ul li:hover{background:#363636}
+    #cssmenu ul ul li,#cssmenu li:hover > ul > li{height:auto}
+    #cssmenu ul li a,#cssmenu ul ul li a{width:100%;border-bottom:0}
+    #cssmenu > ul > li{float:none}
+    #cssmenu ul ul li a{padding-left: 35px;font-size: 14px;}
+    #cssmenu ul ul li{border-bottom:0; }
+
+    #cssmenu ul ul li:hover{background:#363636!important}
+    #cssmenu ul ul ul li a{padding-left:52px}
+    #cssmenu ul ul li a{color:#ddd;background:none}
+    #cssmenu ul ul li:hover > a,#cssmenu ul ul li.active > a{color:#fff}
+    #cssmenu ul ul,#cssmenu ul ul ul{position:relative;left:0;width:100%;margin:0;text-align:left}
+    #cssmenu > ul > li.has-sub > a:after,#cssmenu > ul > li.has-sub > a:before,#cssmenu ul ul > li.has-sub > a:after,#cssmenu ul ul > li.has-sub > a:before{display:none}
+    #cssmenu #head-mobile{background: #464646;display:block;padding:23px;color:#ddd;font-size:12px;font-weight:700}
+    #cssmenu .button{width:55px;height:46px;position:absolute;right:0;top:0;cursor:pointer;z-index:12399994}
+    #cssmenu .button:after{position:absolute;top:22px;right:20px;display:block;height:4px;width:20px;border-top:2px solid #ddd;border-bottom:2px solid #ddd;content:''}
+    #cssmenu .button:before{-webkit-transition:all .3s ease;-ms-transition:all .3s ease;transition:all .3s ease;position:absolute;top:16px;right:20px;display:block;height:2px;width:20px;background:#ddd;content:''}
+    #cssmenu .button.menu-opened:after{-webkit-transition:all .3s ease;-ms-transition:all .3s ease;transition:all .3s ease;top:23px;border:0;height:2px;width:19px;background:#fff;-webkit-transform:rotate(45deg);-moz-transform:rotate(45deg);-ms-transform:rotate(45deg);-o-transform:rotate(45deg);transform:rotate(45deg)}
+    #cssmenu .button.menu-opened:before{top:23px;background:#fff;width:19px;-webkit-transform:rotate(-45deg);-moz-transform:rotate(-45deg);-ms-transform:rotate(-45deg);-o-transform:rotate(-45deg);transform:rotate(-45deg)}
+    #cssmenu .submenu-button{position:absolute;z-index:99;right:0;top:0;display:block;border-left:1px solid #444;height:46px;width:46px;cursor:pointer}
+    #cssmenu .submenu-button.submenu-opened{background:#262626}
+    #cssmenu ul ul .submenu-button{height:41px;width:46px}
+    #cssmenu .submenu-button:after{position:absolute;top:22px;right:19px;width:8px;height:2px;display:block;background:#ddd;content:''}
+    #cssmenu ul ul .submenu-button:after{top:20px;right:19px}
+    #cssmenu .submenu-button.submenu-opened:after{background:#fff}
+    #cssmenu .submenu-button:before{position:absolute;top:19px;right:22px;display:block;width:2px;height:8px;background:#ddd;content:''}
+    #cssmenu ul ul .submenu-button:before{top:17px;right:22px}
+    #cssmenu .submenu-button.submenu-opened:before{display:none}
+    #cssmenu ul ul ul li.active a{border-left:none}
+    #cssmenu > ul > li.has-sub > ul > li.active > a,#cssmenu > ul ul > li.has-sub > ul > li.active > a{border-top:none}
+    #cssmenu > ul > li::after{display:none;}
+
+    header{height:auto;padding:0 15px 10px;}
+    .header-right{width:75%;}
+    .slider-box, .event-right{width:100%;}
+    .event-right ul li{background:none;border-bottom:1px solid #ddd;}
+    .dc-news, .announcements, .videos-container, .exceptional-opportunities, .home-content, footer{padding-left:15px;padding-right:15px;  }
+    .list_layout{width:96%;}
+    .list-content {float: left; width: 58%;}
+    .videos-container ul li .video-box iframe{height:240px;}
+    .exceptional-opportunities .exc-opp-column1{width:33%;}
+    footer .col-1{width:30%;}
+    footer .col-2{width:55%;}
+    #owl-car1 .owl-nav{display:none!important;}
+.main-content{padding-left:15px;padding-right:15px }
+.school-list-container .school-list-box{width:32.8%;}
+.dcnews-leftcont, .main-left { width: 70%; float: left;padding-right: 3%;}
+ul.staff_list li, ul.staffdirect-list li {width: 31.5%;}
+.department-list-container .department-list-box{width:32.5%;}
+ul.bsc-list li{width:31.6%;}
+.bsc-vanue.email a {font-size: 100%;}
+ul.bsc-list li:nth-child(3n+3) {margin-right: 12px;}
+ul.bsc-list li:nth-child(2n+2) {margin-right: 0px;}
+ul.bsc-list li {width: 47.9%;}
+.pd-Campus-Department-result ul.bsc-list li:nth-child(2n+2){margin-right:11px }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(3n+3){margin-right:11px }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(4n+4){margin-right:0px }
+.goog-te-gadget .goog-te-combo { border: 0;  padding-left: 25px;}
+.content .exceptional-opportunities .exc-opp-column1{width: 50%;padding-right: 20px; }
+}
+@media all and (max-width:980px){
+    .school-list-container{text-align:center; }
+    .school-list-container .school-list-box{width:32%;}  
+     ul.staff_list li, ul.staffdirect-list li{width:31%;}
+     .department-list-container .department-list-box{width:32%;}
+}
+@media all and (max-width:960px){
+ .header-right {float: right;padding-top: 35px;width: 74%;}
+}
+@media all and (max-width:768px){
+    .alertclose{float:none;position:relative;right:auto;}
+    .header-right{width:67%;padding-top: 39px;}
+    #search {width: 182px;margin: 0 10px;}
+    a.hd-site-mp-btn{padding:7px 15px 7px 29px;}
+    .campus-news-title{font-size:29px; }
+    .alert-div .container {padding:0 15px;}
+    .alert {text-align:center;}
+    .dcnews-rightcont .mission-statement h2, .dcnews-rightcont .vision-statement h2, .dcnews-rightcont .student-information h2{font-size:19px; }
+    .dcnews-rightcont .mission-statement{padding:20px 20px 100px; border-radius:19px 19px 0px 0px;-moz-border-radius:19px 19px 0px 0px;-webkit-border-radius: 19px 19px 0px 0px;}
+    .dcnews-rightcont .mission-statement p br, .dcnews-rightcont .vision-statement p br, .dcnews-rightcont .student-information p br{display:none}
+    .dcnews-rightcont .vision-statement{padding:20px;border-radius: 0px 0px 19px 19px;-moz-border-radius: 0px 0px 19px 19px;-webkit-border-radius: 0px 0px 19px 19px; }
+    .dcnews-rightcont .student-information{padding:20px 20px 168px 20px}
+    .dcnews-rightcont .student-information::after{left:26px;}
+   
+    .videos-container ul li {width: 30%; vertical-align: top;}
+    .videos-container ul li .video-box iframe {height: auto;vertical-align: top;display: block;}
+    .videos-container ul li .video-box video{max-height:150px; }
+    
+    footer .col-2{width: 55%;}
+    footer .col-1{width: 26%;}
+    .school-list-container .school-list-box {width: 48%;}
+    .pd-Campus-Department-result ul.bsc-list li {width: 32.5%;margin: 0 9px 20px 0;}
+    .pd-Campus-Department-result ul.bsc-list li:nth-child(2n+2){margin-right:9px }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(3n+3){margin-right:0px }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(4n+4){margin-right:9px }
+.fc-toolbar .fc-center {    display: inline-block;    margin-top: 20px;width:100%;}
+}
+@media all and (max-width:767px){
+    .logo{float: none;margin: 10px 0 auto;display: inline-block;width: 100%;text-align: center;}
+    .logo img, footer .col-1 img {display:inherit; margin:auto;}
+    .header-right { width: 100%; padding-top:10px; text-align: center;}
+    .header-right-top {float: none;}
+    .language-box, #search, a.hd-site-mp-btn {float: none; display: inline-block;vertical-align:top; }
+    footer .col-1 {width: 100%; text-align: center; max-width: inherit;}
+    footer .col-2{width: 100%; text-align: center;max-width: inherit;}
+    footer .col-2 ul{width: 100%; text-align: center;margin-bottom:7px }
+    footer .col-2 ul li {margin: 0 0 8px 0;padding: 0 4px;width: auto;display: inline-block;}
+    footer .col-3{width: 100%; text-align: center;max-width: inherit;margin-bottom: 20px;}
+    footer .col-3 .address p br{display:none; }
+    footer .social { float: none; text-align: center;}
+     .school-list-container .school-list-box {width: 100%;}
+    
+     .dcnews-leftcont{padding-right:0; }
+     ul.staff_list li, ul.staffdirect-list li {width:47%;margin:0 5px 20px 5px;}
+     ul.staff_list {width: 100%;display: inline-block; text-align: center;}
+     .pagination ul{text-align:center; }
+     ul.staffdirect-list li:nth-child(3n+3){margin-right:5px }
+     .department-list-container .department-list-box {width: 49%;}
+     .pd-Campus-Department-result ul.bsc-list li {width:49.3%;margin: 0 9px 20px 0;max-width:361px; }
+   .pd-Campus-Department-result ul.bsc-list li:nth-child(3n+3){margin-right:9px;}
+    .pd-Campus-Department-result ul.bsc-list li:nth-child(2n+2){margin-right:0px }
+   .pd-Campus-Department-result ul.bsc-list li:nth-child(4n+4){margin-right:0px;}
+
+}
+@media all and (max-width:640px){
+    .videos-container ul li { width: 100%;vertical-align: top;}
+    .schoolstaff-Dir .col50{width:100%;}
+    .clearfix-mobile{clear:both;width:100%;display:block;content:""} 
+    .dcnews-leftcont, .main-left{width:100%; padding-right:0; }
+    .dcnews-rightcont, .main-right{float:none;margin:50px auto;display:block; width:100%;  }
+    .copyright .f-right{float:none;}
+    .copyright{text-align: center;line-height: 20px;}
+    ul.staff_list li{width:100%;margin:0 0 10px 0 }
+ul.staffdirect-list li{max-width:inherit; }
+ul.bsc-list li{max-width:296px;width:48.9%}
+.pd-Campus-Department-result ul.bsc-list li {width:49%;margin: 0 9px 20px 0;max-width:361px; }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(3n+3){margin-right:9px;}
+    .pd-Campus-Department-result ul.bsc-list li:nth-child(2n+2){margin-right:0px }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(4n+4){margin-right:0px;}
+.pd-right select{max-width:205px;}
+.pd-right::before{display:none;}
+.personnel-directory .col50{width:100%;}
+.personnel-directory .col50 .namesearch-container{margin-bottom:20px;}
+.exceptional-opportunities .main-title span:before,.exceptional-opportunities .main-title span:after{display:none;}
+    .alert-div {font-size:13px;}
+    .content .exceptional-opportunities .exc-opp-column1{width: 100%; }
+}
+@media all and (max-width:639px){
+    .exceptional-opportunities .exc-opp-column1, .exceptional-opportunities .exc-opp-column2, .exceptional-opportunities .exc-opp-column3{width:100%}
+ul.staffdirect-list li{width:100%;margin:0 0 10px 0 }
+ul.bsc-list li {max-width: inherit;width: 100%;}
+.col50.pd-right{width:100%;padding-left:0; }
+.dcnews-leftcont .list_layout{width:100%;}
+    .caption-container {display:none;   }
+    
+
+}
+@media all and (max-width:480px){
+    a.hd-site-mp-btn{margin-top:15px; }
+    ul.bsc-list{text-align:center; }
+    .bsc-box{text-align:left; }
+    
+.content .col40, .content .col50{width:100%}
+.profile{padding-left:0; }
+.gallery-container ul li:nth-child(3n+3), ul.video-list li:nth-child(3n+3) {margin-right:3px;}
+.gallery-container ul li:nth-child(2n+2), ul.video-list li:nth-child(2n+2) {margin-right: 0px;}
+.gallery-container ul li, ul.video-list li {width: 48%;}
+.pd-Campus-Department-result ul.bsc-list li {width:100%;margin: 0 0px 20px 0;max-width:361px; }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(3n+3){margin-right:0px;}
+    .pd-Campus-Department-result ul.bsc-list li:nth-child(2n+2){margin-right:0px }
+.pd-Campus-Department-result ul.bsc-list li:nth-child(4n+4){margin-right:0px;}
+}
+@media all and (max-width:320px){
+    #search{margin-top:15px;width:157px;  }
+    .advert-container ul li{margin:0 0 20px 0;width:95%}
+    .list-content, .list_layout .list-image,.department-list-container .department-list-box{width:100%;}
+.gallery-container ul li, ul.video-list li{max-width:inherit;margin-right:0;width:100%;   }
+.main-title span{font-size:29px }
+.main-title span:before,.main-title span:after{display:none;}
+.fc-toolbar .fc-right {float: left!important;margin-top:15px;}
+}

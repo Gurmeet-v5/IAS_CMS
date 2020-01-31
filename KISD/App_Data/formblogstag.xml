@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<FormBlogsTags>
+  <FormBlogTag>
+    <BlogTagID>1</BlogTagID>
+    <BlogID>1</BlogID>
+    <TagID>1</TagID>
+  </FormBlogTag>
+  <FormBlogTag>
+    <BlogTagID>2</BlogTagID>
+    <BlogID>2</BlogID>
+    <TagID>1</TagID>
+  </FormBlogTag>
+  <FormBlogTag>
+    <BlogTagID>3</BlogTagID>
+    <BlogID>2</BlogID>
+    <TagID>2</TagID>
+  </FormBlogTag>
+</FormBlogsTags>

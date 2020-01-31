@@ -1,0 +1,24 @@
+﻿@model IEnumerable<NewsEvent>
+
+@if (Model != null)
+{
+    <div class="event-right box-slide animated fadeInDown">
+        <ul>
+
+            @foreach (var item in Model)
+            {
+                <li>
+                    <div class="date-container">
+                        <div class="date-month-cont">@item.EventDate.Value.ToString("MMM")</div>
+                        <div class="year-cont">@item.EventDate.Value.Day.ToString()</div>
+                    </div>
+                    <div class="event-title">@item.TitleTxt</div>
+                    @*@item.TitleTxt*@
+                </li>
+            }
+
+        </ul>
+        <a href="@ViewBag.MoreEventsURL" class="view-more-ev-btn">View MORE Events</a>
+        <a href="@ViewBag.NewToKISDURL" class="new-kids-btn">New to kisd</a>
+    </div>
+}

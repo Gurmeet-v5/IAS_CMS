@@ -1,0 +1,191 @@
+﻿@using System.Web.Mvc;
+@using System.Web.Optimization;
+@using KISD.Areas.BlogAdmin.Models;
+@model CategoriesModel
+@{
+    Layout = "~/Areas/BlogAdmin/Views/Shared/_Layout.cshtml";
+    var pager = TempData["pager"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] ?? "CategoriesNameTxt";
+    var sortDirection = Request.QueryString["Direction"] ?? "Ascending";
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var pagesize = Request.QueryString["pagesize"] ?? Common._pageSize.ToString();
+    var page = Request.QueryString["page"] ?? Common._currentPage.ToString();
+    var Categoriesid = Request.QueryString["CategoriesID"] ?? "0";
+    var save_UpdatePanel = ViewBag.Submit;// Stores the value for submit button...either save or Update.
+}
+@using (Html.BeginForm("CreateCategories", "Categories", new { pagesize = pagesize, page = page, Categoriesid = Categoriesid, Column = sortColumn, Direction = sortDirection }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankMasterListing" href='@Url.Action("BlogCategoriesListing", "Categories",
+new
+{
+    pagesize = pagesize,
+    page = page,
+    Categoriesid = Categoriesid,
+    Column = sortColumn,
+    Direction = sortDirection
+}
+)'>
+                    Categories Listing
+                </a>
+            </li>
+            <li>
+                @ViewBag.Title
+            </li>
+        </ul>
+    </div>
+    <!-- Breadcrumb Ends -->
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@ViewBag.Title </h4>
+                <div class="btn-group">
+
+                    <a id="ankback" href='@Url.Action("BlogCategoriesListing", "Categories", new
+                                        {
+                                            pagesize = pagesize,
+                                            page = page,
+                                            Categoriesid = Categoriesid,
+                                            Column = sortColumn,
+                                            Direction = sortDirection,
+                                        })'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Category:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.CategoryNameTxt, new { @class = "required disableSpecialChar", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.CategoryNameTxt)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">&nbsp;</div>
+                <div class="col40">
+
+                    @Html.HiddenFor(m => m.CategoryID)
+                    <input type="submit" value="@ViewBag.Submit"
+                           class="submit-btn submit" id="btnSave" />&nbsp;&nbsp;&nbsp;
+
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+    </div>
+    <div class="customprogressbar" style="display:none;">
+        <div></div>
+    </div>
+    // Page Loader
+    <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+    </div>
+}
+
+<script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+@*<script src="@Href("~/Scripts/CropImage/jquery.Jcrop.js")" type="text/javascript"></script>*@
+<script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+<script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+<script src="~/Scripts/js/additional-methods.js" type="text/javascript"></script>
+<script src="~/Scripts/js/Fileuploder.js"></script>
+<script src="~/Scripts/js/ckeditor/ckeditor.js"></script>
+<script src="~/Scripts/js/fancybox/jquery.fancybox.js" type="text/javascript"></script>
+<link href="~/Scripts/js/Fancybox/jquery.fancybox.css" rel="stylesheet" />
+@*<script src="~/Scripts/CropImage/jquery.Jcrop.js" type="text/javascript"></script>*@
+
+<script src="~/Scripts/js/custom-validate.js"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+        $("#ankMasterAdvertisement").addClass('select');
+
+        $("#ankAdvertisement").addClass('select');
+
+        $("#PageTitleTxt").focus();
+        var alertmessage = '@alertmessage';
+        if (alertmessage)
+            alert(alertmessage);
+        var type = 3;
+        $(document).ready(function () {
+            var nospace = $(".nospace");
+            var funcfb = function () {
+                $(this).val($(this).val().replace(/\s/g, ''));
+            }
+            if (nospace != null && nospace.length > 0) {
+                nospace.keyup(funcfb).blur(funcfb);
+            }
+
+            if ($("#ckDescriptionTxt").length != 0) {
+                var editor = CKEDITOR.replace('ckDescriptionTxt');
+                CKEDITOR.config.allowedContent = true;
+                CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/ckfinder/")', rememberLastFolder: false })
+            }
+            if ($("#AbstractTxt").length != 0) {
+                CKEDITOR.replace('AbstractTxt',
+                       {
+                           toolbar: 'Basic',
+                           BasePath: '@Href("~/Scripts/ckeditor/'")'
+                       });
+                CKEDITOR.config.allowedContent = true;
+            }
+
+        });
+        var height = '';
+        if (type == '1') {
+            height = '500';
+        }
+        else {
+            height = '452';
+        }
+        $("#ankmaster").addClass('select');
+        $("#ankcategories").addClass('select');
+</script>
+<script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+
+<script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+            });
+        });
+</script>
+<script>
+        CKEDITOR.env.isCompatible = true;
+</script>
+<script>
+    $("#CategoryNameTxt").on('keyup paste focusout', function () {
+        var len = $("#CategoryNameTxt").val();
+        len = len.replace(/^[ \s]/, ""); 
+        $(this).val(len);
+    });
+</script>

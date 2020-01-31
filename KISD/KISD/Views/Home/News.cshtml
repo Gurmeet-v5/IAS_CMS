@@ -1,0 +1,55 @@
+﻿@model IEnumerable<NewsEvent>
+
+@{
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+}
+
+@if (Model.Count() > 0 || !string.IsNullOrEmpty(ViewBag.HomeRightSection))
+{
+    <div class="dc-news">
+        <div class="container">
+
+            @if (Model.Count() > 0)
+            {
+                <div class="dcnews-leftcont">
+                    <div class="campus-news-title"><div class="campus-news-title-icon"></div>District and Campus News</div>
+
+                    @foreach (var item in Model)
+                    {
+                        <div class="list_layout wow fadeInUp animated">
+                            <div class="list-image">
+                                @if (!string.IsNullOrEmpty(@item.ImageURLTxt))
+                                {
+                                    <a href="@item.PageURLTxt">
+                                        <img src="@AppPath/@item.ImageURLTxt.Replace("~/", "")" alt="@item.TitleTxt" title="@item.TitleTxt">
+                                        <div class="listimg-a"></div>
+                                    </a>
+                                }
+                            </div>
+                            <div class="list-content">
+                                <div class="list-title"><a href="@item.PageURLTxt">@item.TitleTxt</a> </div>
+                                <div class="list-discruption">
+                                    <p>@item.AbstractTxt</p>
+                                </div>
+                                <div class="list-share">
+                                    <a class="list-btn" href="@item.PageURLTxt">Read More</a>
+                                    <div class="date-author">
+                                        <div class="date">@item.EventCreateDate.Value.ToString("MM/dd/yyyy")</div>
+                                        <div class="author-name">By @item.AuthorNameTxt</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <a class="list-view-all-btn" href="@ViewBag.NewsURL">View More News</a>
+                </div>
+                <div class="clearfix-mobile"></div>
+            }
+            @Html.Raw(ViewBag.HomeRightSection)
+
+        </div>
+    </div>
+}

@@ -1,0 +1,543 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="db_KISDModelStoreContainer" CdmEntityContainer="db_KISDEntities">
+    <EntitySetMapping Name="Announcements">
+      <EntityTypeMapping TypeName="db_KISDModel.Announcement">
+        <MappingFragment StoreEntitySet="Announcement">
+          <ScalarProperty Name="AnnouncementID" ColumnName="AnnouncementID" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="ImageURLTxt" ColumnName="ImageURLTxt" />
+          <ScalarProperty Name="AltImageTxt" ColumnName="AltImageTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="ScheduleDateTime" ColumnName="ScheduleDateTime" />
+          <ScalarProperty Name="DisplayStartDate" ColumnName="DisplayStartDate" />
+          <ScalarProperty Name="DisplayEndDate" ColumnName="DisplayEndDate" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="AnnouncementCreateDate" ColumnName="AnnouncementCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
+          <ScalarProperty Name="ScheduleTimeTxt" ColumnName="ScheduleTimeTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BoardOfMembers">
+      <EntityTypeMapping TypeName="db_KISDModel.BoardOfMember">
+        <MappingFragment StoreEntitySet="BoardOfMember">
+          <ScalarProperty Name="BoardMemberID" ColumnName="BoardMemberID" />
+          <ScalarProperty Name="ImageURLTxt" ColumnName="ImageURLTxt" />
+          <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
+          <ScalarProperty Name="ContactInfoTxt" ColumnName="ContactInfoTxt" />
+          <ScalarProperty Name="TermTxt" ColumnName="TermTxt" />
+          <ScalarProperty Name="RightSectionTitleTxt" ColumnName="RightSectionTitleTxt" />
+          <ScalarProperty Name="RightSectionAbstractTxt" ColumnName="RightSectionAbstractTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescriptionTxt" ColumnName="PageMetaDescriptionTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="BOMCreateDate" ColumnName="BOMCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Contents">
+      <EntityTypeMapping TypeName="db_KISDModel.Content">
+        <MappingFragment StoreEntitySet="Content">
+          <ScalarProperty Name="ContentID" ColumnName="ContentID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="ContentTypeID" ColumnName="ContentTypeID" />
+          <ScalarProperty Name="IsExternalLinkInd" ColumnName="IsExternalLinkInd" />
+          <ScalarProperty Name="ExternalLinkTxt" ColumnName="ExternalLinkTxt" />
+          <ScalarProperty Name="ExternalLinkTargetInd" ColumnName="ExternalLinkTargetInd" />
+          <ScalarProperty Name="PageTitleTxt" ColumnName="PageTitleTxt" />
+          <ScalarProperty Name="MenuTitleTxt" ColumnName="MenuTitleTxt" />
+          <ScalarProperty Name="PageURLTxt" ColumnName="PageURLTxt" />
+          <ScalarProperty Name="AbstractTxt" ColumnName="AbstractTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescriptionTxt" ColumnName="PageMetaDescriptionTxt" />
+          <ScalarProperty Name="RightSectionTitleTxt" ColumnName="RightSectionTitleTxt" />
+          <ScalarProperty Name="RightSectionAbstractTxt" ColumnName="RightSectionAbstractTxt" />
+          <ScalarProperty Name="ContentCreateDate" ColumnName="ContentCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="IsFacebookSharingInd" ColumnName="IsFacebookSharingInd" />
+          <ScalarProperty Name="IsTwitterSharingInd" ColumnName="IsTwitterSharingInd" />
+          <ScalarProperty Name="IsGooglePlusSharingInd" ColumnName="IsGooglePlusSharingInd" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ContentTypes">
+      <EntityTypeMapping TypeName="db_KISDModel.ContentType">
+        <MappingFragment StoreEntitySet="ContentType">
+          <ScalarProperty Name="ContentTypeID" ColumnName="ContentTypeID" />
+          <ScalarProperty Name="ContentTypeNameTxt" ColumnName="ContentTypeNameTxt" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Departments">
+      <EntityTypeMapping TypeName="db_KISDModel.Department">
+        <MappingFragment StoreEntitySet="Department">
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
+          <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
+          <ScalarProperty Name="RightSectionTitleTxt" ColumnName="RightSectionTitleTxt" />
+          <ScalarProperty Name="RightSectionAbstractTxt" ColumnName="RightSectionAbstractTxt" />
+          <ScalarProperty Name="AddressTxt" ColumnName="AddressTxt" />
+          <ScalarProperty Name="PhoneNumberTxt" ColumnName="PhoneNumberTxt" />
+          <ScalarProperty Name="FaxNumberTxt" ColumnName="FaxNumberTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescription" ColumnName="PageMetaDescription" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="DepartmentCreateDate" ColumnName="DepartmentCreateDate" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DepartmentStaffs">
+      <EntityTypeMapping TypeName="db_KISDModel.DepartmentStaff">
+        <MappingFragment StoreEntitySet="DepartmentStaff">
+          <ScalarProperty Name="DeptStaffID" ColumnName="DeptStaffID" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="IsParentDepartment" ColumnName="IsParentDepartment" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Emails">
+      <EntityTypeMapping TypeName="db_KISDModel.Email">
+        <MappingFragment StoreEntitySet="Email">
+          <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+          <ScalarProperty Name="EmailTxt" ColumnName="EmailTxt" />
+          <ScalarProperty Name="EmailTypeID" ColumnName="EmailTypeID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EmailTypes">
+      <EntityTypeMapping TypeName="db_KISDModel.EmailType">
+        <MappingFragment StoreEntitySet="EmailType">
+          <ScalarProperty Name="EmailTypeID" ColumnName="EmailTypeID" />
+          <ScalarProperty Name="EmailTypeNameTxt" ColumnName="EmailTypeNameTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ExceptionOpportunities">
+      <EntityTypeMapping TypeName="db_KISDModel.ExceptionOpportunity">
+        <MappingFragment StoreEntitySet="ExceptionOpportunity">
+          <ScalarProperty Name="ExOpportunityID" ColumnName="ExOpportunityID" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="ExternalLinkInd" ColumnName="ExternalLinkInd" />
+          <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
+          <ScalarProperty Name="ExternalLinkTargetInd" ColumnName="ExternalLinkTargetInd" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+          <ScalarProperty Name="RightSectionTitleTxt" ColumnName="RightSectionTitleTxt" />
+          <ScalarProperty Name="RightSectionAbstractTxt" ColumnName="RightSectionAbstractTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="ShowOnHomeInd" ColumnName="ShowOnHomeInd" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescriptionTxt" ColumnName="PageMetaDescriptionTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="SchoolCategoryID" ColumnName="SchoolCategoryID" />
+          <ScalarProperty Name="ExOpportunityCreateDate" ColumnName="ExOpportunityCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FormEmails">
+      <EntityTypeMapping TypeName="db_KISDModel.FormEmail">
+        <MappingFragment StoreEntitySet="FormEmail">
+          <ScalarProperty Name="FormEmailID" ColumnName="FormEmailID" />
+          <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+          <ScalarProperty Name="EmailTypeID" ColumnName="EmailTypeID" />
+          <ScalarProperty Name="ContentTypeID" ColumnName="ContentTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GalleryListings">
+      <EntityTypeMapping TypeName="db_KISDModel.GalleryListing">
+        <MappingFragment StoreEntitySet="GalleryListing">
+          <ScalarProperty Name="ListingID" ColumnName="ListingID" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="FileURLTxt" ColumnName="FileURLTxt" />
+          <ScalarProperty Name="EmbededURLTxt" ColumnName="EmbededURLTxt" />
+          <ScalarProperty Name="AltImageTxt" ColumnName="AltImageTxt" />
+          <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="DisplayStartDate" ColumnName="DisplayStartDate" />
+          <ScalarProperty Name="DisplayEndDate" ColumnName="DisplayEndDate" />
+          <ScalarProperty Name="UploadTypeNbr" ColumnName="UploadTypeNbr" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="AuthorTxt" ColumnName="AuthorTxt" />
+          <ScalarProperty Name="ShowOnHomeInd" ColumnName="ShowOnHomeInd" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescriptionTxt" ColumnName="PageMetaDescriptionTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="ListingCreateDate" ColumnName="ListingCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Images">
+      <EntityTypeMapping TypeName="db_KISDModel.Image">
+        <MappingFragment StoreEntitySet="Images">
+          <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+          <ScalarProperty Name="ImageTypeID" ColumnName="ImageTypeID" />
+          <ScalarProperty Name="ImgPathTxt" ColumnName="ImgPathTxt" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="AltImageTxt" ColumnName="AltImageTxt" />
+          <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
+          <ScalarProperty Name="TargetWindowInd" ColumnName="TargetWindowInd" />
+          <ScalarProperty Name="DisplayStartDate" ColumnName="DisplayStartDate" />
+          <ScalarProperty Name="DisplayEndDate" ColumnName="DisplayEndDate" />
+          <ScalarProperty Name="AbstractTxt" ColumnName="AbstractTxt" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="ImageCreateDate" ColumnName="ImageCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ImageTypes">
+      <EntityTypeMapping TypeName="db_KISDModel.ImageType">
+        <MappingFragment StoreEntitySet="ImageType">
+          <ScalarProperty Name="ImageTypeID" ColumnName="ImageTypeID" />
+          <ScalarProperty Name="ImageTypeNameTxt" ColumnName="ImageTypeNameTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ListingParameters">
+      <EntityTypeMapping TypeName="db_KISDModel.ListingParameter">
+        <MappingFragment StoreEntitySet="ListingParameters">
+          <ScalarProperty Name="ListingParameterID" ColumnName="ListingParameterID" />
+          <ScalarProperty Name="ListingParameterTxt" ColumnName="ListingParameterTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="NewsEvents">
+      <EntityTypeMapping TypeName="db_KISDModel.NewsEvent">
+        <MappingFragment StoreEntitySet="NewsEvent">
+          <ScalarProperty Name="NewsEventID" ColumnName="NewsEventID" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="ImageURLTxt" ColumnName="ImageURLTxt" />
+          <ScalarProperty Name="IsExternalLinkInd" ColumnName="IsExternalLinkInd" />
+          <ScalarProperty Name="PageURLTxt" ColumnName="PageURLTxt" />
+          <ScalarProperty Name="ExternalLinkTargetInd" ColumnName="ExternalLinkTargetInd" />
+          <ScalarProperty Name="AuthorNameTxt" ColumnName="AuthorNameTxt" />
+          <ScalarProperty Name="AbstractTxt" ColumnName="AbstractTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="RightSectionTitleTxt" ColumnName="RightSectionTitleTxt" />
+          <ScalarProperty Name="RightSectionAbstractTxt" ColumnName="RightSectionAbstractTxt" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+          <ScalarProperty Name="EventDate" ColumnName="EventDate" />
+          <ScalarProperty Name="DisplayStartDate" ColumnName="DisplayStartDate" />
+          <ScalarProperty Name="DisplayEndDate" ColumnName="DisplayEndDate" />
+          <ScalarProperty Name="ShowOnHomeInd" ColumnName="ShowOnHomeInd" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescriptionTxt" ColumnName="PageMetaDescriptionTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="EventCreateDate" ColumnName="EventCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
+          <ScalarProperty Name="IsFacebookSharingInd" ColumnName="IsFacebookSharingInd" />
+          <ScalarProperty Name="IsTwitterSharingInd" ColumnName="IsTwitterSharingInd" />
+          <ScalarProperty Name="IsGooglePlusSharingInd" ColumnName="IsGooglePlusSharingInd" />
+          <ScalarProperty Name="IsRecurringInd" ColumnName="IsRecurringInd" />
+          <ScalarProperty Name="RecurrenceTypeNbr" ColumnName="RecurrenceTypeNbr" />
+          <ScalarProperty Name="IsSundayInd" ColumnName="IsSundayInd" />
+          <ScalarProperty Name="IsMondayInd" ColumnName="IsMondayInd" />
+          <ScalarProperty Name="IsTuesdayInd" ColumnName="IsTuesdayInd" />
+          <ScalarProperty Name="IsWednesdayInd" ColumnName="IsWednesdayInd" />
+          <ScalarProperty Name="IsThursdayInd" ColumnName="IsThursdayInd" />
+          <ScalarProperty Name="IsFridayInd" ColumnName="IsFridayInd" />
+          <ScalarProperty Name="IsSaturdayInd" ColumnName="IsSaturdayInd" />
+          <ScalarProperty Name="MonthModeNbr" ColumnName="MonthModeNbr" />
+          <ScalarProperty Name="MonthdayNbr" ColumnName="MonthdayNbr" />
+          <ScalarProperty Name="MonthonNbr" ColumnName="MonthonNbr" />
+          <ScalarProperty Name="MonthondayNbr" ColumnName="MonthondayNbr" />
+          <ScalarProperty Name="EventsEndOnDate" ColumnName="EventsEndOnDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RightSections">
+      <EntityTypeMapping TypeName="db_KISDModel.RightSection">
+        <MappingFragment StoreEntitySet="RightSection">
+          <ScalarProperty Name="RightSectionID" ColumnName="RightSectionID" />
+          <ScalarProperty Name="IsParentTitleInd" ColumnName="IsParentTitleInd" />
+          <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
+          <ScalarProperty Name="PageTitleTxt" ColumnName="PageTitleTxt" />
+          <ScalarProperty Name="RightSectionTitleTxt" ColumnName="RightSectionTitleTxt" />
+          <ScalarProperty Name="RightSectionAbstractTxt" ColumnName="RightSectionAbstractTxt" />
+          <ScalarProperty Name="DescriptionTxt" ColumnName="DescriptionTxt" />
+          <ScalarProperty Name="IsExternalLinkInd" ColumnName="IsExternalLinkInd" />
+          <ScalarProperty Name="ExternalLinkURLTxt" ColumnName="ExternalLinkURLTxt" />
+          <ScalarProperty Name="ExternalLinkTargetInd" ColumnName="ExternalLinkTargetInd" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="BannerImageID" ColumnName="BannerImageID" />
+          <ScalarProperty Name="AltBannerImageTxt" ColumnName="AltBannerImageTxt" />
+          <ScalarProperty Name="BannerImageAbstractTxt" ColumnName="BannerImageAbstractTxt" />
+          <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+          <ScalarProperty Name="RightSectionCreateDate" ColumnName="RightSectionCreateDate" />
+          <ScalarProperty Name="PageMetaTitleTxt" ColumnName="PageMetaTitleTxt" />
+          <ScalarProperty Name="PageMetaDescriptionTxt" ColumnName="PageMetaDescriptionTxt" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreatedByID" ColumnName="CreatedByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="TableNameTxt" ColumnName="TableNameTxt" />
+          <ScalarProperty Name="ListingID" ColumnName="ListingID" />
+          <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
+          <ScalarProperty Name="IsFacebookSharingInd" ColumnName="IsFacebookSharingInd" />
+          <ScalarProperty Name="IsTwitterSharingInd" ColumnName="IsTwitterSharingInd" />
+          <ScalarProperty Name="IsGooglePlusSharingInd" ColumnName="IsGooglePlusSharingInd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="db_KISDModel.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="RoleNameTxt" ColumnName="RoleNameTxt" />
+          <ScalarProperty Name="LoweredRoleNameTxt" ColumnName="LoweredRoleNameTxt" />
+          <ScalarProperty Name="RoleDescriptionTxt" ColumnName="RoleDescriptionTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Schools">
+      <EntityTypeMapping TypeName="db_KISDModel.School">
+        <MappingFragment StoreEntitySet="School">
+          <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+          <ScalarProperty Name="SchoolCategoryID" ColumnName="SchoolCategoryID" />
+          <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
+          <ScalarProperty Name="AddressTxt" ColumnName="AddressTxt" />
+          <ScalarProperty Name="PhoneNumberTxt" ColumnName="PhoneNumberTxt" />
+          <ScalarProperty Name="WebsiteURLTxt" ColumnName="WebsiteURLTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="SchoolCreateDate" ColumnName="SchoolCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
+          <ScalarProperty Name="PageURLTxt" ColumnName="PageURLTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SocialSharingSettings">
+      <EntityTypeMapping TypeName="db_KISDModel.SocialSharingSetting">
+        <MappingFragment StoreEntitySet="SocialSharingSetting">
+          <ScalarProperty Name="SocialSharingID" ColumnName="SocialSharingID" />
+          <ScalarProperty Name="IsFacebookSharingInd" ColumnName="IsFacebookSharingInd" />
+          <ScalarProperty Name="IsTwitterSharingInd" ColumnName="IsTwitterSharingInd" />
+          <ScalarProperty Name="IsGooglePlusSharingInd" ColumnName="IsGooglePlusSharingInd" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Staffs">
+      <EntityTypeMapping TypeName="db_KISDModel.Staff">
+        <MappingFragment StoreEntitySet="Staff">
+          <ScalarProperty Name="StaffID" ColumnName="StaffID" />
+          <ScalarProperty Name="FirstNameTxt" ColumnName="FirstNameTxt" />
+          <ScalarProperty Name="LastNameTxt" ColumnName="LastNameTxt" />
+          <ScalarProperty Name="DesignationTxt" ColumnName="DesignationTxt" />
+          <ScalarProperty Name="SchoolCategoryID" ColumnName="SchoolCategoryID" />
+          <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
+          <ScalarProperty Name="PhoneTxt" ColumnName="PhoneTxt" />
+          <ScalarProperty Name="EmailTxt" ColumnName="EmailTxt" />
+          <ScalarProperty Name="DisplayOrderNbr" ColumnName="DisplayOrderNbr" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="StaffCreateDate" ColumnName="StaffCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SystemAccessLogs">
+      <EntityTypeMapping TypeName="db_KISDModel.SystemAccessLog">
+        <MappingFragment StoreEntitySet="SystemAccessLog">
+          <ScalarProperty Name="SystemAccessLogID" ColumnName="SystemAccessLogID" />
+          <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
+          <ScalarProperty Name="UserNameTxt" ColumnName="UserNameTxt" />
+          <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+          <ScalarProperty Name="LoginDateTime" ColumnName="LoginDateTime" />
+          <ScalarProperty Name="LogoutDateTime" ColumnName="LogoutDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SystemChangeLogs">
+      <EntityTypeMapping TypeName="db_KISDModel.SystemChangeLog">
+        <MappingFragment StoreEntitySet="SystemChangeLog">
+          <ScalarProperty Name="ChangeLogID" ColumnName="ChangeLogID" />
+          <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
+          <ScalarProperty Name="UsernameTxt" ColumnName="UsernameTxt" />
+          <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+          <ScalarProperty Name="ModuleTxt" ColumnName="ModuleTxt" />
+          <ScalarProperty Name="LogTypeTxt" ColumnName="LogTypeTxt" />
+          <ScalarProperty Name="NotesTxt" ColumnName="NotesTxt" />
+          <ScalarProperty Name="LogDateTime" ColumnName="LogDateTime" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SystemChangeLogDetails">
+      <EntityTypeMapping TypeName="db_KISDModel.SystemChangeLogDetail">
+        <MappingFragment StoreEntitySet="SystemChangeLogDetail">
+          <ScalarProperty Name="ChangeLogDetailID" ColumnName="ChangeLogDetailID" />
+          <ScalarProperty Name="ChangeLogID" ColumnName="ChangeLogID" />
+          <ScalarProperty Name="FieldNameTxt" ColumnName="FieldNameTxt" />
+          <ScalarProperty Name="OldValueTxt" ColumnName="OldValueTxt" />
+          <ScalarProperty Name="NewValueTxt" ColumnName="NewValueTxt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TypeMasters">
+      <EntityTypeMapping TypeName="db_KISDModel.TypeMaster">
+        <MappingFragment StoreEntitySet="TypeMaster">
+          <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
+          <ScalarProperty Name="TypeMasterName" ColumnName="TypeMasterName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDepartments">
+      <EntityTypeMapping TypeName="db_KISDModel.UserDepartment">
+        <MappingFragment StoreEntitySet="UserDepartment">
+          <ScalarProperty Name="UserDepartmentID" ColumnName="UserDepartmentID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserPermissions">
+      <EntityTypeMapping TypeName="db_KISDModel.UserPermission">
+        <MappingFragment StoreEntitySet="UserPermission">
+          <ScalarProperty Name="UserPermissionID" ColumnName="UserPermissionID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="PageID" ColumnName="PageID" />
+          <ScalarProperty Name="IsAccessInd" ColumnName="IsAccessInd" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+          <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserRoles">
+      <EntityTypeMapping TypeName="db_KISDModel.UserRole">
+        <MappingFragment StoreEntitySet="UserRoles">
+          <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="db_KISDModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="FirstNameTxt" ColumnName="FirstNameTxt" />
+          <ScalarProperty Name="LastNameTxt" ColumnName="LastNameTxt" />
+          <ScalarProperty Name="UserNameTxt" ColumnName="UserNameTxt" />
+          <ScalarProperty Name="PasswordTxt" ColumnName="PasswordTxt" />
+          <ScalarProperty Name="EmailTxt" ColumnName="EmailTxt" />
+          <ScalarProperty Name="StatusInd" ColumnName="StatusInd" />
+          <ScalarProperty Name="IsDeletedInd" ColumnName="IsDeletedInd" />
+          <ScalarProperty Name="UserCreateDate" ColumnName="UserCreateDate" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="CreateByID" ColumnName="CreateByID" />
+          <ScalarProperty Name="LastModifyDate" ColumnName="LastModifyDate" />
+          <ScalarProperty Name="LastModifyByID" ColumnName="LastModifyByID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="pr_search_all_paged" FunctionName="db_KISDModel.Store.pr_search_all_paged">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="db_KISDModel.pr_search_all_paged_Result">
+          <ScalarProperty Name="MenuTitleTxt" ColumnName="MenuTitleTxt" />
+          <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IsExternalLink" ColumnName="IsExternalLink" />
+          <ScalarProperty Name="ModuleName" ColumnName="ModuleName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>

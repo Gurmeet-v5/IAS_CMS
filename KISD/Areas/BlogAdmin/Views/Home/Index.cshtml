@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Areas/BlogAdmin/Views/Shared/_Layout.cshtml";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+ }
+
+<div class="breadcrumb">
+    <!-- Breadcrumb -->
+    <ul>
+        <li>
+            <i class="icon-th"></i>
+            Dashboard
+        </li>
+    </ul>
+</div>
+<div class="page-header">
+    <!-- page-header -->
+    <div class="page-title">
+    </div>
+</div>
+
+<div class="wrapper">
+    <!-- Wrapper -->
+    <div class="widget welcome-message">
+        <div class="logos">
+            <br>
+            <img src="~/scripts/Frontend/images/logo-black.png" />
+        </div>
+        <!-- widget -->
+        <h1>Welcome to Killeen ISD Blog Admin section.<br />
+                        You can manage different sections of the Blog from here.
+        </h1>
+    </div>
+    <!-- widget Ends-->
+</div>
+<!-- Wrapper Ends -->
+
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    $("#ankMainDash").addClass('select');
+</script>
+<script type="text/javascript">
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport	
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 5000);
+    }
+
+    function showMessage(msg) {
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500); 
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 1000);
+    }
+</script>

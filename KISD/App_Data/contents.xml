@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Contents>
+  <Content>
+    <ContentID>1</ContentID>
+    <ContentTxt>&lt;div class="address"&gt;&lt;!-- address --&gt;&lt;span&gt;200 N. WS Young Dr. Killeen, TX. 76543&lt;/span&gt;
+
+&lt;div class="phone" style="line-height: 20.8px;"&gt;&lt;span&gt;254-336-0000&lt;/span&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;!-- end address --&gt;</ContentTxt>
+    <ContentTypeID>1</ContentTypeID>
+    <TitleTxt>Logo</TitleTxt>
+    <AltImgTxt>Logo</AltImgTxt>
+    <ImagePathTxt>~/WebData/images/2f969ab8-c716-4ee1-b0b6-41b829662857-.png</ImagePathTxt>
+    <MetaTitleTxt>Home |  KISD</MetaTitleTxt>
+    <MetaDescriptionTxt>Home | KISD</MetaDescriptionTxt>
+  </Content>
+  <Content>
+    <ContentID>2</ContentID>
+    <ContentTxt>&lt;span&gt;200 N. WS Young Dr. Killeen, TX. 76543&lt;/span&gt;
+&lt;div class="phone" style="line-height: 20.8px;"&gt;&lt;span&gt;254-336-0000&lt;/span&gt;&lt;/div&gt;
+</ContentTxt>
+    <ContentTypeID>2</ContentTypeID>
+    <TitleTxt>Footer Logo</TitleTxt>
+    <AltImgTxt>Footer Logo</AltImgTxt>
+    <ImagePathTxt>~/WebData/images/f5057150-5969-4a93-8036-84fd1f4bde5a-.png</ImagePathTxt>
+    <MetaTitleTxt></MetaTitleTxt>
+    <MetaDescriptionTxt></MetaDescriptionTxt>
+  </Content>
+</Contents>

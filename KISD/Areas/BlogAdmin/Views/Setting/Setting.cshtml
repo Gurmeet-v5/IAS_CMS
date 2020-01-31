@@ -1,0 +1,573 @@
+﻿@using System.Web.Mvc;
+@using System.Web.Optimization;
+@using KISD.Areas.BlogAdmin.Models;
+@using ContentTypeAlias = KISD.Areas.BlogAdmin.Models.ContentTypeModel;
+
+@model SettingModel
+@{
+    Layout = "~/Areas/BlogAdmin/Views/Shared/_Layout.cshtml";
+    var pager = TempData["pager"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] ?? "SettingID";
+    var sortDirection = Request.QueryString["Direction"] ?? "Ascending";
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var ContentType = Request.QueryString["ContentType"] ?? "0";
+    var pagesize = Request.QueryString["pagesize"] ?? Common._pageSize.ToString();
+    var page = Request.QueryString["page"] ?? Common._currentPage.ToString();
+    var Settingid = Request.QueryString["SettingID"] != null && Request.QueryString["SettingID"] != "" ? Convert.ToInt32(Request.QueryString["SettingID"]) : 0;
+    var save_UpdatePanel = ViewBag.Submit;// Stores the value for submit button...either save or Update.
+}
+@using (Html.BeginForm("Setting", "Setting", new { SettingType = Settingid, Column = sortColumn, Direction = sortDirection }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @ViewBag.Title
+            </li>
+        </ul>
+    </div>
+    <!-- Breadcrumb Ends -->
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@ViewBag.Title </h4>
+                <div class="btn-group">
+
+                </div>
+            </div>
+
+            @if (Model.ContentType == Convert.ToInt32(ContentTypeAlias.ContentType.BasicSetting))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Enable Comments:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.DropDownListFor(m => m.IsCommentEnabled, ViewBag.IsCommentEnabled as SelectList)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.IsCommentEnabled)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Enable Searching:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.DropDownListFor(m => m.IsSearchEnabled, ViewBag.IsSearchEnabled as SelectList)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.IsSearchEnabled)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Enable Social Sharing:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.DropDownListFor(m => m.IsSocialSharingEnabled, ViewBag.IsSocialSharingEnabled as SelectList)
+                        <br />
+                        @Html.ValidationMessageFor(m => m.IsSocialSharingEnabled)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Posts per page:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.PostPerPage, new { @class = "required disableSpecialChar", @type = "number", @min = "1", @max = "10", maxlength = "2" })
+                        <br />
+                        @Html.ValidationMessageFor(m => m.PostPerPage)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Comment per post:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.CommentPerPost, new { @class = "required disableSpecialChar", @type = "number", @min = "1", @max = "10", maxlength = "2" })
+                        <br />
+                        @Html.ValidationMessageFor(m => m.CommentPerPost)
+                    </div>
+                </div>
+            }
+            else if (Model.ContentType == Convert.ToInt32(ContentTypeAlias.ContentType.ThemeSetting))
+            {
+                <div class="section-part">
+                    <div class="section-title">Pagination Section</div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Paging Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.PagingColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Paging Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.PagingColor, null, new { @id = "spnPagingColor" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Paging Active Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.PagingActiveColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Paging - Active Page Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.PagingActiveColor, null, new { @id = "spnPagingActiveColor" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Paging Hover Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.PagingHoverColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Paging On Hover Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.PagingHoverColor, null, new { @id = "spnPagingHoverColor" })
+                        </div>
+                    </div>
+                </div>
+                <div class="section-part">
+                    <div class="section-title">Navigation Section</div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Navigationbar Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.NevigationBarColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Menu Bar Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.NevigationBarColor, null, new { @id = "spnNevigationBarColor" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Navigationbar Font Family:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownList("NevigationbarFontFamily", ViewBag.FontFamily as SelectList, new { @class = "required" })
+                            <input type="hidden" id="hidNevigationbarFontFamily" name="hidNevigationbarFontFamily" />
+                            <a title="Menu Text Font Family" class="infom"></a>
+                            <span id="spnNevigationBarFontFamily" style="display:none; color: #C30; font-family: Arial,sans-serif; font-size: 12px;">This field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Navigationbar Font Size:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownListFor(m => m.NevigationBarTextFontSize, SettingModel.GetFontList("12"), new { @class = "required" })
+                            <a title="Menu Bar Text Font Size" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.NevigationBarTextFontSize)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Navigationbar Font Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.NevigationBarFontColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Menu Bar Text Font Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.NevigationBarFontColor, null, new { @id = "spnNevigationBarFontColor" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Navigationbar Hover Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.NevigationBarHoverColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Menu On Hover Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.NevigationBarHoverColor, null, new { @id = "spnNevigationBarHoverColor" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Footer Background Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.FooterColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Footer Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.FooterColor, null, new { @id = "spnFooterColor" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-part">
+                    <div class="section-title">Sidebar Section</div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Sidebar Title Background Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.SidebarTitleBackgroundColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Sidebar(Tag Cloud, Category, Month List) Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.SidebarTitleBackgroundColor, null, new { @id = "spnSidebarTitleBackgroundColor" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Sidebar Title Font Family:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownList("SidebarTitleFontFamily", ViewBag.FontFamily as SelectList, new { @class = "required" })
+                            <input type="hidden" id="hidSidebarTitleFontFamily" name="hidSidebarTitleFontFamily" />
+                            <a title="Sidebar(Tag Cloud, Category, Month List) Title Text Font Family" class="infom"></a>
+                            <span id="spnSidebarTitleFontFamily" style="display:none; color: #C30; font-family: Arial,sans-serif; font-size: 12px;">This field is required.</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Sidebar Title Font Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.SidebarTitleFontcolor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Sidebar(Tag Cloud, Category, Month List) Text Font Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.SidebarTitleFontcolor, null, new { @id = "spnSidebarTitleFontcolor" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Sidebar Title Font Size:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownListFor(m => m.SidebarTitleFontSize, SettingModel.GetFontList("18"), new { @class = "required" })
+                            <a title="Sidebar(Tag Cloud, Category, Month List) Text Font Size" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.SidebarTitleFontSize)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section-part">
+                    <div class="section-title">Post Section</div>
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Post Title Font Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.PostTitleFontColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Post Title Text Font Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.PostTitleFontColor, null, new { @id = "spnPostTitleFontColor" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Post Title Font Family:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownList("PostTitleFontFamily", ViewBag.FontFamily as SelectList, new { @class = "required" })
+                            <input type="hidden" id="hidPostTitleFontFamily" name="hidPostTitleFontFamily" />
+                            <a title="Post Title Text Font Family" class="infom"></a>
+                            <span id="spnPostTitleFontFamily" style="display:none; color: #C30; font-family: Arial,sans-serif; font-size: 12px;">This field is required.</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Post Title Font Size:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownListFor(m => m.PostTitleFontSize, SettingModel.GetFontList("25"), new { @class = "required" })
+                            <a title="Post Title Text Font Size" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.PostTitleFontSize)
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col30">
+                            <label>
+                                Read More Button Color:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.ButtonColor, new { @class = "required txtcolorpicker disableSpecialChar colorPicker evo-cp0", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            <a title="Read More Button Background Color" class="infom"></a>
+                            @Html.ValidationMessageFor(x => x.ButtonColor, null, new { @id = "spnButtonColor" })
+                        </div>
+                    </div>
+                </div>
+            }
+            else if (Model.ContentType == Convert.ToInt32(ContentTypeAlias.ContentType.EmailSetting))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Sending Email:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        <div class="semail">
+                            @Html.DropDownList("SendingEmail", ViewBag.FromEmails as SelectList, "-- Select Sending Email --",
+                    new { @class = "required" })
+                        </div>
+                        @Html.ValidationMessageFor(m => m.SendingEmail)
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Receiving Email:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        <div>
+                            @Html.ListBoxFor(m => m.SelectedReceivingEmail, new SelectList(Model.ReceivingEmailList, "Value", "Text", Model.ReceivingEmailList.SelectedValue),
+                                            new { @Id = "lstToemail", @class = "required" })
+                            <br /><span id="toemailspan" style="color: #C30; font-family: Arial,sans-serif; display:none; font-size: 12px;">This field is required.</span>
+                            @Html.ValidationMessageFor(m => m.SelectedReceivingEmail)
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col75" style="text-align:center">
+                    @Html.HiddenFor(m => m.SettingID)
+                    @Html.HiddenFor(m => m.ContentType)
+                    <input type="submit" value="@ViewBag.Submit"
+                           class="submit-btn submit" id="btnSave" />&nbsp;&nbsp;&nbsp;
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+    </div>
+    <div class="customprogressbar" style="display:none;">
+        <div></div>
+    </div>
+    // Page Loader
+    <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+    </div>
+}
+
+<script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+<script src="~/Scripts/js/jquery.validate.js" type="text/javascript" defer="defer"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript" defer="defer"></script>
+<script src="~/Scripts/js/additional-methods.js" type="text/javascript" defer="defer"></script>
+<script src="~/Scripts/js/custom-validate.js" defer="defer"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+    //Passing selected text to hidden field for font families dropdown.
+
+    $('#lstToemail').change(function () {
+        var toemail = $("#lstToemail option:selected").index()
+        if (toemail == 0) {
+            $("#toemailspan").css({ "display": "block" })
+            $("#lstToemail").addClass("input-validation-error")
+
+        }
+        else {
+            $("#toemailspan").css({ "display": "none" })
+            $("#lstToemail").removeClass("input-validation-error")
+        }
+    });
+
+    $("#btnSave").click(function () {
+
+        var toemail = $("#lstToemail option:selected").index()
+        if (toemail == 0) {
+
+            $("#lstToemail").addClass("input-validation-error")
+            $("#toemailspan").css({ "display": "block" })
+            return false;
+        }
+        else {
+            $("#toemailspan").css({ "display": "none" })
+            $("#lstToemail").removeClass("input-validation-error")
+        }
+        var selTypeText = '';
+        selTypeText = $("#NevigationbarFontFamily option:selected").text();
+        $("#hidNevigationbarFontFamily").val(selTypeText);
+
+        selTypeText = $("#SidebarTitleFontFamily option:selected").text();
+        $("#hidSidebarTitleFontFamily").val(selTypeText);
+
+        selTypeText = $("#PostTitleFontFamily option:selected").text();
+        $("#hidPostTitleFontFamily").val(selTypeText);
+    });
+    
+    var alertmessage = '@alertmessage';
+    if (alertmessage)
+        alert(alertmessage);
+    
+    $("#ankmastersetting").addClass('select');
+    var type = '@ContentType';
+
+    if (type == '3') {
+        $("#ankbasicsetting").addClass('select');
+    }
+    else if (type == '4') {
+        $("#ankemailsetting").addClass('select');
+    }
+    else if (type == '5') {
+        $("#ankthemesetting").addClass('select');
+    }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker({
+            changeMonth: true,
+            changeYear: true,
+            yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+        });
+    });
+</script>
+
+<link href="~/Areas/BlogAdmin/Scripts/colorpicker/css/evol-colorpicker.css" rel="stylesheet" />
+<script src="~/Areas/BlogAdmin/Scripts/colorpicker/js/evol-colorpicker.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".txtcolorpicker").width(425);
+        $(".txtcolorpicker").colorpicker();
+    });
+</script>
+<script>
+
+    // Code for replacing with 10 if number is greater then 10
+    // and restrict user for not entring white space on text starts
+    $("#PostPerPage").on('keyup paste focusout', function () {
+        var len = $("#PostPerPage").val();
+        len = len.replace(/^(0*)/, "");
+        $(this).val(len);
+        if (len > 10) {
+            $(this).val(10);
+        }
+    });
+    $("#CommentPerPost").on('keyup paste focusout', function () {
+        var len = $("#CommentPerPost").val();
+        len = len.replace(/^(0*)/, "");
+        $(this).val(len);
+        if (len > 10) {
+            $(this).val(10);
+        }
+    });
+    //------------------------------------------------------
+    var txtval = '';
+    $("#PagingColor").on("change", function () {
+        txtval = $("#PagingColor").val().trim();
+        if (txtval != '') { $("#spnPagingColor").css("display", "none"); $("#PagingColor").removeClass("input-validation-error"); } else { $("#spnPagingColor").css("display", "block"); $("#PagingColor").addClass("input-validation-error"); }
+    });
+    $("#PagingActiveColor").on("change", function () {
+        txtval = $("#PagingActiveColor").val().trim();
+        if (txtval != '') { $("#spnPagingActiveColor").css("display", "none"); $("#PagingActiveColor").removeClass("input-validation-error"); } else { $("#spnPagingActiveColor").css("display", "block"); $("#PagingActiveColor").addClass("input-validation-error"); }
+    });
+    $("#PagingHoverColor").on("change", function () {
+        txtval = $("#PagingHoverColor").val().trim();
+        if (txtval != '') { $("#spnPagingHoverColor").css("display", "none"); $("#PagingHoverColor").removeClass("input-validation-error"); } else { $("#spnPagingHoverColor").css("display", "block"); $("#PagingHoverColor").addClass("input-validation-error"); }
+    });
+    $("#NevigationBarColor").on("change", function () {
+        txtval = $("#NevigationBarColor").val().trim();
+        if (txtval != '') { $("#spnNevigationBarColor").css("display", "none"); $("#NevigationBarColor").removeClass("input-validation-error"); } else { $("#spnNevigationBarColor").css("display", "block"); $("#NevigationBarColor").addClass("input-validation-error"); }
+    });
+    $("#NevigationbarFontFamily").on("change", function () {
+        txtval = $("#NevigationbarFontFamily").val();
+        if (txtval != '0') { $("#spnNevigationBarFontFamily").css("display", "none"); $("#NevigationbarFontFamily").removeClass("input-validation-error"); } else { $("#spnNevigationBarFontFamily").css("display", "block"); $("#NevigationbarFontFamily").addClass("input-validation-error"); }
+    });
+    $("#NevigationBarFontColor").on("change", function () {
+        txtval = $("#NevigationBarFontColor").val().trim();
+        if (txtval != '') { $("#spnNevigationBarFontColor").css("display", "none"); $("#NevigationBarFontColor").removeClass("input-validation-error"); } else { $("#spnNevigationBarFontColor").css("display", "block"); $("#NevigationBarFontColor").addClass("input-validation-error"); }
+    });
+    $("#NevigationBarHoverColor").on("change", function () {
+        txtval = $("#NevigationBarHoverColor").val().trim();
+        if (txtval != '') { $("#spnNevigationBarHoverColor").css("display", "none"); $("#NevigationBarHoverColor").removeClass("input-validation-error"); } else { $("#spnNevigationBarHoverColor").css("display", "block"); $("#NevigationBarHoverColor").addClass("input-validation-error"); }
+    });
+    $("#FooterColor").on("change", function () {
+        txtval = $("#FooterColor").val().trim();
+        if (txtval != '') { $("#spnFooterColor").css("display", "none"); $("#FooterColor").removeClass("input-validation-error"); } else { $("#spnFooterColor").css("display", "block"); $("#FooterColor").addClass("input-validation-error"); }
+    });
+    $("#SidebarTitleBackgroundColor").on("change", function () {
+        txtval = $("#SidebarTitleBackgroundColor").val().trim();
+        if (txtval != '') { $("#spnSidebarTitleBackgroundColor").css("display", "none"); $("#SidebarTitleBackgroundColor").removeClass("input-validation-error"); } else { $("#spnSidebarTitleBackgroundColor").css("display", "block"); $("#SidebarTitleBackgroundColor").addClass("input-validation-error"); }
+    });
+    $("#SidebarTitleFontFamily").on("change", function () {
+        txtval = $("#SidebarTitleFontFamily").val().trim();
+        if (txtval != '0') { $("#spnSidebarTitleFontFamily").css("display", "none"); $("#SidebarTitleFontFamily").removeClass("input-validation-error"); } else { $("#spnSidebarTitleFontFamily").css("display", "block"); $("#SidebarTitleFontFamily").addClass("input-validation-error"); }
+    });
+    $("#SidebarTitleFontcolor").on("change", function () {
+        txtval = $("#SidebarTitleFontcolor").val().trim();
+        if (txtval != '') { $("#spnSidebarTitleFontcolor").css("display", "none"); $("#SidebarTitleFontcolor").removeClass("input-validation-error"); } else { $("#spnSidebarTitleFontcolor").css("display", "block"); $("#SidebarTitleFontcolor").addClass("input-validation-error"); }
+    });
+    $("#PostTitleFontColor").on("change", function () {
+        txtval = $("#PostTitleFontColor").val().trim();
+        if (txtval != '') { $("#spnPostTitleFontColor").css("display", "none"); $("#PostTitleFontColor").removeClass("input-validation-error"); } else { $("#spnPostTitleFontColor").css("display", "block"); $("#PostTitleFontColor").addClass("input-validation-error"); }
+    });
+    $("#PostTitleFontFamily").on("change", function () {
+        txtval = $("#PostTitleFontFamily").val().trim();
+        if (txtval != '0') { $("#spnPostTitleFontFamily").css("display", "none"); $("#PostTitleFontFamily").removeClass("input-validation-error"); } else { $("#spnPostTitleFontFamily").css("display", "block"); $("#PostTitleFontFamily").addClass("input-validation-error"); }
+    });
+    $("#ButtonColor").on("change", function () {
+        txtval = $("#ButtonColor").val().trim();
+        if (txtval != '') { $("#spnButtonColor").css("display", "none"); $("#ButtonColor").removeClass("input-validation-error"); } else { $("#spnButtonColor").css("display", "block"); $("#ButtonColor").addClass("input-validation-error"); }
+    });
+    $(function () {
+        $(document).tooltip();
+    });
+</script>

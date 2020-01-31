@@ -1,0 +1,34 @@
+﻿@model KISD.Areas.Admin.Models.ExceptionOpportunityModel
+
+@if (Model != null)
+{
+    if (Model.ExceptionOpportunities.Count > 0)
+    {
+        <div class="exceptional-opportunities">
+            <div class="container">               
+                @foreach (var data in Model.Categories)
+                {
+                    <div class="exc-opp-column1">
+                        <div class="exc-opp-title">@data.NameTxt</div>
+                        <ul>
+                            @foreach (var d in Model.ExceptionOpportunities.Where(x => x.SchoolCategoryID == @data.SchoolID))
+                        {
+                                <li>
+                                    @if (d.ExternalLinkInd.Value)
+                                    {
+                                        <a href="@d.URLTxt" @if (d.ExternalLinkTargetInd.HasValue && d.ExternalLinkTargetInd.Value) { @Html.Raw("target='_blank'")    }>@d.TitleTxt</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@d.URLTxt?t=c" @if (d.ExternalLinkTargetInd.HasValue && d.ExternalLinkTargetInd.Value) { @Html.Raw("target='_blank'")     }>@d.TitleTxt</a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+}

@@ -1,0 +1,345 @@
+﻿@using KISD.Areas.Blog.Models;
+@using KISD.Areas.BlogAdmin.Contexts;
+@model ContentModel
+@{
+    Layout = "~/Areas/Blog/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : "")) + "/Blog";
+    var AppPathImage = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.BlogAdmin.Models.Common.ReturnValidPath(AppPath);
+    AppPathImage = KISD.Areas.BlogAdmin.Models.Common.ReturnValidPath(AppPathImage);
+    var search = Request.QueryString["search"] == null ? "" : Request.QueryString["search"].ToString();
+    ViewBag.NevigationbarFontFamily = Model.SettingList == null ? "Lato" : Model.SettingList.Select(x => x.NevigationBarFontFamilyTxt).FirstOrDefault().Trim().Replace(" ", "+");
+    ViewBag.SidebarTitleFontFamily = Model.SettingList == null ? "Lato" : Model.SettingList.Select(x => x.SidebarTitleFontFamilyTxt).FirstOrDefault().Trim().Replace(" ", "+");
+    ViewBag.PostTitleFontFamily = Model.SettingList == null ? "Lato" : Model.SettingList.Select(x => x.PostTitleFontFamilyTxt).FirstOrDefault().Trim().Replace(" ", "+");
+    if (Model != null)
+    {
+        if (Model.PagedBlog.Any())
+        {
+            foreach (var item in Model.PagedBlog)
+            {
+                ViewBag.Title = string.IsNullOrEmpty(item.MetaTitleTxt) ? "" : item.MetaTitleTxt;
+                ViewBag.MetaTitle = string.IsNullOrEmpty(item.MetaTitleTxt) ? "" : item.MetaTitleTxt;
+                ViewBag.MetaDescription = string.IsNullOrEmpty(item.MetaDescriptionTxt) ? "" : item.MetaDescriptionTxt;
+            }
+        }
+    }
+    var Alert = TempData["AlertMessage"] ?? string.Empty;
+    var IsSocialSharingEnable = Model.SettingList == null ? false : Model.SettingList.Select(x => x.IsSocialSharingEnabled).FirstOrDefault();
+
+    //Gets all user information in the system
+    var UsersContexts = new UsersContexts().GetAccountUsers();
+
+}
+
+<div id="middle" class="container">
+    <!-- #middle -->
+    <div class="row mrgn-top20">
+        <div id="left-content">
+            <!-- #left-content -->
+            @if (Model != null)
+            {
+                if (Model.PagedBlog.Any())
+                {
+                    foreach (var item in Model.PagedBlog)
+                    {
+                        <article>
+                            <!-- article -->
+                            <a href="@Url.Action("BlogContent", "Content", new { Blogurl = @Html.Raw(item.SlagTxt) })"><h2 class="post-title">@Html.Raw(!string.IsNullOrEmpty(item.TitleTxt) ? item.TitleTxt : "")</h2></a>
+                            <div class="post-date">
+                                @* Auther widget *@
+                                @if (!string.IsNullOrEmpty(item.AuthorNameTxt) && item.AuthorNameTxt != "N/A")
+                                {
+                                    <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(item.AuthorNameTxt), type_ID = "Auther_Search0" + @Html.Raw(item.AuthorNameID) })" class="post-date">
+                                        <i class="fa fa-user" aria-hidden="true"></i> @Html.Raw(UsersContexts.Where(x=> x.UserID == Convert.ToInt64(item.AuthorNameID) && x.UserNameTxt == item.AuthorNameTxt).Select(x=>x.FirstName + " " + x.LastName).FirstOrDefault()) &nbsp;
+                                    </a>
+                                }
+                                @* posted on widget *@
+                                <i aria-hidden="true" class="fa fa-calendar"></i>   @Html.Raw(item.PostedDate.ToString("dd MMM yyyy")) &nbsp;
+                                @* Category widget *@
+                                @if (!string.IsNullOrEmpty(item.CategoryName))
+                                {
+                                    <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(item.CategoryName), type_ID = "Category_Search0" + @Html.Raw(item.CategoryID) })" class="post-date">  <i class="fa fa-server" aria-hidden="true"></i> @Html.Raw(item.CategoryName) &nbsp;</a>
+                                }
+                            </div>
+                            @if (Model.SocialList.Any())
+                        {
+                            if (IsSocialSharingEnable)
+                            {
+                                    <div class="social-icons">
+                                        @foreach (var social_item in Model.SocialList)
+                                        {
+                                            if (social_item.SocialMedia == 1)
+                                            {
+                                                <a href="#" title="Share on Facebook" custom="http://www.facebook.com/sharer.php?u=@AppPath/@item.SlagTxt" class="facebook">
+                                                    <i aria-hidden="true" class="fa fa-facebook-official">
+                                                    </i> Share on Facebook
+                                                </a>
+                                            }
+                                            if (social_item.SocialMedia == 2)
+                                            {
+                                                <a href="#" title="Share on Twitter" custom="http://twitter.com/share?text=@item.TitleTxt&url=@AppPath/@item.SlagTxt" class="twitter">
+                                                    <i class="fa fa-twitter" aria-hidden="true"></i> Share on Twitter
+
+                                                </a>
+                                            }
+                                            if (social_item.SocialMedia == 3)
+                                            {
+
+                                                <a href="#" title="Share on Google +" custom="https://plus.google.com/share?url=@AppPath/@item.SlagTxt" class="googleplus">
+                                                    <i aria-hidden="true" class="fa fa-google-plus"></i> Share on Google +
+
+                                                </a>
+                                            }
+                                        }
+                                    </div>
+                                }
+                            }
+                            <br>
+                            <div class="post-img">
+                                @if (!string.IsNullOrEmpty(item.ImagePathTxt.Trim()))
+                                {
+                                    <img src="@AppPathImage@item.ImagePathTxt.Replace("~/", "/")" alt="@Html.Raw(item.TitleTxt)" title="@Html.Raw(item.TitleTxt)" />
+                                }
+                            </div>
+                            <p>@Html.Raw(item.BlogDescription)</p>
+
+                            <div class="left-tags">
+                                @foreach (var tag_item in item.TagNameList.OrderBy(x => x.TagNameTxt))
+                                {
+                                    <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(tag_item.TagNameTxt), type_ID = "Tag_Search0" + @Html.Raw(tag_item.TagID) })" class="ankSearchTag" name="@Html.Raw(tag_item.TagNameTxt)">
+                                        <span>@Html.Raw(tag_item.TagNameTxt)</span>
+                                    </a>
+                                }
+                            </div>
+                        </article>
+                        if (item.SettingList.Select(x => x.IsCommentEnabled).FirstOrDefault() == true)
+                        {
+                            if (item.IsCommentEnabledInd == true)
+                            {
+                                <div class="comment-box">
+                                    <!-- comment-box -->
+                                    <div class="row">
+                                        <div class="comment-head">
+                                            Comments
+                                        </div>
+                                    </div>
+                                    <div class="gray-border">
+                                        <!-- gray-border -->
+                                        @foreach (var comm_item in Model.CommentList)
+                                        {
+                                            <div class="comment-inner">
+                                                <!-- comment-inner -->
+                                                <p>@Html.Raw(comm_item.CommentDescriptionTxt)</p>
+                                                <div class="comment-name"><strong>@Html.Raw(comm_item.FullNameTxt)</strong> <span>|</span> @Html.Raw(comm_item.No_of_days) </div>
+                                            </div><!-- end comment-inner -->
+                                        }
+                                        <div class="add-comment">
+                                            Add a Comment
+                                        </div>
+                                        @using (Html.BeginForm("BlogContent", "Content", new { search = @Model.SearchTxt }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data", @class = "comment-form" }))
+                                        {
+                                    <!-- comment-form -->
+                                            <label for="full-name" hidden>Full Name</label>
+                                            <input type="text" placeholder="Full Name*" name="full-name" id="full-name" class="required" maxlength="100" />
+                                            <span style="color: #C30; font-family: Arial,sans-serif; font-size: 12px;">@Html.ValidationMessage("full-name")</span>
+                                            <br />
+                                            <label for="email" hidden>Email</label>
+                                            <input type="email" placeholder="Email*" name="email" id="email" class="required" maxlength="200" />
+                                            <span style="color: #C30; font-family: Arial,sans-serif; font-size: 12px;">@Html.ValidationMessage("email")</span>
+                                            <br />
+                                            <label for="phone" hidden>Phone</label>
+                                            <input type="tel" placeholder="Phone  (Optional)" name="phone" id="phone" class="phonenumber" maxlength="20" />
+                                            <br />
+                                            <label for="Comment" hidden>Comment</label>
+                                            <textarea placeholder="Comment*" name="Comment" id="Comment" class="required" maxlength="500"></textarea>
+                                            <span style="color: #C30; font-family: Arial,sans-serif; font-size: 12px;">@Html.ValidationMessage("Comment")</span>
+                                            <br />
+                                            <input type="submit" value="Post Comment" />
+                                   <!-- end comment-form -->
+                                        }
+                                    </div><!-- end gray-border -->
+                                </div><!-- end comment-box -->
+                            }
+                        }
+                    }
+                }
+            }
+        </div>
+
+        <!-- end #left-content -->
+        <aside id="sidebar">
+            <!-- #sidebar Tag Cloud -->
+            @{Html.RenderAction("TagCloud", "Content");}@*Tag Cloud*@
+            <!-- #sidebar category-box Starts -->
+            @{Html.RenderAction("Categories", "Content");}@*Categories*@
+            <!-- category-box End -->
+            @{Html.RenderAction("MonthList", "Content");}@*Month List*@
+        </aside><!-- end #sidebar -->
+
+    </div>
+</div><!-- end #middle -->
+<script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+<script>
+    //Restrict for numbers only
+    var phonenumber = $('.maskinput');
+    if (phonenumber != null && phonenumber.length > 0) {
+        $('.maskinput').mask("(999)-999-9999");
+    }
+    $('.phonenumber').on('keyup paste focusout', function () {
+        // Remove invalid chars from the input
+        var input = this.value.replace(/[^0-9\(\)\s\-]/g, "");
+        var inputlen = input.length;
+        // Get just the numbers in the input
+        var numbers = this.value.replace(/\D/g, '');
+        var numberslen = numbers.length;
+        // Value to store the masked input
+        var newval = "";
+        // Loop through the existing numbers and apply the mask
+        for (var i = 0; i < numberslen; i++) {
+            if (i == 0) newval = "(" + numbers[i];
+            else if (i == 3) newval += ") " + numbers[i];
+            else if (i == 6) newval += "-" + numbers[i];
+            else newval += numbers[i];
+        }
+        // Re-add the non-digit characters to the end of the input that the user entered and that match the mask.
+        if (inputlen >= 1 && numberslen == 0 && input[0] == "(") newval = "(";
+        else if (inputlen >= 6 && numberslen == 3 && input[4] == ")" && input[5] == " ") newval += ") ";
+        else if (inputlen >= 5 && numberslen == 3 && input[4] == ")") newval += ")";
+        else if (inputlen >= 6 && numberslen == 3 && input[5] == " ") newval += " ";
+        else if (inputlen >= 10 && numberslen == 6 && input[9] == "-") newval += "-";
+        $(this).val(newval.substring(0, 14));
+    });
+</script>
+<script>
+    @*var alertmessage = '@Alert';
+    if (alertmessage)
+        alert(alertmessage);*@
+    var message = '@Alert';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 4000);
+    }
+
+    function showMessage(msg) {
+        $('#notifyDiv').removeClass('common_hide');
+        $('#notifyDiv').addClass('common_show');
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        setTimeout(function () {
+            //$('#notifyDiv').hide();
+            $('#notifyDiv').addClass('common_hide');
+            $('#notifyDiv').removeClass('common_show');
+        }, 1000);
+    }
+
+</script>
+<script>
+    //Twitter Social Share code
+    !function (d, s, id) {
+        var js,
+            fjs = d.getElementsByTagName(s)[0],
+            p = /^http:/.test(d.location) ? 'http' : 'https';
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }
+    (document, 'script', 'twitter-wjs');
+    // Social Sharing Popup code
+    $(".social-icons a").on("click", function () {
+        var url = $(this).attr('custom');
+        makeNewWindow(url);
+    });
+    function makeNewWindow(url) {
+        var newWindow
+        var left = (screen.width / 2) - (800 / 2);
+        newWindow = window.open(url, "", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + 800 + ', height=' + 500 + ',  left=' + left);
+    }
+</script>
+<script>
+    @{
+        var NevigationBarColor = string.Empty;
+        var NevigationBarHoverColor = string.Empty;
+        var NevigationBarFontColor = string.Empty;
+        var NevigationBarTextFontSize = string.Empty;
+        var SidebarTitleBackgroundColor = string.Empty;
+        var SidebarTitleFontcolor = string.Empty;
+        var SidebarTitleFontSize = string.Empty;
+        var PostTitleFontColor = string.Empty;
+        var PostTitleFontSize = string.Empty;
+        var FooterColor = string.Empty;
+        var ReadMoreButtonColor = string.Empty;
+        var PagingColor = string.Empty;
+        var PagingActiveColor = string.Empty;
+        var PagingHoverColor = string.Empty;
+        foreach (var item in Model.SettingList)
+        {
+            NevigationBarColor = item.NevigationBarColor == "" ? "#1f497d" : item.NevigationBarColor;
+            NevigationBarFontColor = item.NevigationBarFontColor == "" ? "#eeece1" : item.NevigationBarFontColor;
+            NevigationBarTextFontSize = item.NevigationBarTextFontSize == "" ? "14" : item.NevigationBarTextFontSize;
+            NevigationBarHoverColor = item.NevigationBarHoverColor == "" ? "#0f243e" : item.NevigationBarHoverColor;
+            SidebarTitleBackgroundColor = item.SidebarTitleBackgroundColor == "" ? "#1f497d" : item.SidebarTitleBackgroundColor;
+            SidebarTitleFontcolor = item.SidebarTitleFontcolor == "" ? "#1f497d" : item.SidebarTitleFontcolor;
+            SidebarTitleFontSize = item.SidebarTitleFontSize == "" ? "18" : item.SidebarTitleFontSize;
+            PostTitleFontColor = item.PostTitleFontColor == "" ? "#eeece1" : item.PostTitleFontColor;
+            PostTitleFontSize = item.PostTitleFontSize == "" ? "25" : item.PostTitleFontSize;
+            FooterColor = item.FooterColor == "" ? "#1f497d" : item.FooterColor;
+            ReadMoreButtonColor = item.ButtonColor == "" ? "#1f497d" : item.ButtonColor;
+            PagingColor = item.PagingColor == "" ? "#1f497d" : item.PagingColor;
+            PagingActiveColor = item.PagingActiveColor == "" ? "#1f497d" : item.PagingActiveColor;
+            PagingHoverColor = item.PagingHoverColor == "" ? "#0f243e" : item.PagingHoverColor;
+        }
+    }
+
+    $(document).ready(function () {
+        var NevigationBarFontFamily = '@ViewBag.NevigationBarFontFamily';
+        NevigationBarFontFamily = NevigationBarFontFamily.replace("+", " ");
+        var SidebarTitleFontFamily = '@ViewBag.SidebarTitleFontFamily';
+        SidebarTitleFontFamily = SidebarTitleFontFamily.replace("+", " ");
+        var PostTitleFontFamily = '@ViewBag.PostTitleFontFamily';
+        PostTitleFontFamily = PostTitleFontFamily.replace("+", " ");
+        $(".main-menu").css('background', '@NevigationBarColor');
+        $(".main-menu").css('font-family', NevigationBarFontFamily);
+        $(".main-menu ul li a").css('color', '@NevigationBarFontColor');
+        $(".main-menu ul li a").css('font-size', '@NevigationBarTextFontSize' + 'px');
+        $(".post-img img").css('border-bottom', '4px solid ' + '@NevigationBarColor' + '');
+        $(".main-menu ul li a").hover(function () {
+            $(this).css("background", '@NevigationBarHoverColor');
+        }, function () {
+            $(this).css("background", "");
+        });
+        $(".widget-title").css('background', '@SidebarTitleBackgroundColor');
+        $(".widget-title").css('font-family', SidebarTitleFontFamily);
+        $(".widget-title").css('color', '@SidebarTitleFontcolor');
+        $(".widget-title").css('font-size', '@SidebarTitleFontSize' + 'px');
+        $(".widget-title i").css('color', '@SidebarTitleBackgroundColor');
+        $("#footer").css('background', '@FooterColor');
+        $(".read-more").css('background', '@ReadMoreButtonColor');
+        $(".pagination ul li a").hover(function () {
+            $(this).css("background", '@PagingHoverColor');
+        }, function () {
+            $(this).css("background", '@PagingColor');
+            $(".pagination ul li.active a").css('background', '@PagingActiveColor');
+        });
+        $(".pagination ul li a").css('background', '@PagingColor');
+        $(".post-title").css('color', '@PostTitleFontColor');
+        $(".post-title").css('font-size', '@PostTitleFontSize' + 'px');
+        $(".post-title").css('font-family', PostTitleFontFamily);
+        $(".pagination ul li.active a").css('background', '@PagingActiveColor');
+        $('.comment-form input[type="submit"]').css('background', '@NevigationBarColor');
+    });
+</script>

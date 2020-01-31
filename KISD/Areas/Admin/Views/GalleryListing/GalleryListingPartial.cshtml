@@ -1,0 +1,508 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using GalleryListingTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+
+@model PagedViewModel<GalleryListingModel>
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    TempData["Message"] = string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    string Listingtype = Convert.ToString(ViewBag.ImageTypeId) ?? string.Empty;
+    var TypeMasterID = Request.QueryString["glt"] != null ? Request.QueryString["glt"].ToString() : EncryptDecrypt.Encrypt("0");
+    var SortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "ListingCreateDate";
+    var SortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Descending";
+    var Pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var PagerID = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "")
+                   + "/Admin/GalleryListing/Index?glt=" + TypeMasterID + "&page=1&Column=" + SortColumn + "&Direction=" + SortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+    var initialPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+       (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    initialPath = Common.ReturnValidPath(initialPath);
+    var mastedid = Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID));
+}
+
+<div class="Main_PartialHeader">
+    <!-- widget-header Ends -->
+    <div class="pager paging-top">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style" id="divPager">
+                <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+        }
+        <!-- pagination -->
+    </div>
+    @*wrapper*@
+    <div class="wrapper_partial">
+        <div class="tab-pane active">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery).ToString())
+               {
+                   column.For(x => !string.IsNullOrEmpty(x.FileURLTxt) ?
+                       "<img width='100px' height='70px' src='" + @Href(x.FileURLTxt).Replace("images", "thumbnails_Small").Replace("cropped", "thumbnails") + "' title='" + x.TitleTxt + "' alt='" + (!string.IsNullOrEmpty(x.AltImageTxt) ? x.AltImageTxt : x.TitleTxt) + "'>" :      /**/
+                       "<img src=\"" + @Href("~/WebData/Images/NoImage.jpg") + "\">").Named("Image").Encode(false).Sortable(false).HeaderAttributes(@style => "width:10%", @align => "left").Attributes(@class => "left");
+               }
+
+               column.For(x => x.TitleTxt).Named((EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.Podcast).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.Video).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.FAQCategory).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery).ToString()) ? "Title" : "Document Name").SortColumnName("TitleTxt").Sortable(true).HeaderAttributes(@style => "width:20%", @class => "left sort", @align => "left").Attributes(@class => "left maxtitletxt");
+
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer).ToString())
+               {
+                   column.For(x => Html.Label("FileURLTxt", x.FileURLTxt.Replace("~", "").Replace("/WebData", "WebData").Replace("\\", "/"), new { @class = "FileURLTxt PageURLTxtww imgpath" + x.ListingID, @value = x.ListingID })).Encode(false).Header(" <th data-hide='phone' style='width:30%' align='center'>" + (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing).ToString() ? "Image URL" : "Document URL") + "</th>").Attributes(@align => "center");
+
+                   //column.For(x => Html.Label("Copy", new { @value = x.ListingID, @class = "copybtn" })).Named(EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing).ToString() ? "Copy Image URL" : "Copy Document URL").Sortable(false).HeaderAttributes(@style => "width:15%", @align => "center").Attributes(@align => "center", @title => "Copy to Clipboard");
+               }
+
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.Podcast).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.Video).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.FAQCategory).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery).ToString())
+               {
+                   column.For(x => Html.DropDownList("ddldisplayorder_" + x.ListingID.ToString(), x.DisplayOrderNbrSelect, new { @class = "displayorder", @value = x.ListingID, @text = AppPath, @style = "width:60px" })
+                                 ).Encode(false).Attributes(@class => "center ").Sortable(true).Named("Display Order").SortColumnName("DisplayOrderNbr").HeaderAttributes(@align => "center", @style => "width:15%;", @class => "sort");
+               }
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.Video).ToString())
+               {
+                   column.For(x => Html.CheckBox("chkShowonHome", x.ShowOnHomeInd.Value, new { @class = "checkboxhome", @value = x.ListingID, @text = AppPath })).Encode(false).Header("<th data-hide='phone,tablet'>Show on Home</th>").Attributes(@align => "center");
+               }
+               if (EncryptDecrypt.Decrypt(TypeMasterID) != Convert.ToInt32(GalleryListingTypeAlias.ImageListing).ToString() && EncryptDecrypt.Decrypt(TypeMasterID) != Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer).ToString())
+               {
+                   column.For(x => Html.CheckBox("mycheckbox", x.StatusInd.Value, new { @class = "checkbox", @value = x.ListingID, @text = AppPath })).Encode(false).Header("<th data-hide='phone' style='width:10%' align='center'>Status</th>").Attributes(@align => "center");
+               }
+               column.For(x => x.ListingCreateDate.Value.ToShortDateString()).Named("Date Added").SortColumnName("ListingCreateDate").HeaderAttributes(@class => "sort", @style => "width:15%", @align => "center").Attributes(@align => "center");
+
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.FAQCategory).ToString() || EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery).ToString())
+               {
+                   column.For(x => Html.ActionLink("Manage", "SubGalleryListing", "GalleryListing"
+                                                                                 , new
+                                                                                 {
+                                                                                     glt = EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.FAQCategory).ToString() ? (EncryptDecrypt.Encrypt(Convert.ToInt32(GalleryListingTypeAlias.FAQ).ToString())) : EncryptDecrypt.Encrypt(Convert.ToInt32(GalleryListingTypeAlias.PhotoGalleryImages).ToString()),
+                                                                                     glid = EncryptDecrypt.Encrypt(x.ListingID.ToString()),
+                                                                                     pid = EncryptDecrypt.Encrypt(x.ListingID.ToString()),
+                                                                                     gpagesize = Pagesize,
+                                                                                     gpage = PagerID,
+                                                                                     gColumn = SortColumn,
+                                                                                     gDirection = SortDirection
+                                                                                 }, null)).Named(EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(GalleryListingTypeAlias.FAQCategory).ToString() ? "Manage Questions" : "Manage Images").Sortable(false)
+                                                                                        .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                                                                                        .Attributes(@align => "center");
+
+               }
+
+               column.For(x => Html.ActionLink("Edit", "Create", "GalleryListing",
+                   new
+                   {
+                       glt = EncryptDecrypt.Encrypt(x.TypeMasterID.ToString()),
+                       glid = EncryptDecrypt.Encrypt(x.ListingID.ToString()),
+                       pagesize = Pagesize,
+                       page = PagerID,
+                       Column = SortColumn,
+                       Direction = SortDirection
+                   }
+                   , new { @class = "edit", @title = "Edit" })).Named("Edit").Sortable(false)
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                        .Attributes(@align => "center");
+
+               column.For(x => Html.ActionLink("Delete", "Delete", "GalleryListing",
+                   new
+                   {
+                       glt = EncryptDecrypt.Encrypt(x.TypeMasterID.ToString()),
+                       glid = EncryptDecrypt.Encrypt(x.ListingID.ToString()),
+                       pagesize = Pagesize,
+                       page = PagerID,
+                       Column = SortColumn,
+                       Direction = SortDirection
+                   }, new { @class = "delete PostLink", @val = x.TitleTxt, @title = "Delete" })).Sortable(false).Named("Delete")
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" } })
+                       .Attributes(@align => "center");
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    @*wrapper end *@
+    <div class="pager">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style">
+                <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+        }
+        <!-- pagination -->
+    </div>
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+</div>
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+
+    $(document).ready(function () {
+        var txt = $('.PageURLTxtww').text();
+        if (txt != '') {
+            var path = '@initialPath';
+            $('.PageURLTxtww').prepend(path + "/");
+        }
+    });
+
+    //Confirmation for deleting the image
+    $(document).ready(function () {
+        $(".copybtn").click(function (e) {
+            var imgID = this.getAttribute("value");
+            var s = "." + "imgpath" + imgID;
+            var v = $(s).text();
+
+            var aux = document.createElement("input");
+            aux.setAttribute("value", v);
+            document.body.appendChild(aux);
+            aux.select();
+            document.execCommand("copy");
+            document.body.removeChild(aux);
+            ShowMyMessage("URL copied successfully.");
+        });
+    });
+    var mastedytpeid = '@mastedid';
+    //Confirmation for deleting the image
+    $(document).ready(function () {
+        $("a.PostLink").click(function (e) {
+            e.preventDefault();
+            var deletemsg = '';
+            if (mastedytpeid == 6) {
+                deletemsg = 'Are you sure you want to delete ' + $(this).attr('val') + '?. Please note: All FAQ data will also get deleted including Questions and Answers.';
+            }
+            else {
+                deletemsg = 'Do you want to delete this ' + $(this).attr('val') + '?'
+            }
+            if (window.confirm(deletemsg)) {
+                $.post($(this).attr("href"), function (data) {
+                    // got the result in data variable.
+                    //redirect to the index action method of Image Controller
+                    window.location.href = data;
+                });
+            }
+        });
+    });
+    var alertmessage = '@alertmessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        ShowMyMessage(message);
+    }
+
+    function ShowMyMessage(message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".checkbox").prop("disabled", true);
+        $(".displayorder").prop("disabled", true);
+        $(".checkboxhome").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".checkbox").prop("disabled", false);
+        $(".displayorder").prop("disabled", false);// Make status check box enable after message hides
+        $(".checkboxhome").prop("disabled", false);
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+    var _DateAdded = $("#strCreateDate").val();
+    var _FilterUserName = $("#Title").val();
+    var _Status = $("#status").val();
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _DateAdded,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _DateAdded,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _DateAdded,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _Status
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax call for status check box Active/Inactive
+    $('.checkbox').click(function () {
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        if (pager == 'All') {
+            pager = '0';
+        }
+        var hfid; var hfvalue;
+
+        if ($(this).is(':checked')) {
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager;//passing pager =(dropdown page no value), hfid=image ID, hfvalue= 1,0 for active or inactive
+        //url = url + '&ajaxcall=status';//ajaxcall parameter is used to define which ajax call if posted ;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    // Ajax call for display order section
+    $('.displayorder').change(function () {
+        var qs_shownonhomevalue; var qs_checkboxselected; var qs_value;
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        pager = pager == 'All' ? '0' : pager;
+        var hfid; var hfvalue;
+        var qs_Type = $(this).attr('id');
+
+        var ImageID = $(this).attr('value');
+        var chkStatus = '.chk' + ImageID;
+        if ($(chkStatus).is(":checked")) {
+            qs_value = "1";
+        }
+        else {
+            qs_value = "0";
+        }
+
+        if ($(this).is(':checked')) {
+            qs_checkboxselected = $(this).attr('value');
+            qs_shownonhomevalue = "1";
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            qs_checkboxselected = $(this).attr('value');
+            qs_shownonhomevalue = "0";
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'displayorder';
+
+        var url = $(this).attr('text') + pager + '&hfid=' + hfid + '&hfvalue=' + hfvalue;//passing pager =(dropdown page no value), hfid=image ID, hfvalue= 1,0 for active or inactive
+        //url = url + '&ajaxcall=status';//ajaxcall parameter is used to define which ajax call if posted ;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'displayorder',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: qs_shownonhomevalue,
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax call for Show on home check box
+    $('.checkboxhome').click(function () {
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        var hfid; var hfvalue;
+        if ($(this).is(':checked')) {
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'showonhome',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: 'showonhome'
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    $('.PageURLTxtww').each(function () {
+        var value = this.getAttribute('value');
+        $('<label class="copybtn" for="Copy" value=' + value + ' title="Copy to Clipboard">Copy</label>').insertAfter(this);
+    });
+</script>

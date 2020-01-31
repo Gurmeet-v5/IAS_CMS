@@ -1,0 +1,1406 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="db_KISDModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Announcement">
+    <Key>
+      <PropertyRef Name="AnnouncementID" />
+    </Key>
+    <Property Name="AnnouncementID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="200" />
+    <Property Name="ImageURLTxt" Type="varchar" MaxLength="200" />
+    <Property Name="AltImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="ScheduleDateTime" Type="datetime" />
+    <Property Name="DisplayStartDate" Type="datetime" />
+    <Property Name="DisplayEndDate" Type="datetime" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="AnnouncementCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="TypeMasterID" Type="bigint" />
+    <Property Name="ScheduleTimeTxt" Type="varchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="BoardOfMember">
+    <Key>
+      <PropertyRef Name="BoardMemberID" />
+    </Key>
+    <Property Name="BoardMemberID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ImageURLTxt" Type="varchar" MaxLength="200" />
+    <Property Name="NameTxt" Type="varchar" MaxLength="200" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="200" />
+    <Property Name="URLTxt" Type="varchar" MaxLength="100" />
+    <Property Name="ContactInfoTxt" Type="varchar" MaxLength="200" />
+    <Property Name="TermTxt" Type="varchar" MaxLength="200" />
+    <Property Name="RightSectionTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescriptionTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="BOMCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="100" />
+    <Property Name="BannerImageAbstractTxt" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="Content">
+    <Key>
+      <PropertyRef Name="ContentID" />
+    </Key>
+    <Property Name="ContentID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ParentID" Type="bigint" />
+    <Property Name="ContentTypeID" Type="bigint" Nullable="false" />
+    <Property Name="IsExternalLinkInd" Type="bit" Nullable="false" />
+    <Property Name="ExternalLinkTxt" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="ExternalLinkTargetInd" Type="bit" Nullable="false" />
+    <Property Name="PageTitleTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="MenuTitleTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PageURLTxt" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="AbstractTxt" Type="nvarchar(max)" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="BannerImageAbstractTxt" Type="varchar(max)" />
+    <Property Name="StatusInd" Type="bit" Nullable="false" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescriptionTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="RightSectionTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="ContentCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="IsFacebookSharingInd" Type="bit" />
+    <Property Name="IsTwitterSharingInd" Type="bit" />
+    <Property Name="IsGooglePlusSharingInd" Type="bit" />
+    <Property Name="DepartmentID" Type="bigint" />
+  </EntityType>
+  <EntityType Name="ContentType">
+    <Key>
+      <PropertyRef Name="ContentTypeID" />
+    </Key>
+    <Property Name="ContentTypeID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ContentTypeNameTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="DisplayOrderNbr" Type="int" />
+  </EntityType>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NameTxt" Type="varchar" MaxLength="200" />
+    <Property Name="URLTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="AddressTxt" Type="varchar" MaxLength="500" />
+    <Property Name="PhoneNumberTxt" Type="varchar" MaxLength="20" />
+    <Property Name="FaxNumberTxt" Type="varchar" MaxLength="20" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="ParentID" Type="bigint" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescription" Type="varchar" MaxLength="2000" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="DepartmentCreateDate" Type="datetime" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="BannerImageAbstractTxt" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="DepartmentStaff">
+    <Key>
+      <PropertyRef Name="DeptStaffID" />
+    </Key>
+    <Property Name="DeptStaffID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmentID" Type="bigint" />
+    <Property Name="StaffID" Type="bigint" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="IsParentDepartment" Type="bit" />
+  </EntityType>
+  <EntityType Name="Email">
+    <Key>
+      <PropertyRef Name="EmailID" />
+    </Key>
+    <Property Name="EmailID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailTxt" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="EmailTypeID" Type="bigint" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+  </EntityType>
+  <EntityType Name="EmailType">
+    <Key>
+      <PropertyRef Name="EmailTypeID" />
+    </Key>
+    <Property Name="EmailTypeID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailTypeNameTxt" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ExceptionOpportunity">
+    <Key>
+      <PropertyRef Name="ExOpportunityID" />
+    </Key>
+    <Property Name="ExOpportunityID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="ExternalLinkInd" Type="bit" />
+    <Property Name="URLTxt" Type="varchar" MaxLength="300" />
+    <Property Name="ExternalLinkTargetInd" Type="bit" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="100" />
+    <Property Name="BannerImageAbstractTxt" Type="varchar(max)" />
+    <Property Name="RightSectionTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="ShowOnHomeInd" Type="bit" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescriptionTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="ParentID" Type="bigint" />
+    <Property Name="SchoolCategoryID" Type="bigint" />
+    <Property Name="ExOpportunityCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+  </EntityType>
+  <EntityType Name="FormEmail">
+    <Key>
+      <PropertyRef Name="FormEmailID" />
+    </Key>
+    <Property Name="FormEmailID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailID" Type="bigint" Nullable="false" />
+    <Property Name="EmailTypeID" Type="bigint" Nullable="false" />
+    <Property Name="ContentTypeID" Type="bigint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="GalleryListing">
+    <Key>
+      <PropertyRef Name="ListingID" />
+    </Key>
+    <Property Name="ListingID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="FileURLTxt" Type="varchar" MaxLength="200" />
+    <Property Name="EmbededURLTxt" Type="nvarchar" MaxLength="2000" />
+    <Property Name="AltImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="URLTxt" Type="varchar" MaxLength="300" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="DisplayStartDate" Type="datetime" />
+    <Property Name="DisplayEndDate" Type="datetime" />
+    <Property Name="UploadTypeNbr" Type="int" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="AuthorTxt" Type="varchar" MaxLength="100" />
+    <Property Name="ShowOnHomeInd" Type="bit" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescriptionTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="ListingCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="TypeMasterID" Type="bigint" />
+    <Property Name="ParentID" Type="bigint" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="BannerImageAbstractTxt" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="Images">
+    <Key>
+      <PropertyRef Name="ImageID" />
+    </Key>
+    <Property Name="ImageID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ImageTypeID" Type="bigint" Nullable="false" />
+    <Property Name="ImgPathTxt" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="AltImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="URLTxt" Type="varchar" MaxLength="300" />
+    <Property Name="TargetWindowInd" Type="bit" />
+    <Property Name="DisplayStartDate" Type="datetime" />
+    <Property Name="DisplayEndDate" Type="datetime" />
+    <Property Name="AbstractTxt" Type="nvarchar(max)" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="StatusInd" Type="bit" Nullable="false" />
+    <Property Name="ImageCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+  </EntityType>
+  <EntityType Name="ImageType">
+    <Key>
+      <PropertyRef Name="ImageTypeID" />
+    </Key>
+    <Property Name="ImageTypeID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ImageTypeNameTxt" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ListingParameters">
+    <Key>
+      <PropertyRef Name="ListingParameterID" />
+    </Key>
+    <Property Name="ListingParameterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ListingParameterTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="DescriptionTxt" Type="varchar" MaxLength="200" Nullable="false" />
+  </EntityType>
+  <EntityType Name="NewsEvent">
+    <Key>
+      <PropertyRef Name="NewsEventID" />
+    </Key>
+    <Property Name="NewsEventID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="ImageURLTxt" Type="varchar" MaxLength="200" />
+    <Property Name="IsExternalLinkInd" Type="bit" />
+    <Property Name="PageURLTxt" Type="varchar" MaxLength="300" />
+    <Property Name="ExternalLinkTargetInd" Type="bit" />
+    <Property Name="AuthorNameTxt" Type="varchar" MaxLength="100" />
+    <Property Name="AbstractTxt" Type="varchar" MaxLength="200" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="RightSectionTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="100" />
+    <Property Name="BannerImageAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="EventDate" Type="datetime" />
+    <Property Name="DisplayStartDate" Type="datetime" />
+    <Property Name="DisplayEndDate" Type="datetime" />
+    <Property Name="ShowOnHomeInd" Type="bit" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescriptionTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="DepartmentID" Type="bigint" />
+    <Property Name="EventCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="TypeMasterID" Type="bigint" />
+    <Property Name="IsFacebookSharingInd" Type="bit" />
+    <Property Name="IsTwitterSharingInd" Type="bit" />
+    <Property Name="IsGooglePlusSharingInd" Type="bit" />
+    <Property Name="IsRecurringInd" Type="bit" />
+    <Property Name="RecurrenceTypeNbr" Type="int" />
+    <Property Name="IsSundayInd" Type="bit" />
+    <Property Name="IsMondayInd" Type="bit" />
+    <Property Name="IsTuesdayInd" Type="bit" />
+    <Property Name="IsWednesdayInd" Type="bit" />
+    <Property Name="IsThursdayInd" Type="bit" />
+    <Property Name="IsFridayInd" Type="bit" />
+    <Property Name="IsSaturdayInd" Type="bit" />
+    <Property Name="MonthModeNbr" Type="int" />
+    <Property Name="MonthdayNbr" Type="int" />
+    <Property Name="MonthonNbr" Type="int" />
+    <Property Name="MonthondayNbr" Type="int" />
+    <Property Name="EventsEndOnDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="RightSection">
+    <Key>
+      <PropertyRef Name="RightSectionID" />
+    </Key>
+    <Property Name="RightSectionID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsParentTitleInd" Type="bit" />
+    <Property Name="TitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="PageTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionTitleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="RightSectionAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="DescriptionTxt" Type="nvarchar(max)" />
+    <Property Name="IsExternalLinkInd" Type="bit" />
+    <Property Name="ExternalLinkURLTxt" Type="varchar" MaxLength="300" />
+    <Property Name="ExternalLinkTargetInd" Type="bit" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="BannerImageID" Type="bigint" />
+    <Property Name="AltBannerImageTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="BannerImageAbstractTxt" Type="nvarchar(max)" />
+    <Property Name="ParentID" Type="bigint" />
+    <Property Name="RightSectionCreateDate" Type="datetime" />
+    <Property Name="PageMetaTitleTxt" Type="varchar" MaxLength="1000" />
+    <Property Name="PageMetaDescriptionTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreatedByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="TableNameTxt" Type="varchar" MaxLength="200" />
+    <Property Name="ListingID" Type="bigint" />
+    <Property Name="TypeMasterID" Type="bigint" />
+    <Property Name="IsFacebookSharingInd" Type="bit" />
+    <Property Name="IsTwitterSharingInd" Type="bit" />
+    <Property Name="IsGooglePlusSharingInd" Type="bit" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleNameTxt" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="LoweredRoleNameTxt" Type="nvarchar" MaxLength="256" Nullable="false" />
+    <Property Name="RoleDescriptionTxt" Type="nvarchar" MaxLength="256" Nullable="false" />
+  </EntityType>
+  <EntityType Name="School">
+    <Key>
+      <PropertyRef Name="SchoolID" />
+    </Key>
+    <Property Name="SchoolID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SchoolCategoryID" Type="bigint" />
+    <Property Name="NameTxt" Type="varchar" MaxLength="100" />
+    <Property Name="AddressTxt" Type="varchar" MaxLength="500" />
+    <Property Name="PhoneNumberTxt" Type="varchar" MaxLength="20" />
+    <Property Name="WebsiteURLTxt" Type="varchar" MaxLength="200" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="SchoolCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="TypeMasterID" Type="bigint" />
+    <Property Name="PageURLTxt" Type="varchar" MaxLength="300" />
+  </EntityType>
+  <EntityType Name="SocialSharingSetting">
+    <Key>
+      <PropertyRef Name="SocialSharingID" />
+    </Key>
+    <Property Name="SocialSharingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="IsFacebookSharingInd" Type="bit" />
+    <Property Name="IsTwitterSharingInd" Type="bit" />
+    <Property Name="IsGooglePlusSharingInd" Type="bit" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+  </EntityType>
+  <EntityType Name="Staff">
+    <Key>
+      <PropertyRef Name="StaffID" />
+    </Key>
+    <Property Name="StaffID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstNameTxt" Type="varchar" MaxLength="100" />
+    <Property Name="LastNameTxt" Type="varchar" MaxLength="100" />
+    <Property Name="DesignationTxt" Type="varchar" MaxLength="200" />
+    <Property Name="SchoolCategoryID" Type="bigint" />
+    <Property Name="SchoolID" Type="bigint" />
+    <Property Name="PhoneTxt" Type="varchar" MaxLength="20" />
+    <Property Name="EmailTxt" Type="varchar" MaxLength="200" />
+    <Property Name="DisplayOrderNbr" Type="bigint" />
+    <Property Name="StatusInd" Type="bit" />
+    <Property Name="StaffCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="IsDeletedInd" Type="bit" />
+  </EntityType>
+  <EntityType Name="SystemAccessLog">
+    <Key>
+      <PropertyRef Name="SystemAccessLogID" />
+    </Key>
+    <Property Name="SystemAccessLogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NameTxt" Type="varchar" MaxLength="300" />
+    <Property Name="UserNameTxt" Type="varchar" MaxLength="50" />
+    <Property Name="UserRoleID" Type="smallint" />
+    <Property Name="LoginDateTime" Type="datetime" />
+    <Property Name="LogoutDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="SystemChangeLog">
+    <Key>
+      <PropertyRef Name="ChangeLogID" />
+    </Key>
+    <Property Name="ChangeLogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NameTxt" Type="varchar" MaxLength="300" />
+    <Property Name="UsernameTxt" Type="varchar" MaxLength="50" />
+    <Property Name="UserRoleID" Type="smallint" />
+    <Property Name="ModuleTxt" Type="varchar" MaxLength="100" />
+    <Property Name="LogTypeTxt" Type="varchar" MaxLength="100" />
+    <Property Name="NotesTxt" Type="varchar" MaxLength="2000" />
+    <Property Name="LogDateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="SystemChangeLogDetail">
+    <Key>
+      <PropertyRef Name="ChangeLogDetailID" />
+    </Key>
+    <Property Name="ChangeLogDetailID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ChangeLogID" Type="bigint" Nullable="false" />
+    <Property Name="FieldNameTxt" Type="varchar" MaxLength="100" />
+    <Property Name="OldValueTxt" Type="varchar(max)" />
+    <Property Name="NewValueTxt" Type="varchar(max)" />
+  </EntityType>
+  <EntityType Name="TypeMaster">
+    <Key>
+      <PropertyRef Name="TypeMasterID" />
+    </Key>
+    <Property Name="TypeMasterID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TypeMasterName" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="UserDepartment">
+    <Key>
+      <PropertyRef Name="UserDepartmentID" />
+    </Key>
+    <Property Name="UserDepartmentID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="DepartmentID" Type="bigint" Nullable="false" />
+    <Property Name="CreateDate" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserPermission">
+    <Key>
+      <PropertyRef Name="UserPermissionID" />
+    </Key>
+    <Property Name="UserPermissionID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="PageID" Type="bigint" />
+    <Property Name="IsAccessInd" Type="bit" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+    <Property Name="UserRoleID" Type="smallint" />
+  </EntityType>
+  <EntityType Name="UserRoles">
+    <Key>
+      <PropertyRef Name="UserRoleID" />
+    </Key>
+    <Property Name="UserRoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="RoleID" Type="smallint" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstNameTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="LastNameTxt" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserNameTxt" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="PasswordTxt" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="EmailTxt" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="StatusInd" Type="bit" Nullable="false" />
+    <Property Name="IsDeletedInd" Type="bit" />
+    <Property Name="UserCreateDate" Type="datetime" />
+    <Property Name="CreateDate" Type="datetime" />
+    <Property Name="CreateByID" Type="bigint" />
+    <Property Name="LastModifyDate" Type="datetime" />
+    <Property Name="LastModifyByID" Type="bigint" />
+  </EntityType>
+  <Association Name="FK__Images__ImageTyp__628FA481">
+    <End Role="ImageType" Type="Self.ImageType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ImageType">
+        <PropertyRef Name="ImageTypeID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="ImageTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_TypeMaster">
+    <End Role="TypeMaster" Type="Self.TypeMaster" Multiplicity="0..1" />
+    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeMaster">
+        <PropertyRef Name="TypeMasterID" />
+      </Principal>
+      <Dependent Role="Announcement">
+        <PropertyRef Name="TypeMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Announcement">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Announcement_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Announcement" Type="Self.Announcement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Announcement">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BoardOfMember_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="BoardOfMember" Type="Self.BoardOfMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="BoardOfMember">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BoardOfMember_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="BoardOfMember" Type="Self.BoardOfMember" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="BoardOfMember">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Content_Content">
+    <End Role="Content" Type="Self.Content" Multiplicity="0..1" />
+    <End Role="Content1" Type="Self.Content" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Content">
+        <PropertyRef Name="ContentID" />
+      </Principal>
+      <Dependent Role="Content1">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Content_ContentType">
+    <End Role="ContentType" Type="Self.ContentType" Multiplicity="1" />
+    <End Role="Content" Type="Self.Content" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ContentType">
+        <PropertyRef Name="ContentTypeID" />
+      </Principal>
+      <Dependent Role="Content">
+        <PropertyRef Name="ContentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Content_Images">
+    <End Role="Images" Type="Self.Images" Multiplicity="0..1" />
+    <End Role="Content" Type="Self.Content" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Images">
+        <PropertyRef Name="ImageID" />
+      </Principal>
+      <Dependent Role="Content">
+        <PropertyRef Name="BannerImageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Content_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Content" Type="Self.Content" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Content">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Content_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Content" Type="Self.Content" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Content">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Department_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Department1" Type="Self.Department" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Department1">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Department_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Department" Type="Self.Department" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Department">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Department_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Department" Type="Self.Department" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Department">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmentStaff_Department">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="DepartmentStaff" Type="Self.DepartmentStaff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="DepartmentStaff">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmentStaff_Staff">
+    <End Role="Staff" Type="Self.Staff" Multiplicity="0..1" />
+    <End Role="DepartmentStaff" Type="Self.DepartmentStaff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Staff">
+        <PropertyRef Name="StaffID" />
+      </Principal>
+      <Dependent Role="DepartmentStaff">
+        <PropertyRef Name="StaffID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_DepartmentStaff_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="DepartmentStaff" Type="Self.DepartmentStaff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="DepartmentStaff">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExceptionOpportunity_ExceptionOpportunity">
+    <End Role="ExceptionOpportunity" Type="Self.ExceptionOpportunity" Multiplicity="0..1" />
+    <End Role="ExceptionOpportunity1" Type="Self.ExceptionOpportunity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ExceptionOpportunity">
+        <PropertyRef Name="ExOpportunityID" />
+      </Principal>
+      <Dependent Role="ExceptionOpportunity1">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExceptionOpportunity_Images">
+    <End Role="Images" Type="Self.Images" Multiplicity="0..1" />
+    <End Role="ExceptionOpportunity" Type="Self.ExceptionOpportunity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Images">
+        <PropertyRef Name="ImageID" />
+      </Principal>
+      <Dependent Role="ExceptionOpportunity">
+        <PropertyRef Name="BannerImageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExceptionOpportunity_School">
+    <End Role="School" Type="Self.School" Multiplicity="0..1" />
+    <End Role="ExceptionOpportunity" Type="Self.ExceptionOpportunity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="School">
+        <PropertyRef Name="SchoolID" />
+      </Principal>
+      <Dependent Role="ExceptionOpportunity">
+        <PropertyRef Name="SchoolCategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExceptionOpportunity_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="ExceptionOpportunity" Type="Self.ExceptionOpportunity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ExceptionOpportunity">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ExceptionOpportunity_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="ExceptionOpportunity" Type="Self.ExceptionOpportunity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="ExceptionOpportunity">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FormEmail_ContentType1">
+    <End Role="ContentType" Type="Self.ContentType" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="FormEmail" Type="Self.FormEmail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ContentType">
+        <PropertyRef Name="ContentTypeID" />
+      </Principal>
+      <Dependent Role="FormEmail">
+        <PropertyRef Name="ContentTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FormEmail_Email">
+    <End Role="Email" Type="Self.Email" Multiplicity="1" />
+    <End Role="FormEmail" Type="Self.FormEmail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Email">
+        <PropertyRef Name="EmailID" />
+      </Principal>
+      <Dependent Role="FormEmail">
+        <PropertyRef Name="EmailID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_FormEmail_EmailType">
+    <End Role="EmailType" Type="Self.EmailType" Multiplicity="1" />
+    <End Role="FormEmail" Type="Self.FormEmail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EmailType">
+        <PropertyRef Name="EmailTypeID" />
+      </Principal>
+      <Dependent Role="FormEmail">
+        <PropertyRef Name="EmailTypeID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GalleryListing_GalleryListing">
+    <End Role="GalleryListing" Type="Self.GalleryListing" Multiplicity="0..1" />
+    <End Role="GalleryListing1" Type="Self.GalleryListing" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GalleryListing">
+        <PropertyRef Name="ListingID" />
+      </Principal>
+      <Dependent Role="GalleryListing1">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GalleryListing_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="GalleryListing" Type="Self.GalleryListing" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="GalleryListing">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GalleryListing_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="GalleryListing" Type="Self.GalleryListing" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="GalleryListing">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Images_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Images_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Images" Type="Self.Images" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Images">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RightSection_Images">
+    <End Role="Images" Type="Self.Images" Multiplicity="0..1" />
+    <End Role="RightSection" Type="Self.RightSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Images">
+        <PropertyRef Name="ImageID" />
+      </Principal>
+      <Dependent Role="RightSection">
+        <PropertyRef Name="BannerImageID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RightSection_RightSection">
+    <End Role="RightSection" Type="Self.RightSection" Multiplicity="0..1" />
+    <End Role="RightSection1" Type="Self.RightSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="RightSection">
+        <PropertyRef Name="RightSectionID" />
+      </Principal>
+      <Dependent Role="RightSection1">
+        <PropertyRef Name="ParentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RightSection_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="RightSection" Type="Self.RightSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="RightSection">
+        <PropertyRef Name="CreatedByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_RightSection_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="RightSection" Type="Self.RightSection" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="RightSection">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_School_School">
+    <End Role="TypeMaster" Type="Self.TypeMaster" Multiplicity="0..1" />
+    <End Role="School" Type="Self.School" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeMaster">
+        <PropertyRef Name="TypeMasterID" />
+      </Principal>
+      <Dependent Role="School">
+        <PropertyRef Name="TypeMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_School_TypeMaster">
+    <End Role="TypeMaster" Type="Self.TypeMaster" Multiplicity="0..1" />
+    <End Role="School" Type="Self.School" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TypeMaster">
+        <PropertyRef Name="TypeMasterID" />
+      </Principal>
+      <Dependent Role="School">
+        <PropertyRef Name="TypeMasterID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_School_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="School" Type="Self.School" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="School">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_School_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="School" Type="Self.School" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="School">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SocialSharingSetting_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="SocialSharingSetting" Type="Self.SocialSharingSetting" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SocialSharingSetting">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SocialSharingSetting_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="SocialSharingSetting" Type="Self.SocialSharingSetting" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="SocialSharingSetting">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Staff_School">
+    <End Role="School" Type="Self.School" Multiplicity="0..1" />
+    <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="School">
+        <PropertyRef Name="SchoolID" />
+      </Principal>
+      <Dependent Role="Staff">
+        <PropertyRef Name="SchoolID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Staff_School1">
+    <End Role="School" Type="Self.School" Multiplicity="0..1" />
+    <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="School">
+        <PropertyRef Name="SchoolID" />
+      </Principal>
+      <Dependent Role="Staff">
+        <PropertyRef Name="SchoolCategoryID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Staff_Staff">
+    <End Role="Staff" Type="Self.Staff" Multiplicity="1" />
+    <End Role="Staff1" Type="Self.Staff" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Staff">
+        <PropertyRef Name="StaffID" />
+      </Principal>
+      <Dependent Role="Staff1">
+        <PropertyRef Name="StaffID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Staff_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Staff">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Staff_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Staff">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SystemAccessLog_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+    <End Role="SystemAccessLog" Type="Self.SystemAccessLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="SystemAccessLog">
+        <PropertyRef Name="UserRoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SystemChangeLog_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+    <End Role="SystemChangeLog" Type="Self.SystemChangeLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="SystemChangeLog">
+        <PropertyRef Name="UserRoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_SystemChangeLogDetail_SystemChangeLog">
+    <End Role="SystemChangeLog" Type="Self.SystemChangeLog" Multiplicity="1" />
+    <End Role="SystemChangeLogDetail" Type="Self.SystemChangeLogDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="SystemChangeLog">
+        <PropertyRef Name="ChangeLogID" />
+      </Principal>
+      <Dependent Role="SystemChangeLogDetail">
+        <PropertyRef Name="ChangeLogID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserPermission_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="0..1" />
+    <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="UserRoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserPermission_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserPermission_Users1">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="CreateByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserPermission_Users2">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="UserPermission" Type="Self.UserPermission" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserPermission">
+        <PropertyRef Name="LastModifyByID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoles_Roles">
+    <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+    <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="RoleID" />
+      </Principal>
+      <Dependent Role="UserRoles">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoles_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="UserRoles">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="pr_search_all_paged" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="search" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="usp_RemoveHTMLTags" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="nvarchar(max)">
+    <Parameter Name="String" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <EntityContainer Name="db_KISDModelStoreContainer">
+    <EntitySet Name="Announcement" EntityType="Self.Announcement" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BoardOfMember" EntityType="Self.BoardOfMember" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Content" EntityType="Self.Content" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ContentType" EntityType="Self.ContentType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="DepartmentStaff" EntityType="Self.DepartmentStaff" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Email" EntityType="Self.Email" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmailType" EntityType="Self.EmailType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ExceptionOpportunity" EntityType="Self.ExceptionOpportunity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FormEmail" EntityType="Self.FormEmail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GalleryListing" EntityType="Self.GalleryListing" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Images" EntityType="Self.Images" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ImageType" EntityType="Self.ImageType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ListingParameters" EntityType="Self.ListingParameters" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="NewsEvent" EntityType="Self.NewsEvent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RightSection" EntityType="Self.RightSection" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="School" EntityType="Self.School" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SocialSharingSetting" EntityType="Self.SocialSharingSetting" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SystemAccessLog" EntityType="Self.SystemAccessLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SystemChangeLog" EntityType="Self.SystemChangeLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SystemChangeLogDetail" EntityType="Self.SystemChangeLogDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TypeMaster" EntityType="Self.TypeMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDepartment" EntityType="Self.UserDepartment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserPermission" EntityType="Self.UserPermission" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__Images__ImageTyp__628FA481" Association="Self.FK__Images__ImageTyp__628FA481">
+      <End Role="ImageType" EntitySet="ImageType" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_TypeMaster" Association="Self.FK_Announcement_TypeMaster">
+      <End Role="TypeMaster" EntitySet="TypeMaster" />
+      <End Role="Announcement" EntitySet="Announcement" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_Users" Association="Self.FK_Announcement_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Announcement" EntitySet="Announcement" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Announcement_Users1" Association="Self.FK_Announcement_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Announcement" EntitySet="Announcement" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BoardOfMember_Users" Association="Self.FK_BoardOfMember_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="BoardOfMember" EntitySet="BoardOfMember" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BoardOfMember_Users1" Association="Self.FK_BoardOfMember_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="BoardOfMember" EntitySet="BoardOfMember" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Content_Content" Association="Self.FK_Content_Content">
+      <End Role="Content" EntitySet="Content" />
+      <End Role="Content1" EntitySet="Content" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Content_ContentType" Association="Self.FK_Content_ContentType">
+      <End Role="ContentType" EntitySet="ContentType" />
+      <End Role="Content" EntitySet="Content" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Content_Images" Association="Self.FK_Content_Images">
+      <End Role="Images" EntitySet="Images" />
+      <End Role="Content" EntitySet="Content" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Content_Users" Association="Self.FK_Content_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Content" EntitySet="Content" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Content_Users1" Association="Self.FK_Content_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Content" EntitySet="Content" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Department_Department" Association="Self.FK_Department_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="Department1" EntitySet="Department" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Department_Users" Association="Self.FK_Department_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Department" EntitySet="Department" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Department_Users1" Association="Self.FK_Department_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Department" EntitySet="Department" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmentStaff_Department" Association="Self.FK_DepartmentStaff_Department">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="DepartmentStaff" EntitySet="DepartmentStaff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmentStaff_Staff" Association="Self.FK_DepartmentStaff_Staff">
+      <End Role="Staff" EntitySet="Staff" />
+      <End Role="DepartmentStaff" EntitySet="DepartmentStaff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_DepartmentStaff_Users" Association="Self.FK_DepartmentStaff_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="DepartmentStaff" EntitySet="DepartmentStaff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExceptionOpportunity_ExceptionOpportunity" Association="Self.FK_ExceptionOpportunity_ExceptionOpportunity">
+      <End Role="ExceptionOpportunity" EntitySet="ExceptionOpportunity" />
+      <End Role="ExceptionOpportunity1" EntitySet="ExceptionOpportunity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExceptionOpportunity_Images" Association="Self.FK_ExceptionOpportunity_Images">
+      <End Role="Images" EntitySet="Images" />
+      <End Role="ExceptionOpportunity" EntitySet="ExceptionOpportunity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExceptionOpportunity_School" Association="Self.FK_ExceptionOpportunity_School">
+      <End Role="School" EntitySet="School" />
+      <End Role="ExceptionOpportunity" EntitySet="ExceptionOpportunity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExceptionOpportunity_Users" Association="Self.FK_ExceptionOpportunity_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="ExceptionOpportunity" EntitySet="ExceptionOpportunity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ExceptionOpportunity_Users1" Association="Self.FK_ExceptionOpportunity_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="ExceptionOpportunity" EntitySet="ExceptionOpportunity" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FormEmail_ContentType1" Association="Self.FK_FormEmail_ContentType1">
+      <End Role="ContentType" EntitySet="ContentType" />
+      <End Role="FormEmail" EntitySet="FormEmail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FormEmail_Email" Association="Self.FK_FormEmail_Email">
+      <End Role="Email" EntitySet="Email" />
+      <End Role="FormEmail" EntitySet="FormEmail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_FormEmail_EmailType" Association="Self.FK_FormEmail_EmailType">
+      <End Role="EmailType" EntitySet="EmailType" />
+      <End Role="FormEmail" EntitySet="FormEmail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GalleryListing_GalleryListing" Association="Self.FK_GalleryListing_GalleryListing">
+      <End Role="GalleryListing" EntitySet="GalleryListing" />
+      <End Role="GalleryListing1" EntitySet="GalleryListing" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GalleryListing_Users" Association="Self.FK_GalleryListing_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="GalleryListing" EntitySet="GalleryListing" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GalleryListing_Users1" Association="Self.FK_GalleryListing_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="GalleryListing" EntitySet="GalleryListing" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Images_Users" Association="Self.FK_Images_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Images_Users1" Association="Self.FK_Images_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Images" EntitySet="Images" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RightSection_Images" Association="Self.FK_RightSection_Images">
+      <End Role="Images" EntitySet="Images" />
+      <End Role="RightSection" EntitySet="RightSection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RightSection_RightSection" Association="Self.FK_RightSection_RightSection">
+      <End Role="RightSection" EntitySet="RightSection" />
+      <End Role="RightSection1" EntitySet="RightSection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RightSection_Users" Association="Self.FK_RightSection_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="RightSection" EntitySet="RightSection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_RightSection_Users1" Association="Self.FK_RightSection_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="RightSection" EntitySet="RightSection" />
+    </AssociationSet>
+    <AssociationSet Name="FK_School_School" Association="Self.FK_School_School">
+      <End Role="TypeMaster" EntitySet="TypeMaster" />
+      <End Role="School" EntitySet="School" />
+    </AssociationSet>
+    <AssociationSet Name="FK_School_TypeMaster" Association="Self.FK_School_TypeMaster">
+      <End Role="TypeMaster" EntitySet="TypeMaster" />
+      <End Role="School" EntitySet="School" />
+    </AssociationSet>
+    <AssociationSet Name="FK_School_Users" Association="Self.FK_School_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="School" EntitySet="School" />
+    </AssociationSet>
+    <AssociationSet Name="FK_School_Users1" Association="Self.FK_School_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="School" EntitySet="School" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SocialSharingSetting_Users" Association="Self.FK_SocialSharingSetting_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="SocialSharingSetting" EntitySet="SocialSharingSetting" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SocialSharingSetting_Users1" Association="Self.FK_SocialSharingSetting_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="SocialSharingSetting" EntitySet="SocialSharingSetting" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Staff_School" Association="Self.FK_Staff_School">
+      <End Role="School" EntitySet="School" />
+      <End Role="Staff" EntitySet="Staff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Staff_School1" Association="Self.FK_Staff_School1">
+      <End Role="School" EntitySet="School" />
+      <End Role="Staff" EntitySet="Staff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Staff_Staff" Association="Self.FK_Staff_Staff">
+      <End Role="Staff" EntitySet="Staff" />
+      <End Role="Staff1" EntitySet="Staff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Staff_Users" Association="Self.FK_Staff_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Staff" EntitySet="Staff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Staff_Users1" Association="Self.FK_Staff_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Staff" EntitySet="Staff" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SystemAccessLog_Roles" Association="Self.FK_SystemAccessLog_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="SystemAccessLog" EntitySet="SystemAccessLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SystemChangeLog_Roles" Association="Self.FK_SystemChangeLog_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="SystemChangeLog" EntitySet="SystemChangeLog" />
+    </AssociationSet>
+    <AssociationSet Name="FK_SystemChangeLogDetail_SystemChangeLog" Association="Self.FK_SystemChangeLogDetail_SystemChangeLog">
+      <End Role="SystemChangeLog" EntitySet="SystemChangeLog" />
+      <End Role="SystemChangeLogDetail" EntitySet="SystemChangeLogDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserPermission_Roles" Association="Self.FK_UserPermission_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="UserPermission" EntitySet="UserPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserPermission_Users" Association="Self.FK_UserPermission_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserPermission" EntitySet="UserPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserPermission_Users1" Association="Self.FK_UserPermission_Users1">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserPermission" EntitySet="UserPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserPermission_Users2" Association="Self.FK_UserPermission_Users2">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserPermission" EntitySet="UserPermission" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoles_Roles" Association="Self.FK_UserRoles_Roles">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="UserRoles" EntitySet="UserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoles_Users" Association="Self.FK_UserRoles_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserRoles" EntitySet="UserRoles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

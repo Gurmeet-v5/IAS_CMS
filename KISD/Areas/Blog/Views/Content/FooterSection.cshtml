@@ -1,0 +1,60 @@
+﻿@using KISD.Areas.Blog.Models;
+
+@model ContentModel
+
+@{  var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                         (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.BlogAdmin.Models.Common.ReturnValidPath(AppPath);
+    var IsSearchEnabled = Model.SettingList == null ? false : Model.SettingList.Select(x => x.IsSearchEnabled).FirstOrDefault();
+    var ImgAppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+  (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+}
+
+<footer id="footer">
+    <!-- #footer -->
+    <div class="container">
+        <!-- container -->
+        <div class="col33">
+            <!-- col33 -->
+            @if (Model.FooterList.Any())
+            {
+                foreach (var item in Model.FooterList)
+                {
+                    <a href="@AppPath/blog">
+                        <img src="@ImgAppPath@Html.Raw(item.ImagePathTxt.Replace("~/", "/"))" alt="@Html.Raw(item.AltImgTxt)" title="@Html.Raw(item.TitleTxt)" />
+                    </a>
+                }
+            }
+            
+        </div><!-- end col33 -->
+        <div class="col33">
+            <!-- col33 -->
+            @using (Html.BeginForm("Index", "Home", new { search = @Model.SearchTxt }, FormMethod.Get, new { id = "formfooter", name = "formfooter", enctype = "multipart/form-data", @class = "head-search" }))
+            {
+                if (IsSearchEnabled == true)
+                { 
+                <!-- search -->
+                    <input type="text" name="search" placeholder="Search" title="Search" id="search-footer" maxlength="200" />
+                    <input type="submit" value="Submit" />
+                    <input type="hidden" value="Blog_Search" id="hdnSearchTypeFooter" />
+
+                }
+            }
+        </div><!-- end col33 -->
+        <div class="col33">
+            <!-- col33 -->
+           
+            @if (Model.FooterList.Any())
+            {
+                foreach (var item in Model.FooterList)
+                {
+                    @Html.Raw(item.DescriptionTxt)
+                }
+            }
+        </div> <!-- end col33 -->
+    </div><!-- end container -->
+</footer>
+<div class="copyright">
+<div class="container">Copyright &copy; 2018 Killeen ISD.&nbsp;
+Developed by: <a href="http://centextech.com/default.aspx" target="_blank" title="opens new window">Centex Technologies</a></div>
+</div>

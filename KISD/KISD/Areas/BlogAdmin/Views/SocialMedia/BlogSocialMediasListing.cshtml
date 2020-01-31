@@ -1,0 +1,77 @@
+﻿@using KISD.Areas.BlogAdmin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using MvcContrib.Pagination
+@model PagedViewModel<SocialMediasModel>
+@{
+    Layout = "~/Areas/BlogAdmin/Views/Shared/_Layout.cshtml";
+    var pager = TempData["pager"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "SocialMediaNameTxt";
+    var sortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost)
+                                                + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :"")
+                                                + "/BlogAdmin/SocialMedia/BlogSocialMediasListing?page=1&Column=" + sortColumn + "&Direction=" + sortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("BlogSocialMediasListing", "SocialMedia", new { pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection }
+                                                                                        , FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Raw(string.Format(@ViewBag.Title))
+            </li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@Html.Raw(string.Format(@ViewBag.Title))</h4>
+                <div class="btn-group">
+                    <a href='@Url.Action("CreateSocialMedias", "SocialMedia", new { pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection })'>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+            </div>
+            <!-- widget-header Ends -->
+
+            @Html.Partial("BlogSocialMediasListingPartial", Model)
+
+        </div>
+        <!-- Wrapper Ends -->
+        @*@Html.Hidden("returnUrl", this.Request.RawUrl)*@
+
+        <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+        <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+        <input type="hidden" name="hdnType" id="hdnType" value="" />
+        <input type="hidden" name="hdnshownonhomevalue" id="hdnshownonhomevalue" value="" />
+    </div>
+}
+
+<script type="text/javascript">
+            $("#ankmaster").addClass('select');
+            $("#anksocialmedia").addClass('select');
+</script>
+<script src="~/Areas/BlogAdmin/Scripts/Admin/footable.js" type="text/javascript"></script>
+<script>
+            $(function () {
+                $('table').footable();
+            });
+</script>

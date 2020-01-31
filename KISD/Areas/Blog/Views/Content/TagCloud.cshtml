@@ -1,0 +1,30 @@
+﻿@using KISD.Areas.Blog.Models;
+
+@model ContentModel
+@{
+    var searchtxt = string.Empty;
+}
+<div class="tag-box">
+    <!-- tag-box -->
+    <h3 class="widget-title">
+        Tags
+        <i aria-hidden="true" class="fa fa-sort-desc"></i>
+    </h3>
+    <div class="padding20 white-bg">
+        <!-- white-bg -->
+        @using (Html.BeginForm("Index", "Home", new { search = Model.SearchTxt }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+        {
+            <div class="tags">
+                <!-- tags -->
+                @foreach (var item in Model.TagList)
+                {
+                    if (item.Text != "")
+                    {
+                    <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(item.Text), type_ID = "Tag_Search0" + @Html.Raw(item.Value) })" class="ankSearchTag" name="@Html.Raw(item.Text)"><span>@Html.Raw(item.Text)</span></a>
+                    }
+                }
+            </div>
+        }
+        <!-- end tags -->
+    </div><!-- end white-bg -->
+</div><!-- end tag-box -->

@@ -1,0 +1,50 @@
+﻿
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+    (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    db_KISDEntities objContext = new db_KISDEntities();
+    var ContentTypeID = Convert.ToInt64(KISD.Areas.Admin.Models.ContentType.GenericError);
+    var data = objContext.Contents.Where(x => x.ContentTypeID == ContentTypeID).FirstOrDefault();
+    if (data != null)
+    {
+        ViewBag.Title = data.PageMetaTitleTxt;
+        ViewBag.MetaDescription = data.PageMetaDescriptionTxt;
+        var ImgData = objContext.Images.Where(x => x.ImageID == data.BannerImageID.Value).FirstOrDefault();
+        ViewBag.InnerImgPath = string.IsNullOrEmpty(ImgData.ImgPathTxt) ? "" : ImgData.ImgPathTxt.Replace("~", "");
+        ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ImgData.TitleTxt) ? "" : ImgData.TitleTxt;
+    }
+}
+
+<div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+    {<text>main-banner</text>}
+    else
+    {<text>no-inner-banner</text>}">
+    @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath) && data != null)
+    {
+        <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@data.AltBannerImageTxt" />
+
+        <div class="inner-banner-abstract">
+            <div class="container">
+                @Html.Raw(data.BannerImageAbstractTxt)
+            </div>
+        </div>
+    }
+</div>
+
+<div class="main-content">
+    <div class="container">
+        @if (data != null)
+        {
+            <h1 class="campus-news-title">@data.PageTitleTxt</h1>
+            <div class="breadcrumb">
+                <a href="@AppPath" id="ankHomeBreadCrumb">Home</a><span class="breaddiv"></span>
+                <span id="lblBreadCrumb">@data.PageTitleTxt</span>
+            </div>
+            <div class="content">
+                @Html.Raw(data.DescriptionTxt)
+            </div>
+        }
+    </div>
+</div>

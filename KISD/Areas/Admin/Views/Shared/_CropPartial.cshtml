@@ -1,0 +1,198 @@
+﻿@using KISD.Areas.Admin.Models;
+@{
+    var AppPath = "http://" + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = Common.ReturnValidPath(AppPath);
+    var innerBannerImage = ViewBag.InnerImgPath != null ? (AppPath + "/" + ViewBag.InnerImgPath.Replace("~/", "")) : "";
+}
+    <a class="blue_head chk-btn view-chk various" href="#view_doc"></a>
+    <div style="display:none">
+        <div id="view_doc">
+            <div class="container">               
+                <div class="imageBox">
+                    <div class="thumbBox"></div>
+                    <div class="spinner" style="display: none">Loading...</div>
+                    <input type="hidden" id="chkBrowsehdn" value="" style="display:none;"/>
+                </div>
+                <div class="action">
+                    <input type="button" id="btnCrop" value="Crop Image" class="btnCls">
+                    <input type="button" id="btnFancyCancel"  value="Cancel" class="btnCls-cancel">
+                    <input type="button" id="btnZoomIn" value="Zoom In" title="Zoom In" class="zoom-in">
+                    <input type="button" id="btnZoomOut" value="Zoom Out" title="Zoom Out" class="zoom-out">
+                </div>
+                <label class="modal-title lbldimention" id="IdealImgSize" style="color:red;"></label>
+            </div>
+        </div>
+    </div>
+<div id="divload">
+    <img src="~/Scripts/FrontEnd/images/ajax-loader.gif" class="loadercrop" style="background-position: center center; background-repeat: no-repeat; background-size:100px;height: 100px;left: 50%;margin: -100px 0 0 -100px;position: absolute; top: 50%; width: 100px;" />
+</div>
+<link href="~/Scripts/js/CropImage/css/cropper.css" rel="stylesheet" />
+<link href="~/Scripts/js/fancybox/jquery.fancybox.css" rel="stylesheet" />
+<script src="~/Scripts/js/fancybox/jquery.fancybox.js"></script>
+    <script src="~/Scripts/js/CropImage/js/cropbox.js"></script>
+    <script src="~/Scripts/js/fancybox/jquery.fancybox.pack.js"></script>
+    <script src="~/Scripts/js/fancybox/jquery.fancybox-thumbs.js"></script>
+    <script type="text/javascript">
+            $(".various").fancybox({
+                maxWidth: 1500,
+                maxHeight: 700,
+                fitToView: false,
+                width: '100%',
+                height: 'auto',
+                autoSize: false,
+                closeClick: false,
+                openEffect: 'none',
+                closeEffect: 'none',
+                helpers: {
+                    overlay: { closeClick: false } // prevents closing when clicking OUTSIDE fancybox
+                }
+            });
+            //$(".cropedfileupload").click(function () {
+            //    this.value = null;
+            //});
+            function funfancyclose() {
+                var gethdnval = $("#chkBrowsehdn").val();
+                if ($(".cropedfileupload").hasClass("ImagePathTxt")) {
+                    $('.' + gethdnval).val('');
+                    $("#ImagePathTxt").removeClass("ImagePathTxt");
+                }
+                if ($(".cropedfileupload1").hasClass("FamilyImagePathTxt")) {
+                    $('.' + gethdnval).val('');
+                    $("#FamilyImagePathTxt").removeClass("FamilyImagePathTxt");
+                }
+            }
+            function showprogress() {
+                $('#uploaderprocess').show();
+                $('.customprogressbar').show();
+            }
+            function hideprogress() {
+                $('#uploaderprocess').hide();
+                $('.customprogressbar').hide();
+            }
+            $(window).load(function () {
+                var options =
+                {
+                    thumbBox: '.thumbBox',
+                    spinner: '.spinner'
+                }
+                var cropper = $('.imageBox').cropbox(options);
+                $('.cropedfileupload').on('change', function (e) {
+                    showprogress();
+                    var getcropheight = $("#CropimgHeight").val();
+                    var getcropwidth = $("#CropimgWidth").val();
+                    document.getElementById('IdealImgSize').innerHTML = "Ideal crop image size is " + getcropwidth + "*" + getcropheight;
+                    $('.thumbBox').css('width', getcropwidth);
+                    $('.thumbBox').css('height', getcropheight);
+                    if (!uploadimages(this)) {
+                                hideprogress();
+                                $('#err_ImagePathTxt').hide();
+                                return false;
+                            }
+                            var files = e.target.files;
+                            if (files.length > 0) {
+                                $("#chkBrowsehdn").val("cropedfileupload");
+                                $(".cropedfileupload").addClass("ImagePathTxt");
+                                var reader = new FileReader();
+                                reader.onload = function (e) {
+                                    options.imgSrc = e.target.result;
+                                    cropper = $('.imageBox').cropbox(options);
+                                    $(".various").click();
+                                }
+                                reader.readAsDataURL(this.files[0]);
+                                
+                            }
+                            hideprogress();
+                })
+                $('.cropedfileupload1').on('change', function (e) {
+                    showprogress();
+                    var getcropheight1 = $("#CropimgHeight1").val();
+                    var getcropwidth1 = $("#CropimgWidth1").val();
+                    document.getElementById('IdealImgSize').innerHTML = "Ideal crop image size is " + getcropwidth1 + "*" + getcropheight1;
+                    $('.thumbBox').css('width', getcropwidth1);
+                    $('.thumbBox').css('height', getcropheight1);
+                    if (!uploadimages(this)) {
+                        hideprogress();
+                        $('#input_file_upload_error_img1').hide();
+                        return false;
+                    }
+                    var files = e.target.files;
+                    if (files.length > 0) {
+                        $("#chkBrowsehdn").val("cropedfileupload1");
+                        $(".cropedfileupload1").addClass("FamilyImagePathTxt");
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            options.imgSrc = e.target.result;
+                            cropper = $('.imageBox').cropbox(options);
+                            $(".various").click();
+                        }
+                        reader.readAsDataURL(this.files[0]);
+                        
+                    }
+                    hideprogress();
+                })
+                $('#btnCrop').on('click', function () {
+                    var path = '@AppPath';
+                    showprogresscrop();
+                    var elementchk = $("#chkBrowsehdn").val();
+                    var imgurl = cropper.getDataURL();
+                    if (elementchk == "cropedfileupload") {
+                        var strpath = path+"/Admin/CropImage/UploadImage";
+                        $.ajax({
+                            type: 'POST',
+                            url: strpath,
+                            data: '{ "imageData" : "' + imgurl + '" }',
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            success: function (msg) {
+                                $(".cropedfileupload").removeClass("ImagePathTxt");
+                                hideprogresscrop();
+                                parent.$.fancybox.close();
+                            }
+                        });
+                    }
+                    else {
+                        if (elementchk == "cropedfileupload1") {
+                            var strpath = "../../CropImage/UploadDocFamilyimg";
+                            $.ajax({
+                                type: 'POST',
+                                url: strpath,
+                                data: '{ "imageData" : "' + imgurl + '" }',
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                success: function (msg) {
+                                    $(".cropedfileupload1").removeClass("FamilyImagePathTxt");
+                                    hideprogresscrop();
+                                    parent.$.fancybox.close();
+                                }
+                            });
+                        }
+
+                    }
+                })
+                $('#btnZoomIn').on('click', function () {
+                    cropper.zoomIn();
+                })
+                $('#btnZoomOut').on('click', function () {
+                    cropper.zoomOut();
+                })
+                $('#btnFancyCancel').click(function () {
+                    var gethdnval = $("#chkBrowsehdn").val();
+                    if ($(".cropedfileupload").hasClass("ImagePathTxt")) {
+                        $('.' + gethdnval).val('');
+                        $("#ImagePathTxt").removeClass("ImagePathTxt");
+                    }
+                    if ($(".cropedfileupload1").hasClass("FamilyImagePathTxt")) {
+                        $('.' + gethdnval).val('');
+                        $("#FamilyImagePathTxt").removeClass("FamilyImagePathTxt");
+                    }
+                    parent.$.fancybox.close();
+                })
+            });
+            function showprogresscrop() {
+                $("#divload").show();
+            }
+            function hideprogresscrop() {
+                $("#divload").fadeOut();
+            }
+    </script>

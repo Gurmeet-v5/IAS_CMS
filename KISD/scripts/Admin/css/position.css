@@ -1,0 +1,241 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+.logo{
+	float:left;
+	/*width:30%;*/
+       margin-top:12px;
+	padding-left:10px;
+	}
+    header .logo { margin-top:7px}
+.logo a {
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+    }
+.logo a:hover {
+    color:#d4d4d4;
+    }
+.dropdown-user {
+	float: right;
+	padding: 17px 15px 0 15px;
+	border-left: 1px solid #fff;
+	border-right: 1px solid #fff;
+	cursor: pointer;
+}	
+.dropdown-user label{
+    cursor: pointer;
+}
+.dropdown-user ul li{
+	position:relative;
+	color:#fff;
+	padding-bottom:23px;
+	}
+.dropdown-user ul ul{
+	display:none;
+	position:absolute;
+	right:-16px;
+	top:36px;
+	background:#fff;
+	padding:5px 0px;
+	min-width:166px;
+	border:1px solid #d4d4d4;
+	border-radius:0 0 5px 5px;
+	}
+.dropdown-user ul li:hover ul{
+	display:block;
+	}
+.dropdown-user ul ul li{
+	padding-bottom:0;
+	}	
+.dropdown-user ul ul li a{
+	padding:3px 15px;
+	display:block;
+    color:#575757;
+	}
+.dropdown-user ul ul i {
+    top:2px;
+    position:relative;
+    color:#575757;
+    }
+.username {
+    font-size: 13px;
+    font-weight: 600;
+}	
+.welcome-message{
+	margin:5% 0;
+	text-align:center;
+	border:none;
+	}
+.welcome-message h1{
+	padding:4% 15px;
+	}
+.input-icon > i {
+    color: hsl(0, 0%, 82%);
+    display: block !important;
+    font-size: 16px;
+    height: 16px;
+    margin: 7px 2px 4px 10px;
+    position: absolute !important;
+    text-align: center;
+    width: 16px;
+    z-index: 1;
+	}
+.input-icon > input {
+    padding-left: 30px !important;
+	}
+.login .box .form-title {
+    margin-bottom: 25px;
+    text-align: center;
+	color:#575757;
+}	
+.forgot_pass {
+    background-color: #CCE6FE;
+	text-align:center;
+	border-top:1px solid #ddd;
+	}
+.sidebar{
+	float:left;
+	width:20%;
+    margin-top: 42px;
+	}
+.t-back {
+    float: right;
+    border-right: 2px solid #444;
+}
+.content{
+	float:right;
+	width:80%;
+    margin-top: 40px;
+	}
+.breadcrumb {
+    background: #f9f9f9;
+    float: left;
+    width: 100%;
+	padding:0 20px;
+	border-bottom:1px solid #d9d9d9;
+	position:static;
+    z-index:9;
+}	
+.breadcrumb ul li{
+	float:left;
+	position:relative;
+	color:#939393;
+	font-size:12px;
+	padding:10px 15px 10px 0;
+	}
+.breadcrumb ul li a:after{
+	content:">";
+	left: 5px;
+    position: relative;
+    top: 1px;
+	}
+.breadcrumb ul li a{
+	color:#545454;
+	font-weight:600;
+	}
+.breadcrumb ul li a:hover{
+	color:#000;
+	}
+.page-header {
+	margin-top:38px;
+    float: left;
+    padding: 0 20px;
+    width: 100%;
+    display:none
+	}
+.page-title {
+    padding: 10px 0;
+	}
+.page-title h3 {
+    color:#4D7496;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0 0 10px;
+	}
+.page-title span {
+    color:#878787;
+    display: block;
+    font-size: 11px;
+    font-weight: normal;
+	}
+.widget-header {
+	background:#444;
+	border-bottom:1px solid #d9d9d9;
+	float:left;
+	width:100%;
+	margin-bottom:15px;
+	}
+.widget-header h4{
+	margin-bottom:0;
+	font-size:14px;
+	display:inline-block;
+	color:#fff;
+    padding: 5px 15px;
+	max-width:75%;
+	}
+.widget-header h4 .icon-reorder {
+    margin-top: 3px;
+	}	
+.btn-group {
+    float: right;
+	}	
+.btn-group i {
+    position: relative;
+    top: 0px;
+	}
+.btn-group a{
+	padding:8px 10px;
+	background:#ECECEC;
+	color:#545454;
+	display:inline-block;
+	border-left:1px solid #d9d9d9;
+	float:left;
+	}
+/*.select-style {
+    float: left;
+    background:url(../images/icons/select_arr.png) no-repeat 98% 14px;
+    border: 1px solid #c3c3c3;
+    border-radius: 2px;
+    overflow: hidden;
+    width: 100%;
+    height:34px;
+}*/	
+.select-style {
+    border: 1px solid #c3c3c3;
+    border-radius: 2px;
+    float: left;
+    height: 34px;
+    max-width: 465px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.select-style select {
+    background:none;
+    border:none;
+    box-shadow: none;
+    cursor: pointer;
+    padding:5px;
+    width:100%;
+    height:32px;
+}
+.select-style select:focus{
+	border:none;
+	}
+.suggestion {
+    position:absolute;
+    right:-14px;
+    top:5px;
+}
+.cke input, .cke textarea, .cke select {
+    max-width:none;
+}
+select  option {
+    padding-left:5px; word-wrap:break-word; word-spacing:normal
+}
+.padding20 { padding-left:20px!important}
+.padding-left-0 { padding-left:0px}
+.fontsize {
+    font-size:11px;
+}

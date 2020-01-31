@@ -1,0 +1,188 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+@using GalleryListingTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@model PagedViewModel<GalleryListingModel>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    string Listingtype = Convert.ToString(ViewBag.ImageTypeId) ?? string.Empty;
+    var TypeMasterID = Request.QueryString["glt"] != null ? Request.QueryString["glt"].ToString() : EncryptDecrypt.Encrypt("0");
+    var type = EncryptDecrypt.Decrypt(TypeMasterID);
+    var SortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "ListingCreateDate";
+    var SortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Descending";
+    var Pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var PagerID = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "")
+                   + "/Admin/GalleryListing/Index?glt=" + TypeMasterID + "&page=1&Column=" + SortColumn + "&Direction=" + SortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+   
+
+}
+
+@using (Html.BeginForm("Index", "GalleryListing",
+            new
+            {
+                glt = TypeMasterID,
+                pagesize = Pagesize,
+                page = PagerID,
+                Column = SortColumn,
+                Direction = SortDirection
+            },
+             FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <div class="breadcrumb">
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Raw(Convert.ToString(@ViewBag.PageTitle)) Listing
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>
+                    @Html.Raw(Convert.ToString(@ViewBag.PageTitle)) Listing
+                </h4>
+                <div class="btn-group">
+                    <a href='@Url.Action("Create", "GalleryListing"
+                    , new
+                                            {
+                                                glt = TypeMasterID,
+                                                glid = EncryptDecrypt.Encrypt("0"),
+                                                pagesize = Pagesize,
+                                                page = PagerID,
+                                                Column = SortColumn,
+                                                Direction = SortDirection
+                                            }
+                    )
+                        '>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+            </div>
+            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer))
+            {
+                             <div class="row">
+                            <div class="search_report">
+            <div class="col20">
+                <label>
+                    <b>Document Name:</b>
+                </label>
+                <br />
+                @Html.TextBoxFor(m => m.Title, new { @class = "", maxlength = "100" })
+                <br />
+            </div>
+            <div class="col20">
+                <label>
+                    <b>Date Added:</b>
+                </label>
+                <br />
+
+                @Html.TextBoxFor(m => m.strCreateDate, new { @class = "nospace datepicker ", maxlength = "10", @readonly = true, @placeholder = "MM/DD/YYYY", ondrop = "return false;", onpaste = "return false;" })
+                <br />
+            </div>
+            <div class="col20">
+                <label><b>Status:</b></label>
+                <br />
+                @{var list = new SelectList(new[]
+                                            {
+                        new { ID = "All", Name = "All" },
+                        new { ID = "True", Name = "Active" },
+                        new { ID = "False", Name = "Inactive" },
+                        },
+                                            "ID", "Name", 2);
+                }
+                @Html.DropDownList("status", list, new { })
+                <br />
+            </div>
+        </div>
+                                 <br />
+        <div class="col20">
+            <input type="submit" value="Search" name="search" id="btnsearch" @*onclick="return checkdate();"*@ class="submit-btn submit" />
+            <input type="submit" id="btnCancel" name="command" value="Cancel" class="cancel cancel-btn" />
+        </div>
+
+    </div>
+            }
+            @*Calling Partial View For Ajax Call backs or Postback*@
+            @Html.Partial("GalleryListingPartial", Model)
+        </div>
+    </div>
+
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+}
+
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut();
+    });
+</script>
+<script type="text/javascript">
+    //.. for pager dropdown selectedvalue
+    var type = '@EncryptDecrypt.Decrypt(TypeMasterID)';
+    if (type == "1") {
+        $("#ankMasters").addClass('select');
+        $('#ankimagelisting').addClass('select');
+    }
+    else if (type == "2") {
+        $('#ankMasters').addClass('select');
+        $('#ankDocumentViewer').addClass('select');
+    }
+    else if (type == "3") {
+        $('#ankMasters').addClass('select');
+        $('#ankPodCast').addClass('select'); 
+    }
+    else if (type == "4") {
+        $('#ankMasters').addClass('select');
+        $('#ankVideos').addClass('select');
+        $('#ankVideo').addClass('select');
+    }
+    else if (type == "5") {
+        $('#ankMasters').addClass('select');
+        $('#ankPhotoGallery').addClass('select');
+    }
+    else if (type == "6") {
+        $('#ankMasters').addClass('select');
+        $('#ankFAQ').addClass('select');
+    }
+    else {
+        $("#ankMasters").addClass('select');
+    }
+    $('#btnCancel').click(function () {
+        $("#Title").val('');
+        $("#strCreateDate").val('');
+        $("#status").prop('selectedIndex', 0);
+    });
+</script>
+<script src="~/Scripts/js/footable.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('table').footable();
+    });
+</script>
+<script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker(
+            {
+                changeMonth: true,
+                changeYear: true,
+                yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+            });
+    });
+</script>

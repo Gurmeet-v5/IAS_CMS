@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Roles>
+  <Role>
+    <RoleID>1</RoleID>
+    <RoleNameTxt>Administrator</RoleNameTxt>
+    <RoleDescriptionTxt>Can Manage the content in Blog Admin Section</RoleDescriptionTxt>
+    <LoweredRoleNameTxt>administrator</LoweredRoleNameTxt>
+  </Role>
+  <Role>
+    <RoleID>2</RoleID>
+    <RoleNameTxt>User</RoleNameTxt>
+    <RoleDescriptionTxt>Can Manage the post Section</RoleDescriptionTxt>
+    <LoweredRoleNameTxt>user</LoweredRoleNameTxt>
+  </Role>
+</Roles>

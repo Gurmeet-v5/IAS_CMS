@@ -1,0 +1,345 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using KISD.Areas.Admin.Models;
+@using KModel = KISD.Areas.Admin.Models;
+@model PagedViewModel<ReportsModel>
+@{
+    Layout = null;
+    var ReportTypeID = Request.QueryString["rt"] != null ? Request.QueryString["rt"] : KModel.EncryptDecrypt.Encrypt("0");
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    var TypeID = ViewBag.TypeID != null ? ViewBag.TypeID.ToString() : "";
+    var UserTypeSelectList = Model.CommonSelectItemList;
+    var ModuleTypeSelectList = Model.CommonSelectItemList2;
+    var pagesize = Request.QueryString["pagesize"] ?? "10";
+    var page = Request.QueryString["page"] ?? "1";
+    var Column = Request.QueryString["Column"] ?? "UserNameTxt";
+    var Direction = Request.QueryString["Direction"] ?? "Descending";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                  (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : "")) + "/Admin/Reports/Index?rt=" + ReportTypeID
+                   + "&page=1&Column=" + (Request.QueryString["Column"] ?? "UserNameTxt") + "&Direction=" + (Request.QueryString["Direction"] ?? "Descending") + "&pagesize=";
+}
+<div class="Main_PartialHeader">
+
+    @if (Model != null)
+    {
+        
+            @*<div class="row">
+                <div class="col20">
+                    <label><b>From Date:</b></label><br />
+                    @Html.TextBoxFor(m => m.strFromDate, new { @class = "nospace datetimepicker ", maxlength = "10", @readonly = true, @placeholder = "MM/DD/YYYY", ondrop = "return false;", onpaste = "return false;" })
+                </div>
+                <div class="col20">
+                    <label><b>To Date:</b></label><br />
+                    @Html.TextBoxFor(m => m.strToDate, new { maxlength = "20", @class = "disableSpecialChar datetimepicker", @placeholder = "MM/DD/YYYY", @value = @ViewBag.Code })
+                </div>
+                <div class="col20">
+                    <label><b>User Name:</b></label><br />
+                    @Html.TextBoxFor(m => m.Title, new { maxlength = "100", @class = "disableSpecialChar", @placeholder = "Maximum 100 characters", @value = @ViewBag.STitle })
+                </div>
+                <div class="col20">
+                    <label><b>Module:</b></label><br />
+                    @Html.DropDownList("ModuleType", ModuleTypeSelectList as IEnumerable<SelectListItem>)
+                </div>
+                <div class="col20">
+                    <label><b>User Type:</b></label><br />
+                    @Html.DropDownList("UserType", UserTypeSelectList as IEnumerable<SelectListItem>)
+                </div>
+
+
+
+                <div class="search-btn-container-center">
+                    <input type="submit" value="Search" name="search" class="submit-btn submit formsearch" />
+                    <input type="submit" id="btnCancel" name="command" value="Cancel" class="cancel cancel-btn" />
+                </div>
+            </div>*@
+       
+
+        <div class="pager">
+            <!-- pager -->
+            @if (Model.PagedList.Any())
+            {
+                <div class="select-style" id="divPager">
+                    <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                        <option value="@(AppPath)10" text="10">10</option>
+                        <option value="@(AppPath)25" text="25">25</option>
+                        <option value="@(AppPath)50" text="50">50</option>
+                        <option value="@(AppPath)100" text="100">100</option>
+                        <option value="@(AppPath)0" text="0">All</option>
+                    </select>
+                </div>
+            }
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+
+            @Html.Hidden("returnUrl", this.Request.RawUrl)
+            <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+            <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+            <input type="hidden" name="hdnType" id="hdnType" value="" />
+
+            <input type="hidden" name="hdnFilterFromDate" id="hdnFilterFromDate" value="" />
+            <input type="hidden" name="hdnFilterToDate" id="hdnFilterToDate" value="" />
+            <input type="hidden" name="hdnFilterUserName" id="hdnFilterUserName" value="" />
+            <input type="hidden" name="hdnFilterUserType" id="hdnFilterUserType" value="" />
+
+            <!-- pagination -->
+        </div>
+
+        <div class="wrapper">
+            <div class="tab-pane active">
+                @if (Model.PagedList.Any())
+                {
+                    @Html.Grid(Model.PagedList).Columns(column =>
+               {
+                   column.For(sr => sr.NameTxt).Named("Name").SortColumnName("NameTxt").HeaderAttributes(@class => "center sort", @align => "left", @style => "width:15%").Attributes(@class => "center");
+
+                   column.For(sr => sr.UserNameTxt).Named("User Name").SortColumnName("UserNameTxt").HeaderAttributes(@class => "left sort", @align => "left", @style => "width:15%").Attributes(@class => "left");
+
+                   column.For(sr => sr.RoleNameTxt).Named("User Type").SortColumnName("RoleNameTxt").HeaderAttributes(@class => "left sort", @align => "left", @style => "width:15%").Attributes(@class => "left");
+
+                   column.For(sr => sr.ModuleNameTxt).Named("Module").SortColumnName("ModuleNameTxt").HeaderAttributes(@class => "center sort", @align => "left", @style => "width:15%").Attributes(@class => "center");
+
+                   column.For(sr => sr.LogTypeTxt).Named("Log Type").SortColumnName("LogTypeTxt").HeaderAttributes(@class => "center sort", @align => "left", @style => "width:15%").Attributes(@class => "center");
+
+                   column.For(sr => sr.LogDateTime).Named("Date").SortColumnName("LogDateTime").HeaderAttributes(new Dictionary<string, object> { { "style", "width:20%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } }).Attributes(@class => "center");
+
+                   column.For(x => Html.Label("View", new { @value = x.ChangeLogID, @class = "viewbtn", @onclick = "ViewDetails(" + x.ChangeLogID + ")" })).Named("View").Sortable(false).HeaderAttributes(@style => "width:15%", @align => "center").Attributes(@align => "center", @title => "View Details");
+
+               }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2");
+                }
+                else
+                {
+                    <div>
+                        <div class="nodatafound">
+                            No Data Found.
+                        </div>
+                    </div>
+                }
+            </div>
+
+        </div>
+
+        <div class="pager">
+            <!-- pager -->
+            @if (Model.PagedList.Any())
+            {
+                <div class="select-style">
+                    <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                        <option value="@(AppPath)10" text="10">10</option>
+                        <option value="@(AppPath)25" text="25">25</option>
+                        <option value="@(AppPath)50" text="50">50</option>
+                        <option value="@(AppPath)100" text="100">100</option>
+                        <option value="@(AppPath)0" text="0">All</option>
+                    </select>
+                </div>
+            }
+            <div class="pagination">
+                @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+            </div>
+            <!-- pagination -->
+        </div>
+
+        <div class="shadow common_hide"></div>
+        <div id="loader" class="loader common_hide"> </div>
+        <div id="manage-sections" class="common_hide manage-sections table-report">
+            <a href="#" class="close_popup" title="Close"><span hidden>Close</span></a>
+            <div id='page-content'></div>
+        </div>
+    }
+</div>
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+
+    var alertmessage = '@alertmessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".checkbox").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".checkbox").prop("disabled", false);// Make status check box enable after message hides
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+        var _FilterFromDate = $("#strFromDate").val();
+        var _FilterToDate = $("#strToDate").val();
+        var _FilterUserName = $("#Title").val();
+        var _FilterUserType = $("#UserType").val();
+        var _FilterModuleType = $("#ModuleType").val();
+
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: '',
+            qs_FilterFromDate: _FilterFromDate,
+            qs_FilterToDate: _FilterToDate,
+            qs_FilterUserName: _FilterUserName,
+            qs_FilterUserType: _FilterUserType,
+            qs_FilterModuleType: _FilterModuleType
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    function ViewDetails(ChangeLogID) {
+        $('.shadow').removeClass('common_hide');
+        $('.shadow').addClass('common_show');
+        $('.loader').removeClass('common_hide');
+        $('.loader').addClass('common_show');
+        var URL = '/Admin/Reports/ViewDetails';
+        $(function () {
+            var options = { "backdrop": "static", keyboard: true };
+            $.ajax({
+                type: "GET",
+                url: URL,
+                data: { "ChangeLogID": ChangeLogID },
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    $('#page-content').html(data);
+                    $('.shadow').removeClass('common_hide');
+                    $('.shadow').addClass('common_show');
+                    $('.loader').removeClass('common_show');
+                    $('.loader').addClass('common_hide');
+                    $('#manage-sections').removeClass('common_hide');
+                    $('#manage-sections').addClass('common_show');
+                    return false;
+                },
+                error: function () {
+                    $('.shadow').removeClass('common_show');
+                    $('.shadow').addClass('common_hide');
+                    $('.loader').removeClass('common_show');
+                    $('.loader').addClass('common_hide');
+                    $('#manage-sections').removeClass('common_show');
+                    $('#manage-sections').addClass('common_hide');
+                }
+            });
+        });
+    }
+
+    $('.close_popup').click(function () {
+        $('.shadow').removeClass('common_show');
+        $('.shadow').addClass('common_hide');
+        $('.loader').removeClass('common_show');
+        $('.loader').addClass('common_hide');
+        $('#manage-sections').removeClass('common_show');
+        $('#manage-sections').addClass('common_hide');
+    });
+</script>

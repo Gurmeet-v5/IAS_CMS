@@ -1,0 +1,592 @@
+﻿@using System.Web.Mvc;
+@using KISD.Areas.Admin.Models;
+@model ExceptionOpportunityModel
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var ExceptionOppID = Request.QueryString["iid"].ToString() ?? EncryptDecrypt.Encrypt("0");
+    var PageSize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var Page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var Column = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "ExOpportunityCreateDate";
+    var Direction = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+            (":" + HttpContext.Current.Request.Url.Port.ToString()) : "") + "/Admin/";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("Create", "ExceptionOpportunity",
+                                                                                                               new
+                                                                                                               {
+                                                                                                                   iid = ExceptionOppID,
+                                                                                                                   pagesize = PageSize,
+                                                                                                                   page = Page,
+                                                                                                                   Column = Column,
+                                                                                                                   Direction = Direction,
+                                                                                                               },
+                                                                                                                FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankExceptionOpportunityListing" href='@Url.Action("Index", "ExceptionOpportunity",
+                     new
+                     {
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                         )'>Exceptional Opportunities Listing</a>
+            </li>
+            <li>
+                @if (EncryptDecrypt.Decrypt(ExceptionOppID) != "0")
+                {
+                    {<text>@Model.TitleTxt - </text> }
+                }
+                @ViewBag.PageTitle
+            </li>
+        </ul>
+    </div>
+    <!-- Breadcrumb Ends -->
+
+    <!-- Wrapper -->
+    <div class="wrapper">
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@ViewBag.PageTitle </h4>
+                <div class="btn-group">
+                    <a id="ankback" href='@Url.Action("Index", "ExceptionOpportunity",
+                     new
+                     {
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                )'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row ">
+                <div class="col20">
+                    <label>
+                        Title:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.TitleTxt, new { @class = "required", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.TitleTxt)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        School Category:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    <div class="select-style">
+                        @Html.DropDownList("SchoolCategoryID", ViewBag.SchoolCategoryID as SelectList, "-- Select School Category --",
+                                                new { @class = "required" })
+                        <br />
+                    </div>
+                    @Html.ValidationMessageFor(m => m.SchoolCategoryID)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Is External Link:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    <div class="select-style">
+                        @{
+                            var listItemExternalLink = new List<SelectListItem>
+                        { new SelectListItem { Text = "Yes", Value = "true" }, new SelectListItem { Text = "No", Value = "false" } };
+                        }
+                        @Html.DropDownListFor(model => model.ExternalLinkInd, listItemExternalLink, new { onchange = "setformOncahnge(this.value)" }
+                                     )
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row tblexternalLink">
+                <div class="col20">
+                    <label>
+                        External Link URL:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.URLTxt, new { @class = "required url nospace", maxlength = "300", @placeholder = "Maximum 300 characters" })
+                    <img src="~/scripts/Admin/images/tooltip.png" title="URL must be like http://www.abc.com" class="suggestion" />
+                    <div class="mobiletooltip">
+                    </div>
+                    @Html.ValidationMessageFor(m => m.URLTxt)
+                </div>
+            </div>
+
+            <div class="row tblexternalLink">
+                <div class="col20">
+                    <label>
+                        Target Window:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    <div class="select-style">
+                        @{
+                            var listItemss = new List<SelectListItem>
+                        { new SelectListItem { Text = "New", Value = "true" }, new SelectListItem { Text = "Same", Value = "false" } };
+                        }
+                        @Html.DropDownListFor(model => model.ExternalLinkTargetInd, listItemss)
+
+                    </div>
+                </div>
+            </div>
+            <div class="row metatitle">
+                <div class="col20">
+                    <label>
+                        Page URL:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.PageURLTxt, new { @class = "required alphanumeric nospace", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.PageURLTxt)
+                </div>
+            </div>
+            <div class="common-fieldset metatitle">
+                <span>Banner Image</span>
+                <div class="row metatitle">
+                    <div class="col20">
+                        <label>
+                            Inner Image:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @{
+                                                                var list = new SelectList(ViewBag.InnerImagesTitle, "ImageID", "TitleTxt");
+                        }
+                        @Html.DropDownListFor(m => m.BannerImageID, list as SelectList, "--- Select Inner Image ---", new { @class = "ddl", onchange = "ddlInnerImagesChange(this.value)", @name = "ddlInnerImages" })
+                        <span id="ImageIDErrmsg" style="color:#C30; font-size:12px; font-family:Arial,sans-serif; display:none;">This field is required.</span>
+                    </div>
+                </div>
+
+                <div class="row metatitle">
+                    <div class="col20">
+                        <label>
+                            Alt Image Text:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.AltBannerImageTxt, new { maxlength = "1000", @placeholder = "Maximum 1000 characters", @class = "clsAltImgTxt common-width", @id = "AltImgTxt" })
+                        <br />
+                        @*@Html.ValidationMessageFor(m => m.AltBannerImageTxt)*@
+                    </div>
+                </div>
+
+                <div class="row metatitle">
+                    <div class="col20">
+                        <label>
+                            Banner Image Abstract:
+                        </label>
+                    </div>
+                    <div class="col75" id="tdCkEditor">
+                        @Html.TextAreaFor(m => m.BannerImageAbstractTxt, new { @class = "AbstractTxt common-width", id = "AbstractTxtInner", name = "AbstractTxt" })
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="row metatitle">
+                <div class="col20">
+                    <label>
+                        Description:
+                    </label>
+                </div>
+                <div class="col75">
+                    @Html.TextAreaFor(m => m.DescriptionTxt, new { @class = "ckeditor", @id = "ckDescriptionTxt", htmlEncodeOutput = true })
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Show on Home:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                   @Html.DropDownList("ShowOnHomeInd", ViewBag.ShowOnHomeInd as SelectList)  
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Status:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    <div class="select-style">
+                        @Html.DropDownList("IsActiveInd", ViewBag.IsActiveInd as SelectList)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Date Added:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.strCreateDate, new { @class = "required nospace datepicker ", maxlength = "10", @readonly = true, @placeholder = "mm/dd/yyyy", ondrop = "return false;", onpaste = "return false;" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.strCreateDate)
+                </div>
+            </div>
+            <div class="row metatitle">
+                <div class="col20">
+                    <label>
+                        Page Meta Title:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.PageMetaTitleTxt, new { @class = "required", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.PageMetaTitleTxt)
+                </div>
+            </div>
+
+            <div class="row metatitle">
+                <div class="col20">
+                    <label>
+                        Meta Description:
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextAreaFor(m => m.PageMetaDescriptionTxt, new { maxlength = "2000", @placeholder = "Maximum 2000 characters" })
+                </div>
+            </div>
+
+
+
+
+            <div class="row">
+                <div class="col20">&nbsp;</div>
+                <div class="col40">
+
+                    @Html.HiddenFor(m => m.ExOpportunityID)
+                    @Html.HiddenFor(m => m.CreateDate)
+
+                    <input type="submit" value="@ViewBag.Submit" id="btnsubmit"
+                           class="submit-btn submit" />&nbsp;&nbsp;&nbsp;
+
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                </div>
+            </div>
+        </div>
+    </div>
+     <!-- Wrapper end -->
+                            }
+@*Page Loader*@
+<div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+</div>
+
+<div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+</div>
+<div class="customprogressbar" style="display: none;">
+    <div></div>
+</div>
+
+<script src="@Href("~/Scripts/js/jquery-1.10.2.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery-ui-1.11.2.min.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/additional-methods.js")"></script>
+<script src="@Href("~/Scripts/js/ckeditor/ckeditor.js")"></script>
+<script src="~/Scripts/js/Fileuploder.js"></script>
+<script type="text/javascript" src="@Href("~/Scripts/js/ckfinder/ckfinder.js")"></script>
+
+<script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut();
+    });
+    var $ = jQuery.noConflict();
+        $("#ankExceptionalOpportunities").addClass('select');
+        $('#ankNewToKISD').addClass('select');
+        $('#ankExceptionalOpportunitiesListing').addClass('select');
+
+    var isactive = '@Model.ExternalLinkInd';
+
+    function setform(isactive) {
+        if (isactive == "True" || isactive == "true") {
+            $('.tblexternalLink').show();
+            $('.metatitle').hide();
+        }
+        else {
+            $('.tblexternalLink').hide();
+            $('.metatitle').show();
+        }
+    }
+
+    function reset() {
+        $('#MetaTitleTxt').val('');
+        $('#ExternalLinkTxt').val('');
+        $('#ExternalLinkTargetInd').val('true');
+    }
+
+    function setformOncahnge(isactive) {
+        if (isactive == "True" || isactive == "true") {
+            $('.tblexternalLink').show();
+            $('.metatitle').hide();
+        }
+        else {
+            $('.tblexternalLink').hide();
+            $('.metatitle').show();
+        }
+        $('.field-validation-error').empty();
+        $('.input-validation-error').each(function () {
+            $(this).removeClass('input-validation-error');
+        });
+        reset();
+    }
+
+    function ddlInnerImagesChange(value) {
+        if (value == '') {
+            CKEDITOR.instances['AbstractTxtInner'].setData('');
+            $('#AltImgTxt').val('');
+        }
+        else {
+            $.ajax({
+                url: '@AppPath' + 'Menu/GetDataForInnerImages',
+                data: { ImgId: value },
+                type: 'Get',
+                success: function (result) {
+                    CKEDITOR.instances['AbstractTxtInner'].setData(result.AbstractTxt);
+                    $('#AltImgTxt').val(result.AltImageTxt);
+                    return false;
+                },
+                onerror: function () {
+                }
+            });
+        }
+    }
+
+    function numericOnly(elementRef, id) {
+        var keyCodeEntered = (event.which) ? event.which : (window.event.keyCode) ? window.event.keyCode : -1;
+        if (!((keyCodeEntered == 8) || (keyCodeEntered == 46) || (keyCodeEntered >= 35 && keyCodeEntered <= 40) || (keyCodeEntered >= 48 && keyCodeEntered <= 57) || (keyCodeEntered >= 96 && keyCodeEntered <= 105))) {
+            return false;
+        }
+        else
+            if (keyCodeEntered == 46) {   // Allow only 1 decimal point ('.')...
+                if ((elementRef.value) && (elementRef.value.indexOf('.') >= 0)) return false; else return true;
+            }
+        if (((keyCodeEntered == 101) || (keyCodeEntered == 35) || (keyCodeEntered == 36) || (keyCodeEntered == 37) || (keyCodeEntered == 40) || (keyCodeEntered == 105) || (keyCodeEntered == 97) || (keyCodeEntered == 100) || (keyCodeEntered == 102) || (keyCodeEntered == 103) || (keyCodeEntered == 104) || (keyCodeEntered == 99) || (keyCodeEntered == 98))) {
+            return false;
+        }
+    }
+
+    if ($("#tdCkEditor").length != 0) {
+        CKEDITOR.replace('BannerImageAbstractTxt',
+           {
+               toolbar: 'Basic',
+               BasePath: '@Href("~/Scripts/js/ckeditor/'")'
+           });
+        CKEDITOR.config.allowedContent = true;
+    }
+
+    function Checkdata(thisEle, id) {
+        //var keyCodeEntered = (event.which) ? event.which : (window.event.keyCode) ? window.event.keyCode : -1;
+        //if ((keyCodeEntered >= 48 && keyCodeEntered <= 57) || (keyCodeEntered >= 96 && keyCodeEntered <= 105)) {
+        //    return false;
+        //}
+        if (thisEle.value == '0' || thisEle.value == '.0') { $('#' + id).val(''); }
+    }
+
+    $(document).ready(function () {
+        // Inner Image DropDown validation on submit click
+        $('#btnsubmit').on("click", function () {
+            //var catId = $("#SchoolCategoryID").val();
+            //alert(catId);
+            //var retfalse = 0;
+            //if (catId == '')
+            //{
+            //    alert('in');
+            //    $("#SchoolCategoryID").css({ "display": "block" });
+            //    retfalse = 1;
+            //}
+            //else {
+            //    alert('out');
+            //    $("#SchoolCategoryID").css({ "display": "none" });
+            //}
+                var txtDate = $("#ImageID option:selected").index()
+                if (txtDate == 0) {
+                    $("#ImageIDErrmsg").css({ "display": "block" });
+                    $("#img").addClass("input-validation-error");
+                    retfalse = 1;
+                }
+                else {
+                    $("#ImageIDErrmsg").css({ "display": "none" });
+                    $("#img").removeClass("input-validation-error");
+                }
+                //if ($("#form1").valid()) {
+                //    if (retfalse == 1) {
+                //        return false;
+                //    }
+                //}
+        });
+        // Inner Image DropDown validation on selected index
+        $('#ImageID').change(function () {
+            var txtDate = $("#ImageID option:selected").index()
+
+            if (txtDate == 0) {
+                $("#ImageIDErrmsg").css({ "display": "block" });
+                $("#img").addClass("input-validation-error");
+            }
+            else {
+                $("#ImageIDErrmsg").css({ "display": "none" });
+                $("#img").removeClass("input-validation-error");
+            }
+        });
+        $('#TitleTxt').on('change keyup', function () {
+            var url = this.value;
+            $.ajax({
+                url: '@(Url.Action("CheckURL"))',
+                type: 'POST',
+                data: JSON.stringify({ url: url.replace(/[\W_]/g, '_') }),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    if (data != "" || data != null) {
+                        $("#PageURLTxt").val(data.toString().toLowerCase());
+                    }
+                }
+            });
+        });
+        $('.cropedfileupload').on('change', function (e) {
+            //showprogress();
+            if (!uploadimages(this)) {
+                //hideprogress();
+                return false;
+            }
+            var files = e.target.files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                }
+            }
+        });
+        // Set Focus and validation for IsActive and IsShowOnHome
+        $("#IsActiveInd").change(function () {
+            var IsActive = $("#IsActiveInd option:selected").text();
+            var IsShoeHome = $("#ShowOnHomeInd option:selected").text();
+            if (IsActive.toLowerCase() == "inactive" && IsShoeHome.toLowerCase() == "yes") {
+                alert("Show on Home Exceptional Opportunity cannot be set to Inactive.")
+                $("#IsActiveInd option[value='1']").prop("selected", "selected");
+            }
+        });
+
+        $("#ShowOnHomeInd").change(function () {
+            var IsActive = $("#IsActiveInd option:selected").text();
+            var IsShoeHome = $("#ShowOnHomeInd option:selected").text();
+            
+            if (IsActive.toLowerCase() == "inactive" && IsShoeHome.toLowerCase() == "yes") {
+                alert("Inactive Exceptional Opportunity cannot be set to Show on Home.")
+                $("#ShowOnHomeInd option[value='False']").prop("selected", "selected");
+            }
+        });
+        // Set Focus on PageUrlTxt field on Postback
+        $(document).ready(function () {
+            var urlfocus = '@ViewBag.FocusPageUrl'
+            if (urlfocus == "True") {
+                $("#URLTxt").focus();
+            }
+        });
+
+        var isactive = '@Model.ExternalLinkInd';
+
+        if ($("#donateExternalLink").length == 0) {
+            setform(isactive);
+        }
+
+        var nospace = $(".nospace");
+        var funcfb = function () {
+            $(this).val($(this).val().replace(/\s/g, ''));
+        }
+        if (nospace != null && nospace.length > 0) {
+            nospace.keyup(funcfb).blur(funcfb);
+        }
+
+        if ($("#ckDescriptionTxt").length != 0) {
+            var editor = CKEDITOR.replace('ckDescriptionTxt');
+            CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/js/ckfinder/")', rememberLastFolder: false })
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.editorConfig = function (config) {
+                config.filebrowserImageUploadUrl = '@Href("~/Scripts/js/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images")';
+            };
+        }
+
+        if ($("#ckSidebarDescriptionTxt").length != 0) {
+            var editor = CKEDITOR.replace('ckSidebarDescriptionTxt');
+            CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/js/ckfinder/")', rememberLastFolder: false })
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.editorConfig = function (config) {
+                config.filebrowserImageUploadUrl = '@Href("~/Scripts/js/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images")';
+            };
+        }
+    });
+
+    if ($("#AbstractTxtNotReqd").length != 0) {
+        CKEDITOR.replace('AbstractTxtNotReqd',
+           {
+               toolbar: 'Basic',
+               BasePath: '@Href("~/Scripts/js/ckeditor/'")'
+           });
+        CKEDITOR.config.allowedContent = true;
+    }
+
+    //Image Validation
+    $(document).ready(function () {
+        $('#btnsubmit').on('click', function () {
+            var filename = $('#ImagePathTxt').val();
+            if (String(filename).trim() == '') {
+                $('#input_file_upload_error_img').css({ "display": "block" })
+            }
+        });
+    });
+</script>
+<script src="@Href("~/Scripts/js/custom-validate.js")"></script>
+<script type="text/javascript">
+    $(function () {
+        $('.datepicker').datepicker(
+            {
+                changeMonth: true,
+                changeYear: true,
+                yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+            });
+    });
+</script>
+<script>
+    CKEDITOR.env.isCompatible = true;
+</script>
+

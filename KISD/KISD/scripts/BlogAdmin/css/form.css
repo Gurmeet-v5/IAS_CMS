@@ -1,0 +1,47 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+  ::-webkit-input-placeholder { /* WebKit browsers */
+	  opacity:1;
+  }
+  :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+	  opacity:1;
+  }
+  ::-moz-placeholder { /* Mozilla Firefox 19+ */
+	  opacity:1;
+  }
+  :-ms-input-placeholder { /* Internet Explorer 10+ */
+	  opacity:1;
+  }	
+.font-12{
+	font-size:12px;
+	}
+.patient-form input, .patient-form textarea, .patient-form select{
+	width:100%;
+	border:none;
+	padding:5px;
+	}
+	
+.patient-form input[type="checkbox"]{
+	width:auto;
+	margin:0 3px;
+	position:relative;
+	top:1px;
+	}	
+.patient-form {
+    float: left;
+    margin-bottom: 45px;
+    margin-left: 2%;
+    width: 96%;
+}
+.patient-form label{
+	font-weight:bold;
+	}	
+.patient-form td{
+	width:50%;
+	border:1px solid #e5e5e5;
+	}
+	
+@media all and (max-width:768px){
+
+}

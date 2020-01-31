@@ -1,0 +1,188 @@
+﻿
+@using KISD.Areas.Admin.Models;
+@model UserPermissionsModel
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+
+    var UID = Request.QueryString["UID"] != null ? Request.QueryString["UID"] : EncryptDecrypt.Encrypt("0");
+    var PageSize = Request.QueryString["pagesize"] ?? "10";
+    var Page = Request.QueryString["page"] ?? "1";
+    var Column = Request.QueryString["Column"] ?? "UserCreateDate";
+    var Direction = Request.QueryString["Direction"] ?? "Descending";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+   (":" + HttpContext.Current.Request.Url.Port.ToString()) : "") + "/Admin/";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+
+    @using (Html.BeginForm("ManageUserPermission", "UsersManagement", new
+    {
+        UID = UID,
+        pagesize = PageSize,
+        page = Page,
+        Column = Column,
+        Direction = Direction
+    },
+        FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+    {
+        <div class="breadcrumb">
+            <!-- Breadcrumb -->
+            <ul>
+                <li>
+                    <i class="icon-th"></i>
+                    <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+                </li>
+                <li>
+                    <a id="ankMasterListing" href='@Url.Action("Index", "UsersManagement",
+                     new
+                     {
+                         UserID = UID,
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                         )'
+ >
+                        <text>
+                            User Listing
+                        </text>
+                    </a>
+                </li>
+                <li>
+                    @ViewBag.PageTitle
+                </li>
+            </ul>
+        </div>
+        <div class="wrapper">
+            <div class="widget">
+                <!-- widget -->
+                <div class="widget-header">
+                    <!-- widget-header -->
+                    <h4>
+                        <i class="icon-reorder"></i>@ViewBag.PageTitle
+                    </h4>
+
+                    <div class="btn-group">
+                        <a id="ankback" href='@Url.Action("Index", "UsersManagement",
+                     new
+                     {
+                         UserID = UID,
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                )'>
+                            <i class="icon-arrow-left"></i>Back
+                        </a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            First Name:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Model.User.FirstNameTxt
+                    </div>
+                </div>
+                <div class="row row2">
+                    <div class="col20">
+                        <label>
+                            Last Name:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Model.User.LastNameTxt
+                    </div>
+                </div>
+                <div class="row row2">
+                    <div class="col20">
+                        <label>
+                            Username:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Model.User.UserNameTxt
+                    </div>
+                </div>
+                <div class="row row2">
+                    <div class="col20">
+                        <label>
+                            User Type:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Model.Role.RoleNameTxt
+                    </div>
+                </div>
+
+
+                <div class="row row2">
+                    <div class="col20">
+                        <label>Manage User Permissions:<span class="requiredstar">*</span></label>
+                    </div>
+                    <div class="col40">
+                        @Html.ListBoxFor(m => m.SelectedUserPermissions, new SelectList(Model.PermissionList, "Value", "Text", Model.SelectedUserPermissions),
+                    new { @Id = "lstRightSections" })
+                        @Html.ValidationMessageFor(m => m.SelectedUserPermissions)
+                    </div>
+                </div>
+
+                <div class="row row2">
+                    <div class="col20">&nbsp;
+                        </div>
+                        <div class="col40">
+                            @Html.HiddenFor(m => m.User.UserID)
+                            @Html.HiddenFor(m => m.UserRoleID)
+
+                            <input type="submit" id="btnsubmit" value="@ViewBag.Submit"
+                                   class="submit-btn submit" />
+                            <input type="submit" id="btnCancel" name="command" value="Cancel"
+                                   class="cancel cancel-btn" />
+                        </div>
+                    </div>
+
+            </div>
+        </div>
+        <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+        </div>
+        <div class="customprogressbar" style="display: none;">
+            <div></div>
+        </div>
+        @*Div for blocking the user untill the page is not fully loaded.*@
+        <div id="div" style="position: fixed; bottom: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; opacity: 0.5; background-color: #000; color: #fff; z-index: 9999;">
+        </div>
+    }
+    <script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+    <script src="~/Scripts//js/jquery-ui-1.11.2.min.js"></script>
+    <script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+    <script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+    $(function () {
+        var $ = jQuery.noConflict();
+        $.fn.scrollView = function () {
+            return this.each(function () {
+                $('html, body').animate({
+                    scrollTop: $(this).offset().top
+                }, 1000);
+            });
+        }
+        var nospace = $(".nospace");
+        var funcfb = function () {
+            $(this).val($(this).val().replace(/\s/g, ''));
+        }
+        if (nospace != null && nospace.length > 0) {
+            nospace.keyup(funcfb).blur(funcfb);
+        }
+        $('#ankUsers').addClass('select');
+        $('#ankUserManagement').addClass('select');
+    });
+
+  </script>

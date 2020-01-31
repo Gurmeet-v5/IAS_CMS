@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Image>
+
+@{
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+}
+
+@if (Model.Count() > 0)
+{
+    <div class="homeicon-list">
+        <div class="container">
+            <div class="homeicon-list-cont owl-theme owl-carousel" id="owl-car1">
+                @foreach (var item in Model)
+                {
+                    <a href="@item.URLTxt" @if (item.TargetWindowInd.HasValue && item.TargetWindowInd.Value) { @Html.Raw("target='_blank'") }>
+                        <div class="item homeicon-list-box">
+                            <div class="image">
+                                <img src="@AppPath/@item.ImgPathTxt.Replace("~/","")" alt="@item.AltImageTxt" title="@item.TitleTxt" />
+                            </div>
+                            <div class="icon-title">@item.TitleTxt</div>
+                        </div>
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+}

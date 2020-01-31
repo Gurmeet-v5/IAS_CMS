@@ -1,0 +1,92 @@
+﻿@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType
+@using PagedList
+@using PagedList.Mvc;
+
+@model KISD.Areas.Admin.Models.GalleryListingModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    ViewBag.InnerImgPath = string.IsNullOrEmpty(ViewBag.InnerImgPath) ? "" : ViewBag.InnerImgPath;
+    ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ViewBag.InnerImgTitleTxt) ? "" : ViewBag.InnerImgTitleTxt;
+}
+
+<link href="~/scripts/Frontend/css/fancybox.css" rel="stylesheet" type="text/css" />
+
+@if (Model != null)
+{
+    <div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+    {<text>main-banner</text>}
+    else
+    {<text>no-inner-banner</text>}">
+        @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+        {
+            <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@ViewBag.AltImgTxt" />
+            <div class="container">
+                <div class="inner-banner-abstract">
+                    @Html.Raw(ViewBag.InnerImgAbstractTxt)
+                </div>
+            </div>
+        }
+    </div>
+        <div class="main-content">
+            <div class="container">
+                <div class="main-lefts">
+                    @if (!string.IsNullOrEmpty(Model.TitleTxt))
+                    {
+                        <h1 class="campus-news-title">@Model.TitleTxt</h1>
+                    }
+                    <div class="breadcrumb">
+                        <a href="@AppPath" title="Home Page">Home</a><span class="breaddiv"></span>
+
+                        @if (!string.IsNullOrEmpty(@ViewBag.MainURL) || !string.IsNullOrEmpty(@ViewBag.MainParentName))
+                        {  <a href="@ViewBag.MainURL" title="@ViewBag.MainParentName">@ViewBag.MainParentName</a><span class="breaddiv"></span> }
+
+                        <span>Photo Gallery </span>
+                    </div>
+                    <div class="content">
+                        <div class="gallery-container">
+
+                            <div class="gallery-description">
+                                @Html.Raw(Model.DescriptionTxt)
+                            </div>
+
+                            <ul>
+                                @foreach (var item in Model.CommonPagedList)
+                                {
+                                    <li>
+                                        <a class="fancybox" href="@item.FileURLTxt.Replace("~","").Replace("cropped","images")" data-fancybox-group="gallery" title="@item.TitleTxt @Html.Raw("<br/>") @item.DescriptionTxt">
+                                            <img src="@item.FileURLTxt.Replace("~","")" alt="@item.AltImageTxt">
+                                            <span class="box-title">@item.TitleTxt</span>
+                                            <img src="~/scripts/frontend/images/magnify.png" class="zoom_img">
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                            @if (Model.IsPagingVisible && Model.CommonPagedList.PageCount > 1)
+                            {
+                                <div class="pagination-listing">
+                                    <div class="pagination-container">
+                                        @Html.PagedListPager(Model.CommonPagedList, page => Url.Action("Content", new { page }))
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    <!--content container end here-->
+                </div>
+                <div class="clearfix-mobile"></div>
+                @*Right Section*@
+            </div>
+            <!-- District and Campus News container end here-->
+        </div>
+        <!-- Main content container end here-->
+}
+<script src="/scripts/js/fancybox/jquery.fancybox.js" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery(".fancybox").fancybox();
+</script>

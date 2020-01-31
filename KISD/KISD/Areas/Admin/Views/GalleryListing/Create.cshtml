@@ -1,0 +1,797 @@
+﻿@using System.Web.Mvc;
+@using KISD.Areas.Admin.Models;
+@using GalleryListingTypeAlias = KISD.Areas.Admin.Models.GalleryListingService.TypeMaster;
+@model GalleryListingModel
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    string Listingtype = Convert.ToString(ViewBag.ListingTypeId) ?? string.Empty;
+    var AlertTitle = TempData["Message"] ?? string.Empty;
+    var ListingID = Request.QueryString["glid"] != null ? Request.QueryString["glid"].ToString() : EncryptDecrypt.Encrypt("0");
+    var TypeMasterID = Request.QueryString["glt"].ToString() ?? EncryptDecrypt.Encrypt("0");
+    var PageSize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var Page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var Column = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "TitleTxt";
+    var Direction = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var AppPath1 = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ?
+                      (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+}
+@using (Html.BeginForm("Create", "GalleryListing",
+                                          new
+                                          {
+                                              glt = TypeMasterID,
+                                              glid = ListingID,
+                                              pagesize = PageSize,
+                                              page = Page,
+                                              Column = Column,
+                                              Direction = Direction,
+                                          },
+                                        FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankMasterListing" href='@Url.Action("Index", "GalleryListing",
+                     new
+                     {
+                         glt = TypeMasterID,
+                         glid = ListingID,
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                         )'>
+
+                    <text>
+                        @Html.Raw(@ViewBag.ImageTypeTitle) Listing
+                    </text>
+                </a>
+            </li>
+            <li>
+                @if (EncryptDecrypt.Decrypt(ListingID) != "0")
+                {
+                    {<text>@Model.TitleTxt - </text> }
+                }
+                @Html.Raw(@ViewBag.PageTitle + " Details")
+            </li>
+        </ul>
+    </div>
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>@Html.Raw(@ViewBag.PageTitle + " Details")
+                </h4>
+
+                <div class="btn-group">
+                    <a id="ankback" href='@Url.Action("Index", "GalleryListing",
+                     new
+                     {
+                         glt = TypeMasterID,
+                         glid = ListingID,
+                         pagesize = PageSize,
+                         page = Page,
+                         Column = Column,
+                         Direction = Direction,
+                     }
+                )'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Title:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.TitleTxt, new { @class = "required titleTxt", maxlength = (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == 1) ? "100" : "200", @placeholder = "Maximum 100 characters" })
+                    @Html.ValidationMessageFor(m => m.TitleTxt)
+                </div>
+            </div>
+            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Video) || Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Podcast))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Author:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.AuthorTxt, new { @class = "required titleTxt", maxlength = (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == 1) ? "100" : "200", @placeholder = "Maximum 100 characters" })
+                        @Html.ValidationMessageFor(m => m.AuthorTxt, null, new { @class = "valUsername" })
+                    </div>
+                </div>
+            }
+            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Podcast) || Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Video))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Page URL:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.URLTxt, new { @class = "required alphanumeric nospace", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                        <br />
+                        @Html.ValidationMessageFor(m => m.URLTxt)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Upload type:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        <div class="select-style">
+                            @{
+                                var listItemUploadType = new List<SelectListItem>
+                        { new SelectListItem { Text = "Embeded URL", Value = "1" }, new SelectListItem { Text = "File Uploader", Value = "0" } };
+                            }
+                            @Html.DropDownListFor(model => model.UploadTypeNbr, listItemUploadType, new { onchange = "setfileuploadOncahnge(this.value)" }
+                        )
+                        </div>
+                    </div>
+                </div>
+                <div class="row embededurl">
+                    <div class="col20">
+                        <label>
+                            Embedded @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Podcast)) { <text>Podcast</text> } else if(Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Video)) { <text>Video</text> } URL:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextAreaFor(m => m.EmbededURLTxt, new { @class = "required", maxlength = "300", @placeholder = "Maximum 300 characters" })
+                        @Html.ValidationMessageFor(m => m.EmbededURLTxt, null, new { @class = "" })
+                    </div>
+                </div>
+                                }
+            @if (Convert.ToInt32(Listingtype) != Convert.ToInt32(GalleryListingTypeAlias.FAQ) && Convert.ToInt32(Listingtype) != Convert.ToInt32(GalleryListingTypeAlias.FAQCategory))
+            {
+                <div class="row dvimage" id="dvimage">
+                    <div class="col20">
+                        <label>
+                            @if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.ImageListing || Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.PhotoGallery || Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.FAQ)
+                            {<text>Upload Image:</text>}
+                            else if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.DocumentViewer)
+                            {<text>Upload Document:</text>}
+                            else if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.Podcast)
+                            {<text>Podcast Upload:</text>}
+                            else if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.Video)
+                            {<text>Video Upload:</text>}
+                            <span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.PhotoGallery)
+                        {<input type="file" value="" accept=".jpg,.jpeg,.png,.gif"
+                                @if (Model != null && !string.IsNullOrEmpty(Model.FileURLTxt)) { <text> class="cropedfileupload" name="PhotoGalleryimageupload" id="PhotoGalleryimageupload" </text>                         } else { <text> class="fileinput required cropedfileupload" id="PhotoGalleryimageupload" name="PhotoGalleryimageupload" </text>                                                } />
+                        }
+                        else
+                        {
+
+                            <input type="file" value="" accept=@if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.ImageListing)
+                        {<text> ".jpg,.jpeg,.png,.gif" </text>                    } else if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.DocumentViewer) { <text> ".pdf,.doc,.docx,.xls,.xlsx" </text>                    } else if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.Podcast) { <text> ".mp3" </text>                    } else if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.Video) { <text> ".mp4" </text>                    }
+                                   @if (Model != null && !string.IsNullOrEmpty(Model.FileURLTxt)) { <text> class="@if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.PhotoGallery)
+                            {<text> cropedfileupload</text>}" name="imageupload" id="imageupload" </text>                       } else { <text>
+                                   class="@if (Convert.ToInt64(EncryptDecrypt.Decrypt(TypeMasterID)) == (long)GalleryListingTypeAlias.PhotoGallery)
+                               {<text>fileinput required cropedfileupload</text>}
+                               else
+                               {<text>fileinput required</text>}" name="imageupload" id="imageupload"
+                                   </text>                    } />
+
+                        }
+
+
+                        <span class="fontsize">
+                            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing))
+                            {
+                                <text>Ideal image size is 1500px * 645px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                            }
+                            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer))
+                            {
+                                <text>Only PDF/DOC/DOCX/XLSX/XLS files are allowed and maximum document size is 10 MB.</text>
+                            }
+                            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery))
+                            {
+                                <text>Ideal image size is 260px * 135px.Only JPG/ JPEG/ GIF/ PNG files are allowed and maximum image size is 4 MB.</text>
+                            }
+                            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Podcast))
+                            {
+                                <text>Only MP3 files are allowed and maximum podcast size is 10 MB.</text>
+                            }
+                            @if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) == Convert.ToInt32(GalleryListingTypeAlias.Video))
+                            {
+                                <text>Only MP4 files are allowed and maximum video size is 15 MB.</text>
+                            }
+                        </span>
+                        <span class="field-validation-error" style="display: none;" id="input_file_upload_error_img">This field is required.</span>
+                        @Html.ValidationMessageFor(m => m.FileURLTxt, null, new { @id = "err_ImagePathTxt" })
+                        <br />
+                        @if (Model != null && !string.IsNullOrEmpty(Model.FileURLTxt))
+                    {
+                            <div id="modelimage">
+                                @if (Model.TypeMasterID == 1 || Model.TypeMasterID == 5)
+                                {
+                                    @Html.Raw(string.Format("<text><img src=\"{0}\" alt=\"Image\" height=\"70px\" width=\"100px\" /></text>", Url.Content(@Href(Model.FileURLTxt).Replace("images", "thumbnails_small"))))
+                                }
+                                @if (Model.TypeMasterID == 2)
+                                {
+                                    @Html.Raw(string.Format("<text><a href=\"{0}\" target=\"_blank\" style=\"color:blue;cursor:pointer;text-decoration:underline;\">{1}</a></text>", Model.FileURLTxt.Replace("~", AppPath1), "Click here to view document"))
+                                }
+                                @if (Model.TypeMasterID == 3 && !string.IsNullOrEmpty(Model.FileURLTxt))
+                                {
+
+                                    <audio controls>
+                                        <source src="@AppPath1@(Model.FileURLTxt.Replace("~/", "/"))" type="audio/mpeg">
+                                        Your browser does not support the audio tag.
+                                    </audio>
+                                }
+                                @if (Model.TypeMasterID == 4 && !string.IsNullOrEmpty(Model.FileURLTxt))
+                                {
+                                    <video controls="controls" width="80%" height="500px"  class="doc_view" style="overflow: auto" align="absMiddle">
+                                        <source src="@AppPath1@(Model.FileURLTxt.Replace("~/", "/"))" type="video/mp4">
+                                        Your browser does not support the video.
+                                    </video>
+                                    @*<video controls="" class="doc_view" type="video/mp4" poster="~/Content/images/postermp3.jpg" autoplay="false" preload="auto"   src="@AppPath1@(Model.FileURLTxt.Replace("~/", "/"))" width="80%" height="500px" style="overflow: auto" align="absMiddle"></video>*@
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+                if (Convert.ToInt32(EncryptDecrypt.Decrypt(TypeMasterID)) != Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer))
+                {
+                <div class="row dvaltimage">
+                    <div class="col20">
+                        <label>
+                            Alt Image Text:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.AltImageTxt, new { @class = "required", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                        @Html.ValidationMessageFor(m => m.AltImageTxt)
+                    </div>
+                </div>
+                    }
+                }
+            @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery))
+            {
+
+                <div class="row metatitle">
+                    <div class="col20">
+                        <label>
+                            Page URL:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.URLTxt, new { @class = "required alphanumeric nospace", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                        <br />
+                        @Html.ValidationMessageFor(m => m.URLTxt)
+                    </div>
+                </div>
+            }
+            @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.Podcast) || Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.Video) || Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery))
+            {
+                <div class="common-fieldset metatitle">
+                    <span>Banner Image</span>
+                    <div class="row metatitle">
+                        <div class="col20">
+                            <label>
+                                Inner Image:
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.DropDownListFor(m => m.BannerImageID, ViewBag.InnerImages as SelectList, "--- Select Banner Image ---", new
+                                       { @class = "ddl common-width", onchange = "ddlInnerImagesChange(this.value)" })
+                            <span id="ImageIDErrmsg" style="color:#C30; font-size:12px; font-family:Arial,sans-serif; display:none;">This field is required.</span>
+                            @*@{
+                                var list = new SelectList(ViewBag.InnerImagesTitle, "ImageID", "TitleTxt");
+                            }
+                            @Html.DropDownListFor(m => m.BannerImageID, list as SelectList, "--- Select Inner Image ---", new { @class = "ddl", onchange = "ddlInnerImagesChange(this.value)", @name = "ddlInnerImages" })
+                            <span id="ImageIDErrmsg" style="color:#C30; font-size:12px; font-family:Arial,sans-serif; display:none;">This field is required.</span>*@
+                        </div>
+                    </div>
+
+                    <div class="row metatitle">
+                        <div class="col20">
+                            <label>
+                                Alt Image Text:
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.AltBannerImageTxt, new { maxlength = "1000", @placeholder = "Maximum 1000 characters", @class = " common-width" })
+                            <br />
+                            @*@Html.ValidationMessageFor(m => m.AltBannerImageTxt)*@
+                        </div>
+                    </div>
+
+                    <div class="row metatitle">
+                        <div class="col20">
+                            <label>
+                                Banner Image Abstract:
+                            </label>
+                        </div>
+                        <div class="col75" id="tdCkEditor">
+                            @Html.TextAreaFor(m => m.BannerImageAbstractTxt, new { @class = "AbstractTxt required", id = "AbstractTxtInner", name = "AbstractTxt" })
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Description:
+                        </label>
+                    </div>
+                    <div class="col75">
+                        @Html.TextAreaFor(m => m.DescriptionTxt, new { @class = "ckeditor", @id = "ckDescriptionTxt", htmlEncodeOutput = true })
+                        @*@Html.TextAreaFor(m => m.DescriptionTxt, new { @class = "DescriptionTxt", id = "AbstractTxt",name = "AbstractTxt" })*@
+                    </div>
+                </div>
+            }
+            @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.Video))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Show on Home:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40" id="news-img">
+                        @Html.DropDownList("ShowonHomeInd", ViewBag.ShowonHomeInd as SelectList)
+                    </div>
+                </div>
+            }
+            @if (@*Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer) ||*@ Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.Video))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Display Start Date:
+                        </label>
+                    </div>
+                    <div class="col40" id="divCreatedDate">
+                        @Html.TextBoxFor(m => m.DisplayStartDate, new
+                   {
+                       @Value = ViewBag.StartDateStr,
+                       maxlength = "20",
+                       @class = "datetimepicker",
+                       @placeholder = "MM/DD/YYYY hh:mm",
+                       @id = "DisplayStartDate",
+                       ondrop = "return false;",
+                       onpaste = "return false;"
+                   })
+                        <span id="DisplayStartDatemsg" style="display:none;" class="errors">This field is required.</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Display End Date:
+                        </label>
+                    </div>
+                    <div class="col40" id="divCreatedDate">
+                        @Html.TextBoxFor(m => m.DisplayEndDate, new
+                   {
+                       @Value = ViewBag.EndDateStr,
+                       maxlength = "20",
+                       @class = "datetimepicker",
+
+                       @placeholder = "MM/DD/YYYY hh:mm",
+                       @id = "DisplayEndDate",
+                       ondrop = "return false;",
+                       onpaste = "return false;"
+                   })
+                        <span id="spnHome" class="errors"></span>
+                        <span id="DisplayEndDatemsg" style="display:none;" class="errors">This field is required.</span>
+                    </div>
+                </div>
+            }
+            @if (Convert.ToInt32(Listingtype) != Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer) && Convert.ToInt32(Listingtype) != Convert.ToInt32(GalleryListingTypeAlias.ImageListing))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Status:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.DropDownList("StatusInd", ViewBag.StatusInd as SelectList)
+                    </div>
+                </div>
+            }
+            
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Date Added:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40" id="divCreatedDate">
+                    @Html.TextBoxFor(m => m.ListingCreateDate, new
+               {
+                   @Value = ViewBag.Date,
+                   maxlength = "10",
+                   @class = "nospace datepicker dateonly",
+                   @readonly = true,
+                   @placeholder = "MM/DD/YYYY",
+                   @id = "ListingCreateDate",
+                   ondrop = "return false;",
+                   onpaste = "return false;"
+               })
+                </div>
+            </div>
+            @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery) || Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.Video) || Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.Podcast))
+            {
+
+                <div class="row metatitle">
+                    <div class="col20">
+                        <label>
+                            Page Meta Title:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.PageMetaTitleTxt, new { @class = "required", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                        <br />
+                        @Html.ValidationMessageFor(m => m.PageMetaTitleTxt)
+                    </div>
+                </div>
+
+                <div class="row metatitle">
+                    <div class="col20">
+                        <label>
+                            Meta Description:
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextAreaFor(m => m.PageMetaDescriptionTxt, new { maxlength = "2000", @placeholder = "Maximum 2000 characters" })
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col20">&nbsp;</div>
+                <div class="col40">
+                    <input type="submit" value="@ViewBag.Submit" id="btnsubmit"
+                           class="submit-btn submit CreateInner" />
+
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                    <input type="hidden" value="" name="hdnCreateDate" id="hdnCreateDate" />
+                    @Html.HiddenFor(m => m.ListingID)
+                    @Html.HiddenFor(m => m.FileURLTxt)
+                    @Html.HiddenFor(m => m.TypeMasterID)
+                    @Html.HiddenFor(m => m.IsDeletedInd)
+                    @Html.HiddenFor(m => m.CreateDate)
+                    @Html.HiddenFor(m => m.CreateByID)
+                    @Html.HiddenFor(m => m.LastModifyByID)
+                    @Html.HiddenFor(m => m.LastModifyDate)
+                    @Html.HiddenFor(m => m.SelectedStatus)
+                    @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.ImageListing))
+                {
+                        <input type="hidden" value="460px" id="CropimgHeight">
+                        <input type="hidden" value="1025px" id="CropimgWidth">
+                    }
+                    @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.DocumentViewer))
+                {
+                        <input type="hidden" value="300px" id="CropimgHeight">
+                        <input type="hidden" value="1370px" id="CropimgWidth">
+                    }
+                    @if (Convert.ToInt32(Listingtype) == Convert.ToInt32(GalleryListingTypeAlias.PhotoGallery))
+                {
+                        <input type="hidden" value="135px" id="CropimgHeight">
+                        <input type="hidden" value="260px" id="CropimgWidth">
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+    </div>
+    <div class="customprogressbar" style="display: none;">
+        <div></div>
+    </div>
+    @*Div for blocking the user untill the page is not fully loaded.*@
+                                <div id="div" style="position: fixed; bottom: 0; height: 100%; width: 100%; left: 0; right: 0; top: 0; opacity: 0.5; background-color: #000; color: #fff; z-index: 9999;">
+                                </div>
+                                }
+
+<script src="@Href("~/Scripts/js/jquery-1.10.2.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery-ui-1.11.2.min.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/additional-methods.js")"></script>
+<script src="@Href("~/Scripts/js/ckeditor/ckeditor.js")"></script>
+<script src="~/Scripts/js/Fileuploder.js"></script>
+<script type="text/javascript" src="@Href("~/Scripts/js/ckfinder/ckfinder.js")"></script>
+<link href="~/Scripts/admin/css/jquery.datetimepicker.min.css" rel="stylesheet" />
+<script type="text/javascript" src="~/Scripts/js/jquery.datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+
+    $('#ListingCreateDate').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+
+    });
+    $('.datetimepicker').datetimepicker({
+        format: 'm/d/Y h:i A',
+        step: 1
+    });
+
+    // code for blocking the user untill the page is not fully loaded.
+    $(function () {
+        $("#div").fadeOut();
+        //Code to show alert message
+        var alertmessage = '@AlertTitle';
+        if (alertmessage) {
+            alert(alertmessage);
+        }
+        $('#DisplayStartDate', '#DisplayEndDate', '#ListingCreateDate', '#StatusInd', '#ShowonHomeInd').removeClass('input-validation-error');
+        $("#TitleTxt").focus();
+        var UploadType = '@Model.UploadTypeNbr';
+        if (type == 3 || type == 4) {
+            UploadType = $('#UploadTypeNbr :selected').text() == "Embeded URL" ? "true" : "false";
+            setfileuploadOncahnge(UploadType);
+        }
+        var nospace = $(".nospace");
+        var funcfb = function () {
+            $(this).val($(this).val().replace(/\s/g, ''));
+        }
+        if (nospace != null && nospace.length > 0) {
+            nospace.keyup(funcfb).blur(funcfb);
+        }
+    });
+
+    // Get Listing type of the gallery Listing
+    //.. for pager dropdown selectedvalue
+    var type = '@Listingtype';
+    if (type == "1") {
+        $("#ankMasters").addClass('select');
+        $('#ankimagelisting').addClass('select');
+    }
+    else if (type == "2") {
+        $('#ankMasters').addClass('select');
+        $('#ankDocumentViewer').addClass('select');
+    }
+    else if (type == "3") {
+        $('#ankMasters').addClass('select');
+        $('#ankPodCast').addClass('select');
+    }
+    else if (type == "4") {
+        $('#ankMasters').addClass('select');
+        $('#ankVideos').addClass('select');
+        $('#ankVideo').addClass('select');
+    }
+    else if (type == "5") {
+        $('#ankMasters').addClass('select');
+        $('#ankPhotoGallery').addClass('select');
+    }
+    else if (type == "6") {
+        $('#ankMasters').addClass('select');
+        $('#ankFAQ').addClass('select');
+    }
+    else {
+        $("#ankMasters").addClass('select');
+    }
+    // code for restrict show multiple error msgs on Image uploading.
+    $('#btnsubmit').on('click', function () {
+        if ($('#input_file_upload_error_img').css('display') == 'block') {
+            $('#input_file_upload_error_img').css({ 'display': 'none' });
+            $('#err_ImagePathTxt').css({ 'display': 'block' });
+        }
+
+        if ('@Listingtype' == "2" || '@Listingtype' == "4") {
+            //Code to check dispaly dates comaprision
+            var h_start_time = $('#DisplayStartDate').val();
+            var h_end_time = $('#DisplayEndDate').val();
+
+            if (h_start_time != '' && h_end_time != '') {
+                $('#DisplayEndDatemsg').css({ 'display': 'none' });
+                $('#DisplayStartDatemsg').css({ 'display': 'none' });
+                if (new Date(h_start_time) >= new Date(h_end_time)) {
+                    $('#spnHome').text('Display End Date & Time should be greater than Display Start Date & Time.');
+                    return false;
+                }
+                else {
+                    $('#spnHome').text('');
+                }
+            }
+            else {
+                $('#spnHome').text('');
+                if (h_start_time == '' && h_end_time != '') {
+                    $('#DisplayEndDatemsg').css({ 'display': 'none' });                   
+                    $('#DisplayStartDatemsg').css({ 'display': 'block' });
+                    return false;
+                }
+                else if (h_end_time == '' && h_start_time != '') {
+                    $('#DisplayStartDatemsg').css({ 'display': 'none' });                    
+                    $('#DisplayEndDatemsg').css({ 'display': 'block' });
+                    return false;
+                }
+            }
+        }
+
+        if ($('#imageupload').hasClass('required') && $('#imageupload').val().length == 0) {
+
+            $('#input_file_upload_error_img').css({ 'display': 'block' });
+        }
+        else {
+            $('#input_file_upload_error_img').css({ 'display': 'none' });
+        }
+    });
+    // Code to check extensions and size of the uploaded file
+    $('#imageupload').on('change', function () {
+        var errormsg = '';
+        var validFilesTypes = ["jpg", "jpeg", "png", "gif"];
+        var file = this;
+        var filePath = file.value;
+        var ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
+        var isValidFile = false;
+        var maxsize = 4194304;
+        var maxfsize = "4 MB";
+        if ('@Listingtype' == "1") { maxsize = 4194304; maxfsize = "4 MB"; validFilesTypes = ["jpg", "jpeg", "png", "gif"]; errormsg = "Only JPG/JPEG/PNG/GIF files are allowed."; }
+        else if ('@Listingtype' == "2") { maxsize = 10485760; maxfsize = "10 MB"; validFilesTypes = ["doc", "docx", "xls", "xlsx", "pdf"]; errormsg = "Only DOC/DOCX/XLS/XLSX/PDF files are allowed."; }
+        else if ('@Listingtype' == "3") { maxsize = 10485760; maxfsize = "10 MB"; validFilesTypes = ["mp3"]; errormsg = "Only MP3 files are allowed."; }
+        else if ('@Listingtype' == "4") { maxsize = 15728640; maxfsize = "15 MB"; validFilesTypes = ["mp4"]; errormsg = "Only MP4 files are allowed."; }
+        for (var i = 0; i < validFilesTypes.length; i++) {
+            if (ext == validFilesTypes[i]) {
+                isValidFile = true;
+                break;
+            }
+        }
+        if (!isValidFile) {
+            file.value = null;
+            file = null;
+            var element = document.getElementById('input_file_upload_error_img');
+            element.style.display = 'block';
+            element.innerHTML = errormsg;
+            return isValidFile;
+        }
+        else {
+            
+            var element = document.getElementById('input_file_upload_error_img');
+            element.style.display = 'none';
+        }
+        if (file != null) {
+            var f = file.files[0]
+            if (f.size > maxsize || f.fileSize > maxsize) {
+                file.value = null;
+                //  alert('Maximum image size is 4 MB.');
+                errormsg = ('Maximum file size is ' + maxfsize + '.');
+                isValidFile = false;
+            }
+            else { isValidFile = true; }
+        }
+        if (isValidFile == false)
+        {
+            var element = document.getElementById('input_file_upload_error_img');
+            element.style.display = 'block';
+            element.innerHTML = errormsg;
+        }
+       
+        return isValidFile;
+    });
+    $('#TitleTxt').on('change keyup', function () {
+        var url = this.value;
+        $.ajax({
+            url: '@(Url.Action("CheckURL"))',
+            type: 'POST',
+            data: JSON.stringify({ url: url.replace(/[\W_]/g, '_') }),
+            dataType: 'json',
+            contentType: 'application/json',
+            success: function (data) {
+                if (data != "" || data != null) {
+                    $("#URLTxt").val(data.toString().toLowerCase());
+                }
+            }
+        });
+    });
+    function setfileuploadOncahnge(UploadType) {
+
+        if (UploadType == "True" || UploadType == "true" || UploadType == "1") {
+            $('.dvimage').hide();
+            $('.dvaltimage').hide();
+            $('.embededurl').show();
+            //$('.field-validation-error').empty();
+            //$('.input-validation-error').each(function () {
+            //    $(this).removeClass('input-validation-error');
+            //});
+        }
+        else {
+            $('.dvimage').show();
+            $('.dvaltimage').hide();
+            $('.embededurl').hide();
+        }
+
+    }
+
+    $(function () {
+        if ('@Listingtype' == "4") { // For Videos Listing
+            var status = document.getElementById('StatusInd');
+            var soh = document.getElementById('ShowonHomeInd');
+            $("#SelectedStatus").val(status.value);
+            $("#SelectedShowonHome").val(soh.value);
+
+            $("#StatusInd").on("change", function () {
+                $("#SelectedStatus").val(status.value);
+
+                var IsActive = $("#StatusInd option:selected").text();
+                var IsShoeHome = $("#ShowonHomeInd option:selected").text();
+
+                if (IsActive.toLowerCase() == "inactive" && IsShoeHome.toLowerCase() == "yes") {
+                    alert("Show on Home Videos cannot be set to Inactive.")
+                    $("#StatusInd option[value='True']").prop("selected", "selected");
+                }
+
+            });
+            $("#ShowonHomeInd").on("change", function () {
+                $("#SelectedShowonHome").val(soh.value);
+
+                var IsActive = $("#StatusInd option:selected").text();
+                var IsShoeHome = $("#ShowonHomeInd option:selected").text();
+
+                if (IsActive.toLowerCase() == "inactive" && IsShoeHome.toLowerCase() == "yes") {
+                    alert("Inactive Videos cannot be set to Show on Home.")
+                    $("#ShowonHomeInd option[value='False']").prop("selected", "selected");
+                }
+
+            });
+        }
+    });
+    if ($("#tdCkEditor").length != 0) {
+        CKEDITOR.replace('BannerImageAbstractTxt',
+           {
+               toolbar: 'Basic',
+               BasePath: '@Href("~/Scripts/js/ckeditor/'")'
+        });
+    CKEDITOR.config.allowedContent = true;
+    }
+
+       function ddlInnerImagesChange(value) {
+            if (value == '') {
+                CKEDITOR.instances['AbstractTxtInner'].setData('');
+                $('#AltBannerImageTxt').val('');
+            }
+            else {
+                $.ajax({
+                    url: '@AppPath1' + '/Admin/Menu/GetDataForInnerImages',
+                    data: { ImgId: value },
+                    type: 'Get',
+                    success: function (result) {
+                        CKEDITOR.instances['AbstractTxtInner'].setData(result.AbstractTxt);
+                        $("#AltBannerImageTxt").val(result.AltImageTxt);
+                        $('#AltImageTxt').removeClass("input-validation-error");
+                        $('#bannerAltImageTxt').css({ "display": "none" });
+                        return false;
+                    },
+                    onerror: function () {
+                    }
+                });
+            }
+        }
+
+</script>
+@Html.Partial("_CropPartial")
+<script type="text/javascript">
+
+    if ($("#ckDescriptionTxt").length != 0) {
+        var editor = CKEDITOR.replace('ckDescriptionTxt');
+        CKEDITOR.config.allowedContent = true;
+        CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/js/ckfinder/")', rememberLastFolder: false })
+    }
+
+    CKEDITOR.env.isCompatible = true;
+</script>

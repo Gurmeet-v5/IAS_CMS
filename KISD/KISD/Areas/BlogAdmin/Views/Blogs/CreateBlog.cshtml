@@ -1,0 +1,488 @@
+﻿@using System.Web.Mvc;
+@using System.Web.Optimization;
+@using KISD.Areas.BlogAdmin.Models;
+@model BlogsModel
+@{
+    Layout = "~/Areas/BlogAdmin/Views/Shared/_Layout.cshtml";
+    var pager = TempData["pager"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] ?? "BlogID";
+    var sortDirection = Request.QueryString["Direction"] ?? "Ascending";
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var pagesize = Request.QueryString["pagesize"] ?? Common._pageSize.ToString();
+    var page = Request.QueryString["page"] ?? Common._currentPage.ToString();
+    var Blogid = Request.QueryString["BlogID"] ?? "0";
+    var save_UpdatePanel = ViewBag.Submit;// Stores the value for submit button...either save or Update.
+    var strCategoryid = Model.strCategoryid != null ? Model.strCategoryid : "0";
+}
+@using (Html.BeginForm("CreateBlog", "Blogs", new { pagesize = pagesize, page = page, Blogid = Blogid, Column = sortColumn, Direction = sortDirection }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+
+                <a id="ankMasterListing" href='@Url.Action("BlogsListing", "Blogs",
+new
+{
+    pagesize = pagesize,
+    page = page,
+    Blogid = Blogid,
+    Column = sortColumn,
+    Direction = sortDirection
+}
+)'>
+                    Post Listing
+                </a>
+            </li>
+            <li>
+                @ViewBag.Title
+            </li>
+        </ul>
+    </div>
+    <!-- Breadcrumb Ends -->
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@ViewBag.Title </h4>
+                <div class="btn-group">
+
+                    <a id="ankback" href='@Url.Action("BlogsListing", "Blogs", new
+                                        {
+                                            pagesize = pagesize,
+                                            page = page,
+                                            Blogid = Blogid,
+                                            Column = sortColumn,
+                                            Direction = sortDirection,
+                                        })'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Title:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.TitleTxt, new { @class = "required disableSpecialChar", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.TitleTxt)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Blog URL:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.SlagTxt, new { @class = "required alphanumeric nospace disableSpecialChar", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.SlagTxt)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Author:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.DropDownListFor(m => m.AuthorNameID, ViewBag.AuthorName as SelectList, new { @class = "required" })
+                    <br />
+                    <span id="spnAuthorNameTxt" style="color:#C30; font-size:12px; font-family:Arial,sans-serif; display:none;">This field is required.</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Category:
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.DropDownListFor(x => x.strCategoryid, ViewBag.Category as SelectList)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Image:
+                    </label>
+                </div>
+                <div class="col40">
+
+                    <input type="file"
+                           @if (Model != null && !string.IsNullOrEmpty(Model.ImagePathTxt)) { <text> class="cropedfileupload" name="imageupload" </text>    } else { <text> class="cropedfileupload" id="ImagePathTxt" name="ImagePathTxt" </text>    } />
+
+                    <br />
+                    <span class="fontsize">(Ideal image size is 760px*300px and Maximum image size is 4 MB. Only JPG/JPEG/GIF/PNG files are allowed.)</span>
+
+                    <span class="field-validation-error" style="display: none;" id="input_file_upload_error_img"></span>
+
+                    <br />
+                    @if (Model != null && !string.IsNullOrEmpty(Model.ImagePathTxt))
+                    {
+                    @Html.Raw(string.Format("<text><img src=\"{0}\" alt=\"Image\"  width=\"100px\" height=\"100px\" /></text>", Url.Content(@Href(Model.ImagePathTxt))))
+                    }
+                </div>
+            </div>
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Tags:
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.ListBoxFor(m => m.SelectedTagsID, new SelectList(Model.TagList, "Value", "Text"),
+                                            new { @class = "input-tags" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Allow Comments:
+                    </label>
+                </div>
+                <div class="col40">
+                    <div class="">
+                        @Html.DropDownListFor(m => m.IsCommentEnabledInd, ViewBag.IsCommentEnabledInd as SelectList)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Social Media:
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.ListBoxFor(m => m.SelectedSocialMedia, new SelectList(Model.SocialMediaList, "Value", "Text", Model.SocialMediaList.SelectedValue),
+                                            new { @Id = "lstSocialMediaList" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Abstract:
+                    </label>
+                </div>
+                <div class="col75" id="tdCkEditor_abstract">
+                    @Html.TextAreaFor(m => m.AbstractTxt,
+                                                     new
+                                                     {
+                                                         @class = "AbstractTxt_mini",
+                                                         id = "AbstractTxt_mini",
+                                                         name = "AbstractTxt_mini"
+
+                                                     })
+                                  </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Blog Content:
+                    </label>
+                </div>
+                <div class="col75" id="tdCkEditor">
+                    @Html.TextAreaFor(m => m.BlogDescription,
+                                                     new
+                                                     {
+                                                         @class = "AbstractTxt",
+                                                         id = "AbstractTxt",
+                                                         name = "AbstractTxt"
+                                                     })
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Posted On:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.PostedDate, new { @Value = Model.PostedDate.ToShortDateString(), @readonly = "true", maxlength = "10", @class = "required  datepicker nospace", @placeholder = "MM/DD/YYYY", ondrop = "return false;", onpaste = "return false;" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Status:
+                    </label>
+                </div>
+                <div class="col40">
+                    <div class="">
+                        @Html.DropDownListFor(m => m.IsActiveInd, ViewBag.IsActiveInd as SelectList)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Page Meta Title:<span class="requiredstar">*</span>
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextBoxFor(m => m.MetaTitleTxt, new { @class = "required disableSpecialChar", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                    <br />
+                    @Html.ValidationMessageFor(m => m.MetaTitleTxt)
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">
+                    <label>
+                        Meta Description:
+                    </label>
+                </div>
+                <div class="col40">
+                    @Html.TextAreaFor(m => m.MetaDescriptionTxt, new { @class = "disableSpecialChar", maxlength = "2000", @placeholder = "Maximum 2000 characters" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col20">&nbsp;</div>
+                <div class="col40">
+                    @Html.HiddenFor(m => m.BlogID)
+                    <input type="submit" value="@ViewBag.Submit"
+                           class="submit-btn submit" id="btnSave" />&nbsp;&nbsp;&nbsp;
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fancybox-overlay fancybox-overlay-fixed" style="width: auto; height: auto; display: none;" id="uploaderprocess">
+    </div>
+    <div class="customprogressbar" style="display: none;">
+        <div>
+
+        </div>
+    </div>
+    // Page Loader
+    <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+    </div>
+}
+
+<script src="@Href("~/Scripts/js/jquery.validate.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+<script src="@Href("~/Scripts/js/additional-methods.js")"></script>
+<script src="@Href("~/Scripts/js/ckeditor/ckeditor.js")"></script>
+<script src="~/Scripts/js/ckfinder/ckfinder.js"></script>
+<script src="~/Scripts/js/Fileuploder.js"></script>
+<script src="~/Scripts/js/fancybox/jquery.fancybox.js" type="text/javascript"></script>
+<link href="~/Scripts/js/Fancybox/jquery.fancybox.css" rel="stylesheet" />
+
+<script type="text/javascript">
+    var $ = jQuery.noConflict();
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+
+    $("#ankMasterAdvertisement").addClass('select');
+
+    $("#ankAdvertisement").addClass('select');
+
+    $("#PageTitleTxt").focus();
+    var alertmessage = '@alertmessage';
+    if (alertmessage)
+        alert(alertmessage);
+
+    var type = 3;
+    $(document).ready(function () {
+        var nospace = $(".nospace");
+        var funcfb = function () {
+            $(this).val($(this).val().replace(/\s/g, ''));
+        }
+        if (nospace != null && nospace.length > 0) {
+            nospace.keyup(funcfb).blur(funcfb);
+        }
+
+        if ($("#tdCkEditor").length != 0) {
+            // Mini ck converted to full ck
+            var editor = CKEDITOR.replace('AbstractTxt');
+            CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/ckfinder/")', rememberLastFolder: false })
+            CKEDITOR.config.allowedContent = true;
+            CKEDITOR.editorConfig = function (config) {
+                config.filebrowserImageUploadUrl = '@Href("~/Scripts/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images")';
+            };
+        }
+
+        if ($("#tdCkEditor_abstract").length != 0) {
+            CKEDITOR.replace('AbstractTxt_mini',
+                   {
+                       toolbar: 'Basic',
+                       BasePath: '@Href("~/Scripts/ckeditor/'")'
+                   });
+            CKEDITOR.config.allowedContent = true;
+        }
+
+    });
+    var height = '';
+    if (type == '1') {
+        height = '500';
+    }
+    else {
+        height = '300';
+    }
+
+    $('.cropedfileupload').on('change', function (e) {
+        try {
+            showprogress();
+            if (!uploadimages(this)) {
+                hideprogress();
+                $('#input_file_upload_error_img1').hide();
+                return false;
+            }
+            var files = e.target.files;
+            if (files.length > 0) {
+                if (window.FormData !== undefined) {
+                    var data = new FormData();
+                    for (var x = 0; x < files.length; x++) {
+                        data.append("file" + x, files[x]);
+                    }
+                    $('#input_file_upload_error_img1').hide();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("UploadCroppedImage", "CropImage")',
+                        contentType: false,
+                        processData: false,
+                        data: data,
+                        success: function (result) {
+                            hideprogress();
+                            $.fancybox.open({
+                                href: '@Url.Action("Index", "CropImage")' + '?width=760&height=' + height + '&imagename=' + result,
+                                type: 'iframe',
+                                scrolling: 'true',
+                                closeBtn: false,
+                                closeClick: false,
+                                helpers: {
+                                    overlay: { closeClick: false }
+                                },
+                                keys: {
+                                    close: null
+                                },
+                                width: 1000
+
+                            });
+                        },
+                        error: function (xhr, status, p3, p4) {
+                            var err = "Error " + " " + status + " " + p3 + " " + p4;
+                            if (xhr.responseText && xhr.responseText[0] == "{")
+                                err = JSON.parse(xhr.responseText).Message;
+                            console.log(err);
+                        }
+                    });
+                } else {
+                }
+            }
+        }
+        catch (e) {
+            alert(e);
+        }
+    });
+    $("#ankmasterposts").addClass('select');
+</script>
+<script src="~/Scripts/js/jquery-ui-1.11.2.min.js"></script>
+<script type="text/javascript">
+        $(function () {
+            $('.datepicker').datepicker({
+                changeMonth: true,
+                changeYear: true,
+                yearRange: (new Date().getFullYear() - 10).toString() + ':' + (new Date().getFullYear() + 10).toString()
+            });
+        });
+</script>
+<link href="~/Areas/BlogAdmin/Scripts/dist/css/selectize.default.css" rel="stylesheet" />
+<script src="~/Areas/BlogAdmin/Scripts/dist/js/standalone/selectize.js"></script>
+<script type="text/javascript">
+    $('#SelectedTagsID').selectize({
+        plugins: ['remove_button'],
+        persist: false,
+        create: true,
+        render: {
+            function (data, escape) {
+                return '<div>"' + escape(data.text) + '"</div>';
+            }
+        },
+        onDelete: function (values) {
+            return confirm(values.length > 1 ? 'Are you sure you want to remove these ' + values.length + ' items?' : 'Are you sure you want to remove this tag ?');
+        },
+    });
+
+    var blogid = '@Model.BlogID';
+    if (blogid == 0) {
+        var $select = $('#SelectedTagsID').selectize();
+        var control = $select[0].selectize;
+        control.clear();
+    }
+    else {
+        var $select = $('#SelectedTagsID').selectize();
+        var control = $select[0].selectize;
+
+    }
+</script>
+<script>
+    CKEDITOR.env.isCompatible = true;
+</script>
+<script>
+
+    $("#btnSave").on("click", function () {
+        $("#CategoryID").removeClass("input-validation-error")
+        //Author Drop down
+        var value = $("#AuthorNameID").val();
+        if (value == 0) {
+            $("#AuthorNameID").addClass("input-validation-error");
+            $("#spnAuthorNameTxt").show();
+        }
+        else {
+            $("#AuthorNameID").removeClass("input-validation-error");
+            $("#spnAuthorNameTxt").hide();
+        }
+    });
+
+    $(document).ready(function () {
+        var val = '@strCategoryid';
+
+    });
+
+    //Dropdown validation on Auther Drop Down
+    $("#AuthorNameID").on("change", function () {
+        var value = $("#AuthorNameID").val();
+        if (value == 0) {
+            $("#AuthorNameID").addClass("input-validation-error");
+            $("#spnAuthorNameTxt").show();
+        }
+        else {
+            $("#AuthorNameID").removeClass("input-validation-error");
+            $("#spnAuthorNameTxt").hide();
+        }
+    });
+</script>

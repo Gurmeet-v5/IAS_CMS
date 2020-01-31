@@ -1,0 +1,479 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using KModel = KISD.Areas.Admin.Models;
+@model KModel.PagedViewModel<KModel.RightSectionModel>
+@{
+    Layout = null;
+    var RightSectionID = Request.QueryString["rsid"] != null ? Request.QueryString["rsid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var ParentID = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var ct = Request.QueryString["ct"] != null ? Request.QueryString["ct"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var mtid = Request.QueryString["mtid"] != null ? Request.QueryString["mtid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+        (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+          + "/Admin/RightSection/SubRightSectionListing?pid=" + ParentID
+                  + "&ct=" + ct
+                  + "&mtid=" + mtid
+         + "&mpage=" + (Request.QueryString["mColumn"] ?? "RightSectionCreateDate")
+          + "&mColumn=" + (Request.QueryString["mColumn"] ?? "RightSectionCreateDate") + "&mDirection="
+          + (Request.QueryString["mDirection"] ?? "Descending") + "&mpagesize="
+          + (Request.QueryString["mpagesize"] ?? "10") + "&page=1&Column="
+          + (Request.QueryString["Column"] ?? "RightSectionCreateDate") + "&Direction="
+          + (Request.QueryString["Direction"] ?? "Descending") + "&pagesize=";
+    AppPath = KModel.Common.ReturnValidPath(AppPath);
+    var masterId = Convert.ToInt64(KModel.EncryptDecrypt.Decrypt(mtid));
+}
+
+<div class="Main_PartialHeader">
+    <div class="pager paging-top">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style" id="divPager">
+                <select id="ddlPager" name="ddlPager" class="ddlPgr">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+        }
+        <!-- pagination -->
+    </div>
+
+    <div class="wrapper">
+        <div class="tab-pane active">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               column.For(x => x.TitleTxt).Named("Title").SortColumnName("TitleTxt").HeaderAttributes(@style => "width:20%", @class => "left sort", @align => "left").Attributes(@class => "left maxMenuTitleTxt");
+               column.For(x => x.PageTitleTxt).Named("Page Title").SortColumnName("PageTitleTxt").HeaderAttributes(@style => "width:20%", @class => "left sort", @align => "left").Attributes(@class => "left maxPageTitleTxt");
+               column.For(x => Html.CheckBox("mycheckbox", x.StatusInd.Value, new { @class = "checkbox status", @text = AppPath, @value = x.RightSectionID })).Encode(false).Header("<th style='width:10%'  data-hide='phone'>Status</th>").Attributes(@align => "center");
+               column.For(x => x.RightSectionCreateDate.Value.ToShortDateString()).Named("Date Added").SortColumnName("RightSectionCreateDate").HeaderAttributes(@class => "sort", @style => "width:15%").Attributes(@align => "center");
+
+               column.For(x => Html.ActionLink("Edit", "CreateSubRightSection", "RightSection", new
+               {
+                   rsid = KModel.EncryptDecrypt.Encrypt(x.RightSectionID.ToString()),
+                   pid = ParentID,
+                   ct = ct,
+                   mtid = mtid,
+                   pagesize = Request.QueryString["pagesize"] ?? "10",
+                   page = Request.QueryString["page"] ?? "1",
+                   Column = Request.QueryString["Column"] ?? "CreateDate",
+                   Direction = Request.QueryString["Direction"] ?? "Descending",
+                   mpagesize = Request.QueryString["mpagesize"] ?? "10",
+                   mpage = Request.QueryString["mpage"] ?? "1",
+                   mColumn = Request.QueryString["mColumn"] ?? "CreateDate",
+                   mDirection = Request.QueryString["mDirection"] ?? "Ascending",
+               }, new { @class = "edit", @title = "Edit" })).Named("Edit").Sortable(false)
+                   .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" }, { "class", "footable-sorted-desc" } })
+                   .Attributes(@align => "center");
+               column.For(x => Html.ActionLink("Delete", "DeleteSubRightSection", "RightSection", new
+               {
+                   rsid = KModel.EncryptDecrypt.Encrypt(x.RightSectionID.ToString()),
+                   pid = ParentID,
+                   ct = ct,
+                   mtid = mtid,
+                   pagesize = Request.QueryString["pagesize"] ?? "10",
+                   page = Request.QueryString["page"] ?? "1",
+                   Column = Request.QueryString["Column"] ?? "CreateDate",
+                   Direction = Request.QueryString["Direction"] ?? "Descending",
+                   mpagesize = Request.QueryString["mpagesize"] ?? "10",
+                   mpage = Request.QueryString["mpage"] ?? "1",
+                   mColumn = Request.QueryString["mColumn"] ?? "CreateDate",
+                   mDirection = Request.QueryString["mDirection"] ?? "Ascending",
+               }, new { @class = "PostLink delete", @val = x.TitleTxt, @title = "Delete" })).Sortable(false).Named("Delete").
+                   HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone" } })
+                   .Attributes(@align => "center");
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2")
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="pager">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style">
+                <select id="ddlPager1" class="ddlPgr" name="ddlPager1">
+                    <option value="@(AppPath)10" text="10">10</option>
+                    <option value="@(AppPath)25" text="25">25</option>
+                    <option value="@(AppPath)50" text="50">50</option>
+                    <option value="@(AppPath)100" text="100">100</option>
+                    <option value="@(AppPath)0" text="0">All</option>
+                </select>
+            </div>
+            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+        }
+        <!-- pagination -->
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+    var $ = jQuery.noConflict();
+    var masterTypeID = '@masterId';
+    if (masterTypeID == '8') {
+        $("#ankMasters").addClass('select');
+        $("#ankNews").addClass('select');
+        $("#ankNewsContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '4') {
+        $("#ankMasters").addClass('select');
+        $("#ankvideo").addClass('select');
+        $("#ankVideoContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '9') {
+        $("#ankMasters").addClass('select');
+        $("#ankEvents").addClass('select');
+        $("#ankEventContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '16') {
+        $("#ankNewToKISD").addClass('select');
+        $("#ankExceptionalOpportunities").addClass('select');
+        $("#ankExceptionOppContentRightSecton").addClass('select');       
+    }
+    else if (masterTypeID == '21' || masterTypeID == '22') {
+        $("#ankHome").addClass('select');
+        $("#ankHomeMenu").addClass('select');
+    }
+    else if (masterTypeID == '23' || masterTypeID == '24') {
+        $("#ankAboutKISD").addClass('select');
+        $("#ankAboutKISDMenu").addClass('select');
+    }
+    else if (masterTypeID == '25' || masterTypeID == '26') {
+        $("#ankSchool").addClass('select');
+        $("#ankSchoolMenu").addClass('select');
+    }
+    else if (masterTypeID == '37') {
+        $("#ankAboutKISD").addClass('select');
+        $("#ankAboutContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '38') {
+        $("#ankNewToKISD").addClass('select');
+        $("#ankNewToKISDContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '44') {
+        $("#ankMasters").addClass('select');
+        $("#ankNews").addClass('select');
+        $("#ankNewsListing").addClass('select');
+    }
+    else if (masterTypeID == '45') {
+        $("#ankNewToKISD").addClass('select');
+        $("#ankExceptionalOpportunities").addClass('select');
+        $("#ankExceptionalOpportunitiesListing").addClass('select');
+    }
+    else if (masterTypeID == '17') {
+        $("#ankDepartments").addClass('select');
+        $("#ankDepartmentContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '27' || masterTypeID == '28') {
+        $("#ankNewToKISD").addClass('select');
+        $("#ankNewToKISDMenu").addClass('select');
+    }
+    else if (masterTypeID == '46') {
+        $("#ankDepartments").addClass('select');
+        $("#ankDepartmentsListing").addClass('select');
+    }
+    else if (masterTypeID == '31' || masterTypeID == '32') {
+        $("#ankDepartments").addClass('select');
+        $("#ankDepartmentsMenu").addClass('select');
+    }
+    else if (masterTypeID == '39') {
+        $("#ankParentStudents").addClass('select');
+        $("#ankParentStudentContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '29' || masterTypeID == '30') {
+        $("#ankParentStudents").addClass('select');
+        $("#ankParentStudentsMenu").addClass('select');
+    }
+    else if (masterTypeID == '40') {
+        $("#ankParentStudents").addClass('select');
+        $("#ankStaff").addClass('select');
+        $("#ankStaffContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '41') {
+        $("#ankSchoolBoard").addClass('select');
+        $("#ankSchoolBoardContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '33') {
+        $("#ankSchoolBoard").addClass('select');
+        $("#ankSchoolBoardMenu").addClass('select');
+    }
+    else if (masterTypeID == '20') {
+        $("#ankSchoolBoard").addClass('select');
+        $("#ankBoardMembers").addClass('select');
+        $("#ankBoardMemberContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '42') {
+        $("#ankSchoolBoard").addClass('select');
+        $("#ankBoardMembers").addClass('select');
+        $("#ankBoardMembersListing").addClass('select');
+    }
+    else if (masterTypeID == '43') {
+        $("#ankEmployment").addClass('select');
+        $("#ankEmploymentContentRightSecton").addClass('select');
+    }
+    else if (masterTypeID == '35') {
+        $("#ankEmployment").addClass('select');
+        $("#ankEmploymentMenu").addClass('select');
+    }
+    else if (masterTypeID == '47') {
+        $("#ankFlyPages").addClass('select');
+    }
+    else if (masterTypeID == '15') {
+        $("#ankSchoolBoard").addClass('select');
+        $("#ankBoardMembers").addClass('select');
+        $("#ankBoardScheduleContentRightSecton").addClass('select');
+    }
+    //Delete Right Section
+    $(document).ready(function () {
+
+        $("a.PostLink").click(function (e) {
+            e.preventDefault();
+            if (window.confirm('Are you sure you want to delete Right Section ' + $(this).attr('val') + '?')) {
+                $.post($(this).attr("href"), function (data) {
+                    window.location.href = data;
+                });
+            }
+        });
+    });
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+        showMessage(message);
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+    }
+
+    function showMessage(msg) {
+        $(".status").prop("disabled", true);// Make status check box enable after message hides
+        $(".displayOrder").prop("disabled", true);
+
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".status").prop("disabled", false);// Make status check box enable after message hides
+        $(".displayOrder").prop("disabled", false);
+
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlPgr').on('change', function () {
+        var url = $(this).val();
+
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+    $('.status').change(function () {
+        var qs_pager = $(".ddlPgr").find("option:selected").prop("text");//qs_pager =(dropdown page no value
+        if (qs_pager == 'All') {
+            qs_pager = '0';
+        }
+        var qs_Type; var qs_checkboxselected; var qs_value;
+        var value = this.value;
+        qs_checkboxselected = this.id.split('_')[1];
+        qs_value = value;
+        qs_Type = 'status';
+
+        var skillsSelect = document.getElementById(this.id);
+        var selected = skillsSelect.options[skillsSelect.selectedIndex].text;
+
+        if (selected == 'Active') {
+            hfid = qs_checkboxselected;
+            hfvalue = '1';
+        } else if (selected == 'InActive') {
+            hfid = qs_checkboxselected;
+            hfvalue = '0';
+        }
+        else {
+            hfid = qs_checkboxselected;
+            hfvalue = '2';
+        }
+
+        var url = $(this).attr('text') + qs_pager;
+
+        // String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: qs_checkboxselected,
+            qs_value: qs_value,
+            qs_Type: qs_Type
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+        return false;
+    });
+
+  
+
+    //Ajax call for status check box Active/Inactive
+    $('.checkbox').click(function () {
+        var pager = $(".ddlPgr").find("option:selected").prop("text");
+        pager = pager == 'All' ? '0' : pager;
+        var hfid; var hfvalue;
+
+        if ($(this).is(':checked')) {
+            hfid = $(this).attr('value')
+            hfvalue = '1';
+        } else {
+            hfid = $(this).attr('value')
+            hfvalue = '0';
+        }
+        var url = $(this).attr('text') + pager;
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'status',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: hfid,
+            hfvalue: hfvalue,
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+            }
+        });
+
+        return false;
+    });
+</script>

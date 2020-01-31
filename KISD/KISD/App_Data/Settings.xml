@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Settings>
+  <Setting>
+    <SettingID>1</SettingID>
+    <PostPerPage>10</PostPerPage>
+    <IsSearchEnabled>true</IsSearchEnabled>
+    <ThemesPath></ThemesPath>
+    <SendingEmail>3</SendingEmail>
+    <ReceivingEmail>4</ReceivingEmail>
+    <CommentPerPost>10</CommentPerPost>
+    <PagingColor>#3f3f3f</PagingColor>
+    <PagingActiveColor>#0c0c0c</PagingActiveColor>
+    <PagingHoverColor>#f79646</PagingHoverColor>
+    <ButtonColor>#3f3f3f</ButtonColor>
+    <NevigationBarColor>#dc0816</NevigationBarColor>
+    <NevigationBarFontFamily>1</NevigationBarFontFamily>
+    <NevigationBarFontFamilyTxt>Arial</NevigationBarFontFamilyTxt>
+    <NevigationBarHoverColor>#212121</NevigationBarHoverColor>
+    <NevigationBarFontColor>#ffffff</NevigationBarFontColor>
+    <NevigationBarTextFontSize>15</NevigationBarTextFontSize>
+    <NevigationBarTextFontStyle></NevigationBarTextFontStyle>
+    <FooterColor>#202730</FooterColor>
+    <SidebarTitleBackgroundColor>#e5a812</SidebarTitleBackgroundColor>
+    <SidebarTitleFontFamily>1</SidebarTitleFontFamily>
+    <SidebarTitleFontFamilyTxt>Arial</SidebarTitleFontFamilyTxt>
+    <SidebarTitleFontcolor>#eeece1</SidebarTitleFontcolor>
+    <SidebarTitleFontSize>14</SidebarTitleFontSize>
+    <!--<SideBarCategoryTextFontStyle></SideBarCategoryTextFontStyle>-->
+    <PostTitleFontColor>#0f243e</PostTitleFontColor>
+    <PostTitleFontFamily>3</PostTitleFontFamily>
+    <PostTitleFontFamilyTxt>Open Sans</PostTitleFontFamilyTxt>
+    <!--<SidebarTitleFontcolor>#548dd4</SidebarTitleFontcolor>-->
+    <PostTitleFontSize>20</PostTitleFontSize>
+    <!--<SideBarTagTextFontStyle></SideBarTagTextFontStyle>-->
+    <IsCommentEnabled>true</IsCommentEnabled>
+    <IsSocialSharingEnabled>true</IsSocialSharingEnabled>
+  </Setting>
+</Settings>

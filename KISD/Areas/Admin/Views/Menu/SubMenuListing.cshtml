@@ -1,0 +1,187 @@
+﻿@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@using KModel = KISD.Areas.Admin.Models;
+@using MenuTypeAlias = KISD.Areas.Admin.Models.ContentType;
+@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType;
+
+@model KModel.PagedViewModel<KModel.ContentModel>
+@{
+
+    var _MenuTypeId = Request.QueryString["mt"] != null ? KModel.EncryptDecrypt.Decrypt(Request.QueryString["mt"].ToString()) : ("0");
+    var _SubMenuTypeId = Request.QueryString["smt"] != null ? KModel.EncryptDecrypt.Decrypt(Request.QueryString["smt"].ToString()) : ("0");
+    var _ParentId = Request.QueryString["pid"] != null ? KModel.EncryptDecrypt.Decrypt(Request.QueryString["pid"].ToString()) : ("0");
+
+    var TypeMasterID = Request.QueryString["mtid"] != null ? Request.QueryString["mtid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var SubTypeMasterID = Request.QueryString["smtid"] != null ? Request.QueryString["smtid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var MenuTypeId = Request.QueryString["mt"] != null ? Request.QueryString["mt"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var SubMenuTypeId = Request.QueryString["smt"] != null ? Request.QueryString["smt"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+    var ParentId = Request.QueryString["pid"] != null ? Request.QueryString["pid"].ToString() : KModel.EncryptDecrypt.Encrypt("0");
+
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var pager = TempData["pager"] ?? string.Empty;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                    (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                    + "/Admin/Menu/SubMenuListing?mt=" + MenuTypeId + "&smt=" + SubMenuTypeId + "&mtid=" + TypeMasterID
+                    + "&smtid=" + SubTypeMasterID + "&pid=" + ParentId
+                    + "&mpage=" + (Request.QueryString["mColumn"] ?? "ContentCreateDate") + "&mColumn=" + (Request.QueryString["mColumn"] ?? "ContentCreateDate") + "&mDirection=" + (Request.QueryString["mDirection"] ?? "Descending")
+                    + "&mpagesize=" + (Request.QueryString["mpagesize"] ?? "10") + "&page=1&Column=" + (Request.QueryString["Column"] ?? "ContentCreateDate") + "&Direction=" + (Request.QueryString["Direction"] ?? "Descending")
+                    + "&pagesize=";
+    AppPath = KModel.Common.ReturnValidPath(AppPath);
+}
+
+@using (Html.BeginForm("SubMenuListing", "Menu", new
+{
+    mt = MenuTypeId,
+    smt = SubMenuTypeId,
+    pid = ParentId,
+    mtid= TypeMasterID,
+    smtid = SubTypeMasterID,
+    pagesize = Request.QueryString["pagesize"] ?? "10",
+    page = Request.QueryString["page"] ?? "1",
+    Column = Request.QueryString["Column"] ?? "ContentCreateDate",
+    Direction = Request.QueryString["Direction"] ?? "Ascending"
+}, FormMethod.Post, new { id = "form1", name = "form1" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                <a id="ankbacktoMasterListing" href='@Url.Action("MenuListing", "Menu", new {
+                                                                                                    mt = MenuTypeId,
+                                                                                                    smt = SubMenuTypeId,
+                                                                                                    mtid = TypeMasterID,
+                                                                                                    smtid = SubTypeMasterID,
+                                                                                                    pagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                                                                    page = Request.QueryString["mpage"] ?? "1",
+                                                                                                    Column = Request.QueryString["mColumn"] ?? "ContentCreateDate",
+                                                                                                    Direction = Request.QueryString["mDirection"] ?? "Descending" })'>
+                    @ViewBag.Title
+                </a>
+            </li>
+            <li>
+                @ViewBag.PageTitle Sub Menu Page Listing
+            </li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4>
+                    <i class="icon-reorder"></i>
+
+                    @Html.Raw(@ViewBag.PageTitle) <text> Sub Menu Page Listing</text>
+                </h4>
+                <div class="btn-group">
+                    <a id="ankback" href='@Url.Action("MenuListing", "Menu", new {
+                                                                                        mt = MenuTypeId,
+                                                                                        smt = SubMenuTypeId,
+                                                                                        mtid = TypeMasterID,
+                                                                                        smtid = SubTypeMasterID,
+                                                                                        pagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                                                        page = Request.QueryString["mpage"] ?? "1",
+                                                                                        Column = Request.QueryString["mColumn"] ?? "ContentCreateDate",
+                                                                                        Direction = Request.QueryString["mDirection"] ?? "Descending" })'>
+                        <i class="icon-arrow-left"></i>Back
+                    </a>
+
+                    <a href='@Url.Action("CreateSubmenu", "Menu", new {
+                                                                            mt = MenuTypeId,
+                                                                            smt = SubMenuTypeId,
+                                                                            pid = ParentId,
+                                                                            mtid = TypeMasterID,
+                                                                            smtid = SubTypeMasterID,
+                                                                            cid = KModel.EncryptDecrypt.Encrypt("0"),
+                                                                            pagesize = Request.QueryString["pagesize"] ?? "10",
+                                                                            page = Request.QueryString["page"] ?? "1",
+                                                                            Column = Request.QueryString["Column"] ?? "ContentCreateDate",
+                                                                            Direction = Request.QueryString["Direction"] ?? "Descending",
+                                                                            mpagesize = Request.QueryString["mpagesize"] ?? "10",
+                                                                            mpage = Request.QueryString["mpage"] ?? "1",
+                                                                            mColumn = Request.QueryString["mColumn"] ?? "ContentCreateDate",
+                                                                            mDirection = Request.QueryString["mDirection"] ?? "Descending" })'>
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+            </div>
+
+            @Html.Partial("SubMenuPartial", Model)
+        </div>
+    </div>
+    <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+    </div>
+
+    @*@Html.Hidden("returnUrl", this.Request.RawUrl)*@
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+}
+<script src="~/Scripts/js/jquery-1.10.2.js"></script>
+<script src="~/Scripts/js/jquery.jgrowl.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+    // code for blocking the user untill the page is not fully loaded.
+    $(document).ready(function () {
+        $("#div").fadeOut()
+    });
+</script>
+<script type="text/javascript">
+
+    var menutypeId = '@Convert.ToInt32(KModel.EncryptDecrypt.Decrypt(MenuTypeId))';
+    if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.HomeMenu)') {
+        $("#ankHome").addClass('select');
+        $("#ankHomeMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.AboutKISDMenu)') {
+        $("#ankAboutKISD").addClass('select');
+        $("#ankAboutKISDMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.SchoolMenu)') {
+        $("#ankSchool").addClass('select');
+        $("#ankSchoolMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.NewToKISDMenu)') {
+        $("#ankNewToKISD").addClass('select');
+        $("#ankNewToKISDMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.DepartmentsMenu)') {
+        $("#ankDepartments").addClass('select');
+        $("#ankDepartmentsMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.ParentStudentsMenu)') {
+        $("#ankParentStudents").addClass('select');
+        $("#ankParentStudentsMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.SchoolBoardMenu)') {
+        $("#ankSchoolBoard").addClass('select');
+        $("#ankSchoolBoardMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.EmploymentMenu)') {
+        $("#ankEmployment").addClass('select');
+        $("#ankEmploymentMenu").addClass('select');
+    }
+    else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.Fly)') {
+        $("#ankFlyPages").addClass('select');
+    }
+
+
+</script>
+<script src="~/Scripts/js/footable.js" type="text/javascript"></script>
+<script>
+    $(function () {
+        $('table').footable();
+    });
+</script>

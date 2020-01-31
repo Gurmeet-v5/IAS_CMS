@@ -1,0 +1,129 @@
+﻿@using KISD.Areas.Admin.Models;
+@using MvcContrib.UI.Grid;
+
+@model PagedViewModel<EmailModel>
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var pager = TempData["pager"] ?? string.Empty;
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var AlertMessage = TempData["Message"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "EmailTxt";
+    var sortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var emailtype = Request.QueryString["et"] != null ? Request.QueryString["et"].ToString() : "0";
+    var EmailTxt = emailtype == "1" ? "From Email" : "To Email";
+    var eid = Request.QueryString["eid"] != null ? Request.QueryString["eid"].ToString() : EncryptDecrypt.Encrypt("0");
+    var pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost)
+                                                + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                                                (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                                                + "/Admin/Email/Emails?et=" + emailtype
+                                                + "&page=1&Column=" + sortColumn + "&Direction=" + sortDirection + "&pagesize=";
+    AppPath = Common.ReturnValidPath(AppPath);
+}
+@using (Html.BeginForm("Emails", "Email", new { et = emailtype, pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Raw(string.Format(@ViewBag.Title))
+            </li>
+        </ul>
+    </div>
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@Html.Raw(string.Format(@ViewBag.Title))</h4>
+                <div class="btn-group" id="add" style="display:none">
+                    <a id="ankAdd" href="#">
+                        <i class="icon-plus"></i>Add
+                    </a>
+                </div>
+                <div class="btn-group" id="back" style="display:none">
+                    <a id="ankAdd" href="#">
+                        <i class="icon-minus"></i>Back
+                    </a>
+                </div>
+            </div>
+
+            <!-- Form-Section -->
+            <div id="emailform">
+                <div class="row">
+                    <div class="col10" style="width:110px">
+                        <label>
+                            @EmailTxt:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.EmailTxt, new { @class = "required email", maxlength = "200", @placeholder = "Maximum 200 characters" })
+                        <img src="@Href("~/Scripts/Admin/images/tooltip.png")" title="Email should be in the format of abc@xyz.com" class="suggestion" />
+                        <div class="mobiletooltip">
+                        </div>
+                        @Html.ValidationMessageFor(m => m.EmailTxt,null,new { @class="EmailValidation"})
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col10 mobile_hide" style="width:110px">&nbsp;</div>
+                    <div class="col40">
+                        @Html.HiddenFor(m => m.EmailTypeID)
+                        @Html.HiddenFor(m => m.EmailID)
+
+                        <input type="submit" id="btncreate" value="@ViewBag.Submit"
+                               class="submit-btn submit" />&nbsp;&nbsp;&nbsp;
+
+                        <input type="button" id="btnCancel" name="command" value="Cancel" onclick="location.href='@Url.Action("Emails", "Email", new {et= emailtype, id=0 })'"
+                               class="cancel cancel-btn" style="visiblity:@(Request.QueryString["et"].ToString() == "1" ? "hidden" : "visible")" />
+                    </div>
+                </div>
+            </div>
+            <!-- widget-header Ends -->
+            @*Calling Partial View For Ajax Call backs or Postback*@
+            @Html.Partial("EmailPartial", Model)
+        </div>
+    </div>
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+}
+<script src="~/Scripts/js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.js" type="text/javascript"></script>
+<script src="~/Scripts/js/jquery.validate.unobtrusive.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+    var type = '@emailtype';
+    $("#ankEmails").addClass('select');
+    if (type == '1') {
+        $("#ankFromEmail").addClass('select');
+    }
+    else {
+        $("#ankToEmail").addClass('select');
+    }
+    
+    var txt = $('.maxtext');
+    if (txt != null && txt.length > 0) {
+        $('.maxtext').each(function () {
+            if (String($(this).text()).length > 100) {
+                var sub1 = String($(this).text()).substring(0, 99);
+                var sub2 = String($(this).text()).substring(99, $(this).text().length);
+                $(this).text('');
+                $(this).html(sub1 + "<br />" + sub2)
+            }
+        });
+    }
+
+    $('#btncreate').click(function () {
+        //alert($('.EmailValidation').children('span').val());
+    });
+</script>

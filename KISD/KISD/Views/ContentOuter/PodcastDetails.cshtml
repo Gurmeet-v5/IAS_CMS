@@ -1,0 +1,90 @@
+﻿@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType
+@model KISD.Areas.Admin.Models.GalleryListingModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    ViewBag.InnerImgPath = string.IsNullOrEmpty(ViewBag.InnerImgPath) ? "" : ViewBag.InnerImgPath;
+    ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ViewBag.InnerImgTitleTxt) ? "" : ViewBag.InnerImgTitleTxt;
+    db_KISDEntities objContext = new db_KISDEntities();
+}
+@if (Model != null)
+{
+
+    <div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+    {<text>main-banner</text>}
+    else
+    {<text>no-inner-banner</text>}">
+        @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+        {
+            <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@Model.AltBannerImageTxt" />
+            <div class="container">
+                <div class="inner-banner-abstract">
+                    @Html.Raw(Model.BannerImageAbstractTxt)
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="main-content ">
+        <div class="container">
+            <div class="main-lefts full-wrapper">
+                <h1 class="campus-news-title">Podcast</h1>
+                <div class="breadcrumb">
+                    <a href="@AppPath" title="Home Page">Home</a><span class="breaddiv"></span>
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.ParentURL) || !string.IsNullOrEmpty(@ViewBag.ParentName))
+                    {  <a href="@ViewBag.ParentURL" title="@ViewBag.ParentName">@ViewBag.ParentName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.MainURL) || !string.IsNullOrEmpty(@ViewBag.MainParentName))
+                    {  <a href="@ViewBag.MainURL" title="@ViewBag.MainParentName">@ViewBag.MainParentName</a><span class="breaddiv"></span> }
+
+                    <span>@Model.TitleTxt</span>
+                </div>
+
+                <div class="content">
+                    <div class="audio-detail-container">
+                        <div class="audio-detail-center">
+                            <div class="audio-title">
+                                @Model.TitleTxt
+                            </div>
+                            <div class="audio_bottom_details">
+                                <div class="audio-author">By: <span class="audio-author-name">@Model.AuthorTxt</span></div>
+                                @if (Model.ListingCreateDate != null)
+                                {
+                                    <div class="audio-date-added">
+                                        @Model.ListingCreateDate.Value.ToString("MM/dd/yyyy")
+                                    </div>
+                                }
+                            </div>
+
+                            @if (Model.UploadTypeNbr == 0)
+                            {
+                                <audio controls autoplay>
+                                    <source src="@Model.FileURLTxt.Replace("~","")" type="audio/ogg">
+                                    <source src="@Model.FileURLTxt.Replace("~","")" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            }
+                            else
+                            {
+                                <div class="audio-embedded">
+                                    @Html.Raw(Model.EmbededURLTxt)
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="description">
+                        @Html.Raw(Model.DescriptionTxt)
+                    </div>
+                </div>
+            </div>
+            <!--content container end here-->
+
+        </div>
+    </div>
+}

@@ -1,0 +1,86 @@
+﻿@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType
+@model KISD.Areas.Admin.Models.NewsEventModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    ViewBag.InnerImgPath = string.IsNullOrEmpty(ViewBag.InnerImgPath) ? "" : ViewBag.InnerImgPath;
+    ViewBag.InnerImgTitleTxt = string.IsNullOrEmpty(ViewBag.InnerImgTitleTxt) ? "" : ViewBag.InnerImgTitleTxt;
+}
+@if (Model != null)
+{
+    <div class="@if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath)){<text>main-banner</text>}else{<text>no-inner-banner</text>}">
+        @if (!string.IsNullOrEmpty(@ViewBag.InnerImgPath))
+        {
+            <img src="@ViewBag.InnerImgPath" class="banner_img" title="@ViewBag.InnerImgTitleTxt" alt="@Model.AltBannerImageTxt" />
+            <div class="container">
+                <div class="inner-banner-abstract">
+                    @Html.Raw(Model.BannerImageAbstractTxt)
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            <div @if (Model.ParentRightSections.Count > 0 || !string.IsNullOrEmpty(Model.RightSectionTitleTxt) || !string.IsNullOrEmpty(Model.RightSectionAbstractTxt)) { @Html.Raw("class='main-left'")     ; }>
+                <h1 class="campus-news-title">@Model.TitleTxt</h1>
+                <div class="breadcrumb">
+                    <a href="@AppPath" title="Home Page">Home</a><span class="breaddiv"></span>
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.MainURL) || !string.IsNullOrEmpty(@ViewBag.MainParentName))
+                {  <a href="@ViewBag.MainURL" title="@ViewBag.MainParentName">@ViewBag.MainParentName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.ParentURL) || !string.IsNullOrEmpty(@ViewBag.ParentName))
+                {  <a href="@ViewBag.ParentURL" title="@ViewBag.ParentName">@ViewBag.ParentName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.SearchParentCategoryURL) || !string.IsNullOrEmpty(@ViewBag.SearchParentCategoryName))
+                {  <a href="@ViewBag.SearchParentCategoryURL" title="@ViewBag.SearchParentCategoryName">@ViewBag.SearchParentCategoryName</a><span class="breaddiv"></span> }
+
+                    @if (!string.IsNullOrEmpty(@ViewBag.Main3rdCategoryURL) || !string.IsNullOrEmpty(@ViewBag.Main3rdCategoryParentName))
+                {  <a href="@ViewBag.Main3rdCategoryURL" title="@ViewBag.Main3rdCategoryParentName">@ViewBag.Main3rdCategoryParentName</a><span class="breaddiv"></span> }
+
+                    <span>@Model.TitleTxt</span>
+                </div>
+                <div class="content">
+                    <div class="news-event-box">
+                        <div class="list_layout detail_layout">
+                            @if (!string.IsNullOrEmpty(Model.ImageURLTxt))
+                        {
+                                <div class="list-image">
+                                    <img src="@Model.ImageURLTxt.Replace("~/","")" alt="@Model.TitleTxt" title="@Model.TitleTxt">
+                                </div>
+                        }
+
+                            <div class="list-content">
+                                <div class="list-share">
+                                    <div class="date-author">
+                                        <div class="date">@(String.Format("{0:MM/dd/yyyy}", Model.EventCreateDate))</div>
+                                        <div class="author-name">By: @Model.AuthorNameTxt</div>
+                                    </div>
+                                </div>
+                                <div class="list-discruption">
+                                    @Html.Raw(Model.DescriptionTxt)
+                                </div>
+                            </div>
+                            <a class="back-btn generic_btn" href="@Model.ContentUrl">Back</a>
+                        </div><!--list_layout  end here-->
+                    </div>
+                </div>
+            </div>
+
+            <!--main left end here-->
+
+            <div class="clearfix-mobile"></div>
+            
+            @*Right Section*@
+            @{Html.RenderAction("RightSection", "ContentOuter", new { ListingID = Model.NewsEventID, ModuleType = "News" });}
+
+        </div>
+        <!-- District and Campus News container end here-->
+    </div>
+    <!-- Main content container end here-->
+}

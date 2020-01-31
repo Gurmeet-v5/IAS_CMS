@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Users>
+  <User>
+    <UserID>1</UserID>
+    <FirstName>Blog</FirstName>
+    <LastName>Admin</LastName>
+    <UserNameTxt>Administrator1</UserNameTxt>
+    <Password>BlogAdmin@123</Password>
+    <EmailTxt>test@test.com</EmailTxt>
+    <StatusInd>true</StatusInd>
+  </User>
+</Users>

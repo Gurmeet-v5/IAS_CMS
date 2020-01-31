@@ -1,0 +1,15 @@
+﻿@model Content
+@{
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+}
+
+@if (Model != null)
+{
+    if (!string.IsNullOrEmpty(Model.AbstractTxt))
+    {
+        @Html.Raw(Model.AbstractTxt)
+    }
+}
+

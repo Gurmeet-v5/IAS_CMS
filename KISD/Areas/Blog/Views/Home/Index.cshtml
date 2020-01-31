@@ -1,0 +1,251 @@
+﻿@using KISD.Areas.Blog.Models;
+@using PagedList.Mvc;
+@using KISD.Areas.BlogAdmin.Contexts;
+@model ContentModel
+@{
+    Layout = "~/Areas/Blog/Views/Shared/_Layout.cshtml";
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : "")) + "/Blog";
+    var AppPathImage = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.BlogAdmin.Models.Common.ReturnValidPath(AppPath);
+    AppPathImage = KISD.Areas.BlogAdmin.Models.Common.ReturnValidPath(AppPathImage);
+    var search = Request.QueryString["search"] == null ? "" : Request.QueryString["search"].ToString();
+    var type_ID = Request.QueryString["type_ID"] == null ? "" : Request.QueryString["type_ID"].ToString();
+    ViewBag.NevigationbarFontFamily = Model.SettingList == null ? "Lato" : Model.SettingList.Select(x => x.NevigationBarFontFamilyTxt).FirstOrDefault().Trim().Replace(" ", "+");
+    ViewBag.SidebarTitleFontFamily = Model.SettingList == null ? "Lato" : Model.SettingList.Select(x => x.SidebarTitleFontFamilyTxt).FirstOrDefault().Trim().Replace(" ", "+");
+    ViewBag.PostTitleFontFamily = Model.SettingList == null ? "Lato" : Model.SettingList.Select(x => x.PostTitleFontFamilyTxt).FirstOrDefault().Trim().Replace(" ", "+");
+    ViewBag.Title = Model.HeaderList == null ? "" : Model.HeaderList.Select(x => x.MetaTitleTxt).FirstOrDefault();
+    ViewBag.MetaTitle = Model.HeaderList == null ? "" : Model.HeaderList.Select(x => x.MetaTitleTxt).FirstOrDefault();
+    ViewBag.MetaDescription = Model.HeaderList == null ? "" : Model.HeaderList.Select(x => x.MetaDescriptionTxt).FirstOrDefault();
+    var IsSocialSharingEnable = Model.SettingList == null ? false : Model.SettingList.Select(x => x.IsSocialSharingEnabled).FirstOrDefault();
+
+    //Gets all user information in the system
+    var UsersContexts = new UsersContexts().GetAccountUsers();
+}
+<!-- end #Header -->
+
+<div id="middle" class="container">
+    <!-- #middle -->
+    <div class="row mrgn-top20">
+        <div id="left-content">
+            <!-- #left-content -->
+            @if (Model.PagedBlog.Any())
+            {
+                foreach (var item in Model.PagedBlog)
+                {
+                    <article>
+                        <!-- article -->
+                        <a href="@Url.Action("BlogContent", "Content", new { Blogurl = @Html.Raw(item.SlagTxt) })"><h2 class="post-title">@Html.Raw(!string.IsNullOrEmpty(item.TitleTxt) ? item.TitleTxt : "")</h2></a>
+
+                        <div class="post-date">
+                            @* Auther widget *@
+                            @if (!string.IsNullOrEmpty(item.AuthorNameTxt) && item.AuthorNameTxt != "N/A")
+                            {
+                                <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(item.AuthorNameTxt), type_ID = "Auther_Search0" +  @Html.Raw(item.AuthorNameID) })" class="post-date">
+                                    <i class="fa fa-user" aria-hidden="true"></i> @Html.Raw(UsersContexts.Where(x => x.UserID == Convert.ToInt64(item.AuthorNameID) && x.UserNameTxt == item.AuthorNameTxt).Select(x => x.FirstName + " " + x.LastName).FirstOrDefault()) &nbsp;
+                                </a>
+                            }
+                            @* posted on widget *@
+                            <i aria-hidden="true" class="fa fa-calendar"></i>  @Html.Raw(item.PostedDate != null ? item.PostedDate.ToString("dd MMM yyyy") : "") &nbsp;
+                            @* Category widget *@
+                            @if (!string.IsNullOrEmpty(item.CategoryName))
+                            {
+                                <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(item.CategoryName), type_ID = "Category_Search0" +  @Html.Raw(item.CategoryID) })" class="post-date">  <i class="fa fa-server" aria-hidden="true"></i> @Html.Raw(!string.IsNullOrEmpty(item.CategoryName) ? item.CategoryName : "") &nbsp;</a>
+                            }
+                        </div>
+                        @if (item.SocialList.Any())
+                        {
+                            if (IsSocialSharingEnable)
+                            {
+                                <div class="social-icons">
+
+                                    @foreach (var social_item in item.SocialList)
+                                    {
+                                        if (social_item.SocialMedia == 1)
+                                        {
+                                            <a href="#" title="Share on Facebook" custom="http://www.facebook.com/sharer.php?u=@AppPath/@item.SlagTxt" class="facebook">
+                                                <i aria-hidden="true" class="fa fa-facebook-official">
+                                                </i> Share on Facebook
+                                            </a>
+                                        }
+                                        if (social_item.SocialMedia == 2)
+                                        {
+                                            <a href="#" title="Share on Twitter" custom="http://twitter.com/share?text=@item.TitleTxt&url=@AppPath/@item.SlagTxt" class="twitter">
+                                                <i class="fa fa-twitter" aria-hidden="true"></i> Share on Twitter
+
+                                            </a>
+                                        }
+                                        if (social_item.SocialMedia == 3)
+                                        {
+
+                                            <a href="#" title="Share on Google +" custom="https://plus.google.com/share?url=@AppPath/@item.SlagTxt" class="googleplus">
+                                                <i aria-hidden="true" class="fa fa-google-plus"></i> Share on Google +
+
+                                            </a>
+                                        }
+                                    }
+
+
+                                </div>
+                            }
+                        }
+                        <br>
+                        @if (!string.IsNullOrEmpty(item.ImagePathTxt.Trim()))
+                        {
+                            <div class="post-img">
+                                <img src="@AppPathImage@item.ImagePathTxt.Replace("~/", "/")" alt="@Html.Raw(item.TitleTxt)" title="@Html.Raw(item.TitleTxt)" />
+                            </div>
+                        }
+
+                        <p>@Html.Raw(item.AbstractTxt)</p>
+
+                        <a href="@Url.Action("BlogContent", "Content", new { Blogurl = @Html.Raw(item.SlagTxt) })" class="read-more">Read More <i aria-hidden="true" class="fa fa-angle-double-right"></i></a>
+
+                        <div class="left-tags">
+                            @foreach (var tag_item in item.TagNameList.OrderBy(x => x.TagNameTxt))
+                            {
+                                if (!string.IsNullOrEmpty(tag_item.TagNameTxt))  //tag_item.TagNameTxt != ""
+                                {
+                                    <a href="@Url.Action("Index", "Home", new { search = @Html.Raw(tag_item.TagNameTxt), type_ID = "Tag_Search0" + @Html.Raw(tag_item.TagID) })" class="ankSearchTag" name="@Html.Raw(tag_item.TagNameTxt)"><span>@Html.Raw(tag_item.TagNameTxt)</span></a>
+                                }
+                            }
+                        </div>
+                    </article><!-- end article -->
+                    <hr />
+                }
+            }
+            else
+            {
+                <div class="error-msg">
+                    Sorry, No record found.
+                </div>
+            }
+
+            @if (Model.PagedBlog.Any() && Model.IsPagingVisible)
+            {
+                <div class="pagination">
+                    <!-- pagination -->
+                    <ul>
+                        <li>
+                            @Html.PagedListPager(Model.PagedBlog, page => Url.Action("Index", new { page, search = search, type_ID = type_ID }))
+                        </li>
+                    </ul>
+                </div><!-- end pagination -->
+            }
+
+        </div><!-- end #left-content -->
+
+        <aside id="sidebar">
+            <!-- #sidebar Tag Cloud -->
+            @{Html.RenderAction("TagCloud", "Content");}@*Tag Cloud*@
+            <!-- #sidebar category-box Starts -->
+            @{Html.RenderAction("Categories", "Content");}@*Categories*@
+            <!-- category-box End -->
+            @{Html.RenderAction("MonthList", "Content");}@*Month List*@
+        </aside><!-- end #sidebar -->
+    </div>
+</div><!-- end #middle -->
+<!-- end #footer -->
+<script type="text/javascript">
+
+    //$(".googleplus").hover(function () {
+
+    //});
+
+    //Twitter Social Share code
+    !function (d, s, id) {
+        var js,
+            fjs = d.getElementsByTagName(s)[0],
+            p = /^http:/.test(d.location) ? 'http' : 'https';
+        if (!d.getElementById(id)) {
+            js = d.createElement(s);
+            js.id = id;
+            js.src = p + '://platform.twitter.com/widgets.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }
+    }
+    (document, 'script', 'twitter-wjs');
+    // Social Sharing Popup code
+    $(".social-icons a").on("click", function () {
+        var url = $(this).attr('custom');
+        makeNewWindow(url);
+    });
+    function makeNewWindow(url) {
+        var newWindow
+        var left = (screen.width / 2) - (800 / 2);
+        //var top = (screen.height / 2) - (500 / 2);
+        newWindow = window.open(url, "", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + 800 + ', height=' + 500 + ',  left=' + left);
+    }
+</script>
+<script>
+    @{
+        var NevigationBarColor = string.Empty;
+        var NevigationBarHoverColor = string.Empty;
+        var NevigationBarFontColor = string.Empty;
+        var NevigationBarTextFontSize = string.Empty;
+        var SidebarTitleBackgroundColor = string.Empty;
+        var SidebarTitleFontcolor = string.Empty;
+        var SidebarTitleFontSize = string.Empty;
+        var PostTitleFontColor = string.Empty;
+        var PostTitleFontSize = string.Empty;
+        var FooterColor = string.Empty;
+        var ReadMoreButtonColor = string.Empty;
+        var PagingColor = string.Empty;
+        var PagingActiveColor = string.Empty;
+        var PagingHoverColor = string.Empty;
+        foreach (var item in Model.SettingList)
+        {
+            NevigationBarColor = item.NevigationBarColor == "" ? "#1f497d" : item.NevigationBarColor;
+            NevigationBarFontColor = item.NevigationBarFontColor == "" ? "#eeece1" : item.NevigationBarFontColor;
+            NevigationBarTextFontSize = item.NevigationBarTextFontSize == "" ? "14" : item.NevigationBarTextFontSize;
+            NevigationBarHoverColor = item.NevigationBarHoverColor == "" ? "#0f243e" : item.NevigationBarHoverColor;
+            SidebarTitleBackgroundColor = item.SidebarTitleBackgroundColor == "" ? "#1f497d" : item.SidebarTitleBackgroundColor;
+            SidebarTitleFontcolor = item.SidebarTitleFontcolor == "" ? "#1f497d" : item.SidebarTitleFontcolor;
+            SidebarTitleFontSize = item.SidebarTitleFontSize == "" ? "18" : item.SidebarTitleFontSize;
+            PostTitleFontColor = item.PostTitleFontColor == "" ? "#eeece1" : item.PostTitleFontColor;
+            PostTitleFontSize = item.PostTitleFontSize == "" ? "25" : item.PostTitleFontSize;
+            FooterColor = item.FooterColor == "" ? "#1f497d" : item.FooterColor;
+            ReadMoreButtonColor = item.ButtonColor == "" ? "#1f497d" : item.ButtonColor;
+            PagingColor = item.PagingColor == "" ? "#1f497d" : item.PagingColor;
+            PagingActiveColor = item.PagingActiveColor == "" ? "#1f497d" : item.PagingActiveColor;
+            PagingHoverColor = item.PagingHoverColor == "" ? "#0f243e" : item.PagingHoverColor;
+        }
+    }
+    $(document).ready(function () {
+        var NevigationBarFontFamily = '@ViewBag.NevigationBarFontFamily';
+        NevigationBarFontFamily = NevigationBarFontFamily.replace("+", " ");
+        var SidebarTitleFontFamily = '@ViewBag.SidebarTitleFontFamily';
+        SidebarTitleFontFamily = SidebarTitleFontFamily.replace("+", " ");
+        var PostTitleFontFamily = '@ViewBag.PostTitleFontFamily';
+        PostTitleFontFamily = PostTitleFontFamily.replace("+", " ");
+        $(".main-menu").css('background', '@NevigationBarColor');
+        $(".main-menu").css('font-family', NevigationBarFontFamily);
+        $(".main-menu ul li a").css('color', '@NevigationBarFontColor');
+        $(".main-menu ul li a").css('font-size', '@NevigationBarTextFontSize' + 'px');
+        $(".post-img img").css('border-bottom', '4px solid ' + '@NevigationBarColor' + '');
+        $(".main-menu ul li a").hover(function () {
+            $(this).css("background", '@NevigationBarHoverColor');
+        }, function () {
+            $(this).css("background", "");
+        });
+        $(".widget-title").css('background', '@SidebarTitleBackgroundColor');
+        $(".widget-title").css('font-family', SidebarTitleFontFamily);
+        $(".widget-title").css('color', '@SidebarTitleFontcolor');
+        $(".widget-title").css('font-size', '@SidebarTitleFontSize' + 'px');
+        $(".widget-title i").css('color', '@SidebarTitleBackgroundColor');
+        $("#footer").css('background', '@FooterColor');
+        $(".read-more").css('background', '@ReadMoreButtonColor');
+        $(".pagination ul li a").hover(function () {
+            $(this).css("background", '@PagingHoverColor');
+        }, function () {
+            $(this).css("background", '@PagingColor');
+            $(".pagination ul li.active a").css('background', '@PagingActiveColor');
+        });
+        $(".pagination ul li a").css('background', '@PagingColor');
+        $(".post-title").css('color', '@PostTitleFontColor');
+        $(".post-title").css('font-size', '@PostTitleFontSize' + 'px');
+        $(".post-title").css('font-family', PostTitleFontFamily);
+        $(".pagination ul li.active a").css('background', '@PagingActiveColor');
+    });
+</script>

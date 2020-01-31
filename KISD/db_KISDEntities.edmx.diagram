@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="8f019d9c51404884a1280189861d6409" Name="Diagram1">
+        <EntityTypeShape EntityType="db_KISDModel.Announcement" Width="1.5" PointX="3" PointY="38.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.BoardOfMember" Width="1.5" PointX="3" PointY="31.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.Content" Width="1.5" PointX="6" PointY="34.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.ContentType" Width="1.5" PointX="3.75" PointY="25.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.Department" Width="1.5" PointX="3" PointY="47.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.DepartmentStaff" Width="1.5" PointX="5.25" PointY="43.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.Email" Width="1.5" PointX="3.75" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.EmailType" Width="1.5" PointX="3.75" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.ExceptionOpportunity" Width="1.5" PointX="9" PointY="34.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.FormEmail" Width="1.5" PointX="6" PointY="23" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.GalleryListing" Width="1.5" PointX="3" PointY="61.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.Image" Width="1.5" PointX="9" PointY="28.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.ImageType" Width="1.5" PointX="6.75" PointY="26.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.ListingParameter" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.NewsEvent" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.RightSection" Width="1.5" PointX="11.25" PointY="31.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.Role" Width="1.5" PointX="0.75" PointY="27.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.School" Width="1.5" PointX="9" PointY="42.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.SocialSharingSetting" Width="1.5" PointX="3" PointY="81.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.Staff" Width="1.5" PointX="11.25" PointY="40.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.SystemAccessLog" Width="1.5" PointX="3" PointY="15.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.SystemChangeLog" Width="1.5" PointX="3" PointY="11.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.SystemChangeLogDetail" Width="1.5" PointX="5.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.TypeMaster" Width="1.5" PointX="6.75" PointY="47.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.UserDepartment" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.UserPermission" Width="1.5" PointX="6" PointY="29.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.UserRole" Width="1.5" PointX="3" PointY="28.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="db_KISDModel.User" Width="1.5" PointX="0.75" PointY="33.875" IsExpanded="true" />
+        <AssociationConnector Association="db_KISDModel.FK_Announcement_TypeMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Announcement_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Announcement_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_BoardOfMember_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_BoardOfMember_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Content_Content" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Content_ContentType" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Content_Images" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Content_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Content_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_FormEmail_ContentType1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Department_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Department_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Department_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_DepartmentStaff_Department" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_DepartmentStaff_Staff" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_DepartmentStaff_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_FormEmail_Email" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_FormEmail_EmailType" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_ExceptionOpportunity_ExceptionOpportunity" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_ExceptionOpportunity_Images" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_ExceptionOpportunity_School" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_ExceptionOpportunity_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_ExceptionOpportunity_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_GalleryListing_GalleryListing" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_GalleryListing_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_GalleryListing_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK__Images__ImageTyp__628FA481" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Images_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Images_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_RightSection_Images" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_RightSection_RightSection" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_RightSection_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_RightSection_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_SystemAccessLog_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_SystemChangeLog_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_UserPermission_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_UserRoles_Roles" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_School_School" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_School_TypeMaster" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_School_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_School_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Staff_School" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Staff_School1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_SocialSharingSetting_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_SocialSharingSetting_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Staff_Staff" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Staff_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_Staff_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_SystemChangeLogDetail_SystemChangeLog" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_UserPermission_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_UserPermission_Users1" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_UserPermission_Users2" ManuallyRouted="false" />
+        <AssociationConnector Association="db_KISDModel.FK_UserRoles_Users" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

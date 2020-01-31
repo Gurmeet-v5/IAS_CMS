@@ -1,0 +1,300 @@
+﻿@using System.Web.Mvc;
+@using System.Web.Optimization;
+@model KISD.Areas.BlogAdmin.Models.ContentModel
+@using ContentTypeAlias = KISD.Areas.BlogAdmin.Models.ContentTypeModel;
+
+@{
+    ViewBag.Title = Model.ContentTypeTitle;
+    Layout = "~/Areas/BlogAdmin/Views/Shared/_Layout.cshtml";
+    var ContentType = Request.QueryString["ContentType"] ?? "0";
+    var content = ViewBag.ContentTypeID != null ? ViewBag.ContentTypeID : 0;
+}
+@using (Html.BeginForm("CreateContent", "Content", new { ContentType = ContentType }, FormMethod.Post, new { id = "form1", name = "form1", enctype = "multipart/form-data" }))
+{
+    <div class="breadcrumb">
+        <!-- Breadcrumb -->
+        <ul>
+            <li>
+                <i class="icon-th"></i>
+                <a id="ankdahboard" href='@Url.Action("Index", "Home")'>Dashboard</a>
+            </li>
+            <li>
+                @Html.Label(Model.ContentTypeTitle)
+            </li>
+        </ul>
+    </div>
+    <!-- Breadcrumb Ends -->
+
+    <div class="page-header">
+        <!-- page-header -->
+        <div class="page-title">
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <!-- Wrapper -->
+        <div class="widget">
+            <!-- widget -->
+            <div class="widget-header">
+                <!-- widget-header -->
+                <h4><i class="icon-reorder"></i>@Model.ContentTypeTitle </h4>
+                <div class="btn-group">
+                </div>
+            </div>
+
+            @if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContentType.Footer) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContentType.Header))
+            {
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Title:<span class="requiredstar">*</span>
+                        </label>
+                    </div>
+                    <div class="col40">
+                        @Html.TextBoxFor(m => m.TitleTxt, new { @class = "required disableSpecialChar", maxlength = "100", @placeholder = "Maximum 100 characters"  })
+                        <br />
+                        @Html.ValidationMessageFor(m => m.TitleTxt)
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Alt Image Text:
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.AltImgTxt, new { @class = "disableSpecialChar", maxlength = "100", @placeholder = "Maximum 100 characters" })
+                            @*<br />
+                            @Html.ValidationMessageFor(m => m.AltImgTxt)*@
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Logo Image:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            <input type="file"
+                                   @if (Model != null && !string.IsNullOrEmpty(Model.ImagePathTxt)) { <text> class="" name="imageupload" </text>       } else { <text> class="fileinput required" id="ImagePathTxt" name="ImagePathTxt" </text>       } />
+                            <br />
+                            <span class="fontsize">(Ideal maximum image size is 1 MB. Only JPG/JPEG/GIF/PNG files are allowed.)</span>
+                            <span class="field-validation-error" style="display: none;" id="input_file_upload_error_img"></span>
+                            <span class="field-validation-error" style="display: none;" id="input_file_upload_error_img1">This field is required </span>
+                            <br />
+                            @if (Model != null && !string.IsNullOrEmpty(Model.ImagePathTxt))
+                            {
+                                @Html.Raw(string.Format("<text><img src=\"{0}\" alt=\"Image\"  width=\"150px\" height=\"50px\" /></text>", Url.Content(@Href(Model.ImagePathTxt.Replace("images", "thumbnails_Small")))))
+                            }
+                        </div>
+                    </div>
+
+                <div class="row">
+                    <div class="col20">
+                        <label>
+                            Description:
+                        </label>
+                    </div>
+                    <div class="col75" id="tdCkEditor">
+                        @Html.TextAreaFor(m => m.DescriptionTxt,
+                                                     new
+                                                     {
+                                                         @class = "AbstractTxt",
+                                                         id = "AbstractTxt",
+                                                         name = "AbstractTxt"
+                                                     })
+                        @*<br />
+                        <span class="field-validation-error" id="spnabstract" style="display: none;">This field is required.</span>*@
+                    </div>
+                </div>
+                if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContentType.Header))
+                {
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Page Meta Title:<span class="requiredstar">*</span>
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextBoxFor(m => m.MetaTitleTxt, new { @class = "required disableSpecialChar", maxlength = "1000", @placeholder = "Maximum 1000 characters" })
+                            <br />
+                            @Html.ValidationMessageFor(m => m.MetaTitleTxt)
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col20">
+                            <label>
+                                Meta Description:
+                            </label>
+                        </div>
+                        <div class="col40">
+                            @Html.TextAreaFor(m => m.MetaDescriptionTxt, new { @class = "disableSpecialChar", maxlength = "2000", @placeholder = "Maximum 2000 characters" })
+                        </div>
+                    </div>
+                }
+            }
+            <div class="row">
+                <div class="col20">&nbsp;</div>
+                <div class="col40">
+                    @Html.HiddenFor(m => m.ContentID)
+                    @Html.HiddenFor(m => m.ContentTypeID)
+                    @Html.HiddenFor(m => m.ContentTypeTitle)
+
+                    <input type="submit" value="@ViewBag.Submit" id="btnsubmit"
+                           class="submit-btn submit" />&nbsp;&nbsp;&nbsp;
+                    <input type="submit" id="btnCancel" name="command" value="Cancel"
+                           class="cancel cancel-btn" />
+                </div>
+            </div>
+        </div>
+    </div>
+    // Page Loader
+    <div id="div" style="position:fixed; bottom:0; height:100%; width:100%; left:0; right:0; top:0; opacity:0.5; background-color:#000; color:#fff; z-index:9999;">
+
+    </div>
+    <script src="@Href("~/Scripts/js/jquery-1.10.2.js")" type="text/javascript"></script>
+    <script src="@Href("~/Scripts/js/jquery.validate.js")" type="text/javascript"></script>
+    <script src="@Href("~/Scripts/js/jquery.validate.unobtrusive.js")" type="text/javascript"></script>
+    <script src="@Href("~/Scripts/js/additional-methods.js")"></script>
+    <script src="@Href("~/Scripts/js/ckeditor/ckeditor.js")"></script>
+    <script src="~/Areas/BlogAdmin/Scripts/Fileuploder.js"></script>
+    <script src="~/Areas/BlogAdmin/Scripts/fancybox/jquery.fancybox.js" type="text/javascript"></script>
+    <link href="~/Scripts/js/Fancybox/jquery.fancybox.css" rel="stylesheet" />
+    <script type="text/javascript" src="@Href("~/Scripts/js/ckfinder/ckfinder.js")"></script>
+    <script type="text/javascript">
+        var $ = jQuery.noConflict();
+
+        // code for blocking the user untill the page is not fully loaded.
+        $(document).ready(function () {
+            $("#div").fadeOut()
+        });
+
+        var contentType = '@content';
+        $(document).ready(function () {
+            var nospace = $(".nospace");
+            // for mini ck for header and footer for home page
+            if ($("#tdCkEditor").length != 0) {
+                // Mini ck converted to full ck
+                var editor = CKEDITOR.replace('AbstractTxt');
+                CKFinder.setupCKEditor(editor, { basePath: '@Href("~/Scripts/js/ckfinder/")', rememberLastFolder: false })
+                CKEDITOR.config.allowedContent = true;
+                CKEDITOR.editorConfig = function (config) {
+                    config.filebrowserImageUploadUrl = '@Href("~/Scripts/js/ckfinder/core/connector/aspx/connector.aspx?command=QuickUpload&type=Images")';
+                };
+               
+                $('#btnsubmit').on('click', function () {
+                    var data = CKEDITOR.instances.AbstractTxt.getData();
+                    $("#AbstractTxt").val(data);
+                    var valAbstract = '';
+                    try {
+                        valAbstract = $("#AbstractTxt").val();
+                    } catch (err) { }
+                });
+            }
+        });
+
+        $('.cropedfileupload').on('change', function (e) {
+            try {
+                showprogress();
+                if (!uploadimages(this)) {
+                    hideprogress();
+                    $('#input_file_upload_error_img1').hide();
+                    return false;
+                }
+                // Check image natural height , width
+                var width = '';
+                var height = '';
+                var files = e.target.files;
+                var size = '';
+                var img = new Image();
+                img.src = window.URL.createObjectURL(this.files[0]);
+                img.onload = function () {
+                    width = img.naturalWidth,
+                    height = img.naturalHeight
+                    };
+                //--------------------------------
+                if (files.length > 0) {
+                    if (window.FormData !== undefined) {
+
+                        var data = new FormData();
+                        for (var x = 0; x < files.length; x++) {
+                            data.append("file" + x, files[x]);
+                        }
+                        $('#input_file_upload_error_img1').hide();
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("UploadCroppedImage", "CropImage")',
+                            contentType: false,
+                            processData: false,
+                            data: data,
+                            success: function (result) {
+                                hideprogress();
+                                $.fancybox.open({
+                                    href: '@Url.Action("Index", "CropImage")' + '?width=' + width + '&height=' + height + '&imagename=' + result,
+                                    type: 'iframe',
+                                    scrolling: 'true',
+                                    closeBtn: false,
+                                    closeClick: false,
+                                    helpers: {
+                                        overlay: { closeClick: false }
+                                    },
+                                    keys: {
+                                        close: null
+                                    },
+                                    width: 500
+                                });
+                            },
+                            error: function (xhr, status, p3, p4) {
+                                var err = "Error " + " " + status + " " + p3 + " " + p4;
+                                if (xhr.responseText && xhr.responseText[0] == "{")
+                                    err = JSON.parse(xhr.responseText).Message;
+                                console.log(err);
+                            }
+                        });
+                    } else {
+                    }
+                }
+            }
+            catch (e) {
+                alert(e);
+            }
+        });
+        $("#ankmasterecontent").addClass('select');
+        var type = '@ContentType';
+
+        if (type == '1') {
+            $("#ankheader").addClass('select');
+        }
+        else {
+            $("#ankfooter").addClass('select');
+        }
+    </script>
+    <script src="~/Scripts/js/custom-validate.js"></script>
+    <script>
+            $("#TitleTxt").on('blur paste focusout', function () {
+                var len = $(this).val();
+                len = len.trimLeft();
+                $(this).val(len);
+            });
+            $("#AltImgTxt").on('blur paste focusout', function () {
+                var len = $(this).val();
+                len = len.trimLeft();
+                $(this).val(len);
+            });
+            $("#MetaTitleTxt").on('blur paste focusout', function () {
+                var len = $(this).val();
+                len = len.trimLeft();
+                $(this).val(len);
+            });
+            $("#MetaDescriptionTxt").on('blur paste focusout', function () {
+                var len = $(this).val();
+                len = len.trimLeft();
+                $(this).val(len);
+            });
+
+    </script>
+    <script>
+        CKEDITOR.env.isCompatible = true;
+    </script>
+}

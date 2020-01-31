@@ -1,0 +1,75 @@
+﻿@model IEnumerable<GalleryListing>
+
+@{
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+    db_KISDEntities objContext = new db_KISDEntities();
+    var TypeMasterID = Convert.ToInt32(KISD.Areas.Admin.Models.GalleryListingService.TypeMaster.Video);
+    var ContentTypeID = Convert.ToInt32(KISD.Areas.Admin.Models.ContentType.Videos);
+    var VideoCount = objContext.GalleryListings.Where(x => x.IsDeletedInd == false && x.StatusInd == true && x.TypeMasterID == TypeMasterID).Count();
+    var VideoURL = objContext.Contents.Where(x => x.ContentTypeID == ContentTypeID).Select(x => x.PageURLTxt).FirstOrDefault();
+}
+
+@if (Model.Count() > 0)
+{
+    <div class="videos-container">
+        <div class="container">
+            <div class="main-title"><span>KISD TV</span></div>
+            <ul>
+                @foreach (var item in Model)
+                {
+                    <li>
+
+                        @if (item.UploadTypeNbr == 1)
+                        {
+                            <div class="video-box">
+                                @Html.Raw(item.EmbededURLTxt);
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="video-box">
+                                <video id="@item.ListingID" onclick="playvideo(@item.ListingID)">
+                                    <source src="@item.FileURLTxt.Replace("~","")" type="video/mp4">
+                                    <source src="@item.FileURLTxt.Replace("~","")" type="video/ogg">
+                                    Your browser does not support the video.
+                                </video>
+                                <div id="s_@item.ListingID" class="video-box-layer" onclick="playvideo(@item.ListingID)">
+                                    <a ><span class="video-btn"></span></a>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="video-title">
+                            <div class="video-icon"></div>
+                            <a href="@item.URLTxt"> @item.TitleTxt</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+            @if (VideoCount > 3)
+            {
+                <div class="center"><a href="@VideoURL" class="list-view-all-btn">View More</a></div>
+            }
+        </div>
+    </div>
+}
+<script type="text/javascript">
+    function playvideo(id) {
+        var cls = "#" + id;        
+        var playbtn = "#s_"+id;
+        debugger;
+        var video = $(cls).get(0);
+        if (video.paused) {
+            video.play();
+            $(cls).prop('controls','controls');
+            $(playbtn).addClass("hide");
+        }
+        else {
+            video.pause();
+            $(cls).removeAttr('controls');
+            $(playbtn).removeClass("hide");
+        }
+    }
+</script>

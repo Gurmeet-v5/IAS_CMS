@@ -1,0 +1,198 @@
+nav{
+	float:left;
+	width:100%;
+	height:100%;
+	position:relative;
+	background:url(../images/nav-bg.jpg) repeat-y scroll 100% 0 #333;
+	padding-right:8px;
+	/*padding-bottom:80px;*/
+    z-index:9;
+	}
+nav ul li {
+	float:left;
+	width:100%;
+    position: relative;
+	border-bottom:1px solid #000;
+}
+nav ul li a{
+    color:#fff;
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 15px 15px 15px 20px;
+    text-transform: uppercase;
+	}
+nav ul li a:hover{
+	background:#fff;
+	color:#585858;
+	border-right:2px solid #000;
+	}
+nav ul li a.select{
+	background:#fff;
+	color:#585858;
+	border-right:2px solid #000;
+	}	
+nav ul li ul {
+	display: none;
+	position:absolute;
+	z-index:99;
+	left:100%;
+	top:0;
+	background:url(../images/nav-bg.jpg) repeat-y scroll 0% 0 #333;
+	padding-left:8px;
+	width:100%;
+}
+nav ul li:hover ul{
+	display:block;
+	}
+nav ul li li{
+	border-right:1px solid #000;
+	}
+nav ul li li:first-child{
+	border-top:1px solid #000;
+	}
+
+/*! ####################################################################### */
+
+/* General styles for all menus */
+.meanmenu-reveal{
+	height:52px;
+	float:left;
+	padding-right:20px;
+	border-right:1px solid #a52123;
+	display:none;
+	}
+.meanmenu-reveal button{
+	background:url(../images/icons/menu-drop.png) no-repeat scroll 0 0;
+	width:20px;
+	height:15px;
+	margin-top:18px;
+	cursor:pointer;
+	padding:15px 0;
+	border-radius:0;
+	}
+.cbp-spmenu {
+	background: #47a3da;
+	position: fixed;
+}
+
+.cbp-spmenu h3 {
+	color: #afdefa;
+	font-size: 1.9em;
+	padding: 20px;
+	margin: 0;
+	font-weight: 300;
+	background: #0d77b6;
+}
+
+.cbp-spmenu a {
+	display: block;
+	color: #fff;
+	font-size: 1.1em;
+	font-weight: 300;
+}
+
+.cbp-spmenu a:hover {
+	background: #258ecd;
+}
+
+.cbp-spmenu a:active {
+	background: #afdefa;
+	color: #47a3da;
+}
+
+/* Orientation-dependent styles for the content of the menu */
+
+.cbp-spmenu-vertical {
+	width: 240px;
+	height: 100%;
+	overflow-y:scroll;
+	z-index: 1000;
+}
+
+.cbp-spmenu-vertical a {
+	border-bottom:1px solid #2171a3;
+	padding: 1em;
+}
+.cbp-spmenu-vertical a:hover{
+	background:#fafafa;
+	}
+.cbp-spmenu-vertical ul ul{
+	background:none;
+	position:relative;
+	left:0;
+	padding-left:0;
+	}
+.cbp-spmenu-vertical ul li{
+	border-bottom:1px solid #60b5e8;
+	}	
+.cbp-spmenu-vertical ul li:first-child{
+	border-top:1px solid #60b5e8;
+	}	
+.cbp-spmenu-vertical ul ul a{
+	padding-left:1.5em;
+	background:#fafafa;
+	color:#fff;
+	border-bottom:none;
+    background:#287cae;
+	}
+.cbp-spmenu-vertical ul ul a:hover{
+	background:#fff;
+	color:#666;
+	}	
+/* Vertical menu that slides from the left or right */
+
+.cbp-spmenu-left {
+	/*left: -240px;*/
+	padding-right:0;
+}
+
+.cbp-spmenu-left.cbp-spmenu-open {
+
+    top: 55px;	left: 0px;
+}
+
+/* Transitions */
+
+.cbp-spmenu,
+.cbp-spmenu-push {
+	-webkit-transition: all 0.3s ease;
+	-moz-transition: all 0.3s ease;
+	transition: all 0.3s ease;
+}
+
+/* Example media queries */
+
+@media screen and (max-width: 55.1875em){
+
+	
+	.cbp-spmenu-top {
+		top: -110px;
+	}
+
+	
+
+}
+
+@media screen and (max-width: 55.1875em){
+
+
+	.cbp-spmenu-top {
+		top: -110px;
+	}
+
+}
+
+@media screen and (min-width: 320px){
+
+	.cbp-spmenu-vertical {
+		font-size: 90%;
+		width: 190px;
+	}
+
+	.cbp-spmenu-left {
+		left: -190px;
+	}
+
+	
+}

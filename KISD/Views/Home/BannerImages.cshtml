@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Image>
+
+@{
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+}
+
+@if (Model != null)
+{
+    <div class="full-width">
+        <div class="flexslider slider-box box-slide">
+            <ul class="slides">
+                @foreach (var item in Model)
+                {
+                    <li class="slider-img" style="background-image:url('@AppPath@item.ImgPathTxt.Replace("~/WebData/images/", "/WebData/Thumbnails/")')">
+                        <img class="slider-hide-img common_hide" src='@AppPath@item.ImgPathTxt.Replace("~/WebData/images/", "/WebData/Thumbnails/")' alt="@item.AltImageTxt" title="@item.TitleTxt" longdesc="Bannerimage">
+                        <div class="flex-caption animated fadeInDownBig">
+                            <div class="caption-container animated fadeInDownBig">
+                                @if (!string.IsNullOrEmpty(item.AbstractTxt))
+                                {
+                                    @Html.Raw(item.AbstractTxt)
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        @*@{Html.RenderAction("Event", "Home");}*@
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿@using KISD.Areas.Blog.Models;
+
+@model ContentModel
+<div class="category-box">
+    <!-- category-box -->
+    <h3 class="widget-title">
+        Categories
+        <i aria-hidden="true" class="fa fa-sort-desc"></i>
+    </h3>
+    <div class="padding20 white-bg">
+        <!-- white-bg -->
+    @if (Model.categoryList.Count > 0)
+    {
+        <ul>
+            @foreach (var item in Model.categoryList)
+            {
+                <li>
+                    <a href="@Url.Action("index", "home", new { search = @Html.Raw(item.CategoryNameTxt), type_ID = "Category_Search0" + @Html.Raw(item.CategoryID) })">@Html.Raw(item.CategoryNameTxt)</a> <span>(@Html.Raw(item.CategoryCount))</span>
+                </li>
+            }
+        </ul>
+    }
+    </div><!-- end white-bg -->
+</div>
+

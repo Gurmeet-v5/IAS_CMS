@@ -1,0 +1,102 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+body{
+	margin:0;
+	padding:0;
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:14px;
+	color:#000;
+	}  
+.wrapper {
+    margin: 0 auto;
+    padding: 0 0 25px;
+    width: 1000px;
+}
+.title {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+	float:left;
+	width:100%;
+}
+.font-12{
+	font-size:12px;
+	text-align:justify!important;
+	}
+.patient-form input, .patient-form textarea , .patient-form select{
+	width:100%;
+	padding:5px;
+	}
+.patient-form input[type="checkbox"]{
+	width:auto;
+	margin:0 3px;
+	position:relative;
+	top:1px;
+	}	
+.patient-form {
+    float: left;
+    margin:0 auto 10px;
+    max-width: 1000px;
+    width: 100%;
+	border-collapse:collapse;
+}
+.patient-form label{
+	font-weight:bold;
+	}	
+.field-validation-error
+{
+    color: #C30;
+    font-size: 12px;
+    float: left;
+	width:100%;
+}
+.field-validation-valid{
+	float:left;
+	width:100%;
+	}
+.input-validation-error
+{
+    border: 1px solid #C30;
+    box-shadow: 0 0px 4px rgba(240,40,40,0.5);
+}
+
+.validation-summary-errors
+{
+    color: #C30;
+    font-size: 12px;
+}
+.required-str {color: #f00;
+    font-size: 16px;
+    font-weight:bold;
+}
+.patient-form .w-button {
+    margin-left: 0;
+    margin-right: 0;
+}
+.patient-form td {
+	padding:5px;
+	border:1px solid #ccc;
+	}
+.center{
+	text-align:center;
+	}
+
+	
+	
+@media all and (max-width:768px){
+
+.patient-form .col10, .patient-form .col20, .patient-form .col30, .patient-form .col40, .patient-form .col50, .patient-form .col60, .patient-form .col70, .patient-form .col80, .patient-form .col90{
+	width:100%;
+	}	
+
+/*#footer {
+     position: fixed;
+     bottom: 0;
+   }
+   #body {
+     margin: 5px 5px 900px 5px; /*(y should reflect the height of the footer);*/
+}*/
+}
+
+ 

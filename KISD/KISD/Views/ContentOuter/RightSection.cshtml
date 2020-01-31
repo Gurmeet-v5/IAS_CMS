@@ -1,0 +1,118 @@
+﻿
+@model KISD.Areas.Admin.Models.ListingRightSectionModel
+@{
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
+}
+
+<link href="~/scripts/frontend/css/sidemenu.css" type="text/css" rel="stylesheet" />
+
+@if (Model != null)
+{
+    <div class="main-right">
+        @if (Model.IsFacebookSharingInd || Model.IsGooglePlusSharingInd || Model.IsTwitterSharingInd)
+        {
+            <div class="right-share">
+                <div class="title-social-share">Share This Page</div>
+                <div class="social">
+                    <ul>
+                        @if (Model.IsFacebookSharingInd)
+                        {
+                            <li class="facebook_icon"><a href="#" title="Share on Facebook" custom="http://www.facebook.com/sharer.php?u=@AppPath/@Model.PageURLTxt">Facebook</a></li>
+                        }
+                        @if (Model.IsTwitterSharingInd)
+                        {
+                            <li class="twitter_icon"><a href="#" title="Share on Twitter" custom="http://twitter.com/share?text=@Model.PageTitleTxt&url=@AppPath/@Model.PageURLTxt">Twitter</a></li>
+                        }
+                        @if (Model.IsGooglePlusSharingInd)
+                        {
+                            <li class="google_icon"><a href="#" title="Share on Google Plus" custom="https://plus.google.com/share?url=@AppPath/@Model.PageURLTxt">Google Plus</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+        @if (!string.IsNullOrEmpty(Model.RightSectionTitleTxt)
+                            || !string.IsNullOrEmpty(Model.RightSectionAbstractTxt)
+                            || (Model.ParentRightSections != null && Model.ParentRightSections.Count > 0)
+                            )
+        {
+            <div class="sidemenu-container">
+
+                @if (!string.IsNullOrEmpty(Model.RightSectionTitleTxt))
+                {
+                    <div class="side-link-heading">@Model.RightSectionTitleTxt</div>
+                }
+                @if (!string.IsNullOrEmpty(Model.RightSectionAbstractTxt))
+                {
+                    <div class="side-link-abstract">@Model.RightSectionAbstractTxt</div>
+                }
+                @if (Model.ParentRightSections != null)
+                    {
+                    <div id="sidemenu">
+                        <ul>
+                            @foreach (var data in Model.ParentRightSections)
+                        {
+                                <li @if (data.IsParentTitleInd.Value == true && Model.ChildRightSections.Where(x => x.ParentID == data.RightSectionID).Count() > 0) { @Html.Raw("class='has-sub'")              ; }>
+                                    @if (!string.IsNullOrEmpty(data.ExternalLinkURLTxt) || Model.ChildRightSections.Where(x => x.ParentID == data.RightSectionID).Count() > 0)
+                                    {
+                                        <a href="@if (data.IsParentTitleInd.Value == true)
+                                        { @Html.Raw("#");
+                                        }
+                                        else
+                                        { @data.ExternalLinkURLTxt;
+                                        }" style="text-shadow: none;">
+                                            <span>@data.TitleTxt</span>
+                                            @if (data.IsParentTitleInd.Value == true && Model.ChildRightSections.Where(x => x.ParentID == data.RightSectionID).Count() > 0)
+                                            {
+                                                <span class="holder"></span>
+                                            }
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <div class="section-name">
+                                            <span>@data.TitleTxt</span>
+                                        </div>
+                                    }
+
+                                    @if (Model.ChildRightSections.Where(x => x.ParentID == data.RightSectionID).Count() > 0 && data.IsParentTitleInd.Value == true)
+                                    {
+                                        foreach (var d in Model.ChildRightSections.Where(x => x.ParentID == data.RightSectionID))
+                                        {
+                                            <ul>
+                                                <li>
+                                                    <a href="@d.ExternalLinkURLTxt" @if (@d.ExternalLinkTargetInd.Value) {<text> target = "_blank"</text>}><span>@d.TitleTxt</span></a>
+                                                </li>
+                                            </ul>
+                                        }
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+}
+@if (Model.ParentRightSections != null)
+{
+    if (Model.ParentRightSections.Count > 0)
+    {
+        <script src="~/scripts/js/sidemenu.js" type="text/javascript"></script>
+    }
+}
+<script type="text/javascript">
+    $(".social a").on("click", function () {
+        var url = $(this).attr('custom');
+        makeNewWindow(url);
+    });
+
+    function makeNewWindow(url) {
+        var newWindow
+        var left = (screen.width / 2) - (800 / 2);
+        newWindow = window.open(url, "", 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' + 800 + ', height=' + 500 + ',  left=' + left);
+    }
+</script>

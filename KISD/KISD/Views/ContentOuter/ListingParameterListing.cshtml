@@ -1,0 +1,45 @@
+﻿@using ContentTypeAlias = KISD.Areas.Admin.Models.ContentType
+@model KISD.Areas.Admin.Models.ContentModel
+@{
+    ViewBag.Title = !string.IsNullOrEmpty(Model.PageMetaTitleTxt) ? Model.PageMetaTitleTxt : "";
+    ViewBag.MetaDescription = !string.IsNullOrEmpty(Model.PageMetaDescriptionTxt) ? Model.PageMetaDescriptionTxt : "";
+    Layout = null;
+    var AppPath = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost) + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+     (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""));
+    db_KISDEntities objContext = new db_KISDEntities();
+}
+
+<div class="listing-content">
+
+    @if (Model.ListingParemeterName.Trim() == KISD.Areas.Admin.Models.Common.ListingParameters.PodCast.ToString().Trim())
+    {
+        Html.RenderPartial("PodcastListingPartial");
+    }
+
+    @if (Model.ListingParemeterName.Trim() == KISD.Areas.Admin.Models.Common.ListingParameters.FAQ.ToString().Trim())
+    {
+        Html.RenderPartial("FAQListingPartial");
+    }
+
+    @if (Model.ListingParemeterName.Trim() == KISD.Areas.Admin.Models.Common.ListingParameters.FAQByCategory.ToString().Trim())
+    {
+        ViewBag.FAQByCategory = "true";
+        Html.RenderPartial("FAQListingPartial");
+    }
+
+    @if (Model.ListingParemeterName.Trim() == KISD.Areas.Admin.Models.Common.ListingParameters.PhotoGallery.ToString().Trim())
+    {
+        Html.RenderPartial("PhotoGalleryListingPartial");
+    }
+
+    @if (Model.ListingParemeterName.Trim() == KISD.Areas.Admin.Models.Common.ListingParameters.PhotoGalleryByCategory.ToString().Trim())
+    {
+        ViewBag.PhotoGalleryByCategory = "true";
+        Html.RenderPartial("PhotoGalleryListingPartial");
+    }
+
+    @if (Model.ListingParemeterName.Trim() == KISD.Areas.Admin.Models.Common.ListingParameters.Video.ToString().Trim())
+    {
+        Html.RenderPartial("VideoListingPartial");
+    }
+</div>

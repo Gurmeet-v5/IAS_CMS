@@ -1,0 +1,431 @@
+﻿@using KISD.Areas.BlogAdmin.Contexts;
+@using KISD.Areas.BlogAdmin.Models;
+@using MvcContrib.UI.Grid;
+@using MvcContrib.UI.Pager
+@model PagedViewModel<UsersModel>
+@{
+    var message = TempData["AlertMessage"] ?? string.Empty;
+    var alertmessage = TempData["Message"] ?? string.Empty;
+    var UserID = Request.QueryString["UserID"] != null ? Request.QueryString["UserID"].ToString() : "0";
+    var pager = TempData["pager"] ?? string.Empty;
+    var sortColumn = Request.QueryString["Column"] != null ? Request.QueryString["Column"].ToString() : "FirstName";
+    var sortDirection = Request.QueryString["Direction"] != null ? Request.QueryString["Direction"].ToString() : "Ascending";
+    var pagesize = Request.QueryString["pagesize"] != null ? Request.QueryString["pagesize"].ToString() : Common._pageSize.ToString();
+    var pagerID = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var page = Request.QueryString["page"] != null ? Request.QueryString["page"].ToString() : Common._currentPage.ToString();
+    var AppPath1 = (Request.IsSecureConnection ? "https://" : "http://") + (HttpContext.Current.Request.Url.DnsSafeHost)
+                                       + (HttpContext.Current.Request.IsLocal ? (":" + HttpContext.Current.Request.Url.Port.ToString()) :
+                                       (HttpContext.Current.Request.ApplicationPath.Length > 1 ? HttpContext.Current.Request.ApplicationPath : ""))
+                                       + "/BlogAdmin/User/BlogUserListing?ImageTypeID=" + Request.QueryString["ImageTypeID"] + "&page=1&Column=" + sortColumn + "&Direction=" + sortDirection + "&CategoryID=" + UserID + "&pagesize=";
+    AppPath1 = Common.ReturnValidPath(AppPath1);
+    var UsersRolesContext = new UsersRolesContext().GetUsersRoles();
+    var UsersContexts = new UsersContexts().GetAccountUsers();
+    var isLoginAdmin = from ur in UsersRolesContext join uc in UsersContexts on ur.UserID equals uc.UserID where uc.UserNameTxt.ToLower().Trim() == User.Identity.Name.ToString().ToLower().Trim() select (ur.RoleID);
+    var objAdminCount = from ur in UsersRolesContext join uc in UsersContexts on ur.UserID equals uc.UserID where ur.RoleID == 1 && uc.StatusInd == true select (ur.RoleID);
+    var Admin_count = objAdminCount != null ? (objAdminCount.Count() > 1 ? 2 : 1) : 0;
+}
+<div class="Main_PartialHeader">
+
+    <!-- widget-header Ends -->
+    <div class="pager paging-top">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style" id="divPager">
+                <select id="ddlPager" name="ddlPager" class="ddlpgr">
+                    <option value="@(AppPath1)10" text="10">10</option>
+                    <option value="@(AppPath1)25" text="25">25</option>
+                    <option value="@(AppPath1)50" text="50">50</option>
+                    <option value="@(AppPath1)100" text="100">100</option>
+                    <option value="@(AppPath1)0" text="0">All</option>
+                </select>
+            </div>
+        }
+        <div class="pagination">
+            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+        </div>
+        <!-- pagination -->
+    </div>
+
+    <div class="wrapper">
+        <div class="tab-pane active">
+            @if (Model.PagedList.Any())
+            {
+                @Html.Grid(Model.PagedList).Columns(column =>
+           {
+               column.For(x => x.FirstName + " " + x.LastName).Named("Name").SortColumnName("FirstName")
+                   .HeaderAttributes(@class => "left sort", @style => "width:35%", @align => "left").Attributes(@Class => "left maxtext").Sortable(true);
+
+               column.For(x => x.UserNameTxt).Named("Username").SortColumnName("UserNameTxt")
+                   .HeaderAttributes(@class => "sort", @align => "center", @style => "width:25%;").Visible(true).Attributes(@align => "center")
+                   .HeaderAttributes(new Dictionary<string, object> {});
+
+               column.For(x => Html.CheckBox("chkActive", x.StatusInd, new { @class = "checkbox", @value = x.UserID, @id = x.UserNameTxt })).Encode(false).Header("<th data-hide='phone,tablet'  width='10%' >Status</th>").Visible(true).Attributes(@align => "center");
+
+               column.For(x => Html.ActionLink("Manage", "CreateUserRole", "UsersRoles"
+                   , new { UserID = x.UserID, pagesize = pagesize, page = page, Column = "UserName", Direction = sortDirection }
+                   , new { @class = "edit", @value = x.UserNameTxt })).Named("Assign Role").Sortable(false)
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone,tablet" }, { "class", "footable-sorted-desc" } })
+                            .Attributes(@align => "center");
+
+               column.For(x => Html.ActionLink("Edit", "CreateUser", "User"
+                   , new { UserID = x.UserID, pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection }
+                   , new { @class = "edit", @value = x.UserNameTxt })).Named("Edit").Sortable(false)
+                       .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone,tablet" }, { "class", "footable-sorted-desc" } })
+                            .Attributes(@align => "center");
+
+               column.For(x => Html.ActionLink("Delete", "Delete", "User", new { userId = x.UserID, pagesize = pagesize, page = page, Column = sortColumn, Direction = sortDirection }
+                                               , new { @class = "delete PostLink", @val = x.UserNameTxt })).Sortable(false).Named("Delete")
+                           .HeaderAttributes(new Dictionary<string, object> { { "style", "width:10%" }, { "data-hide", "phone,tablet" } })
+                           .Attributes(@align => "center");
+
+
+           }).Sort(Model.GridSortOptions).Attributes(@class => "table table-bordered", @CellSpacing => "0", @CellPadding => "2");
+            }
+            else
+            {
+                <div>
+                    <div class="nodatafound">
+                        No Data Found.
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="pager">
+        <!-- pager -->
+        @if (Model.PagedList.Any())
+        {
+            <div class="select-style">
+                <select id="ddlPager1" name="ddlPager1" class="ddlpgr">
+                    <option value="@(AppPath1)10" text="10">10</option>
+                    <option value="@(AppPath1)25" text="25">25</option>
+                    <option value="@(AppPath1)50" text="50">50</option>
+                    <option value="@(AppPath1)100" text="100">100</option>
+                    <option value="@(AppPath1)0" text="0">All</option>
+                </select>
+
+            </div>
+        }
+        <div class="pagination">
+            @Html.Raw(Html.Pager(Model.PagedList).First("First").Last("Last").Next("Next").Previous("Previous"))
+        </div>
+        <!-- pagination -->
+    </div>
+
+
+    @Html.Hidden("returnUrl", this.Request.RawUrl)
+    <input type="hidden" name="hdncheckboxselected" id="hdncheckboxselected" value="" />
+    <input type="hidden" name="hdnvalue" id="hdnvalue" value="" />
+</div>
+
+<script type="text/javascript">
+    //Scroll window to top
+    window.scrollTo(0, 0);
+
+    var alertmessage = '@alertmessage';
+    if (alertmessage != '')
+        alert(alertmessage);
+
+    var message = '@message';
+    if (message) {
+        var het = $('.message').outerHeight();
+        $('.message').css('top', -het); //move element outside viewport
+
+        showMessage(message);
+
+        setTimeout(function () {
+            hidemessage()
+        }, 3000);
+
+    }
+
+    function showMessage(msg) {
+        $(".checkbox").prop("disabled", true);
+        $('#notifyDiv').show();
+        $('.message').animate({ top: "0" }, 500);
+        $('#notifyMsg').html(msg);
+    }
+
+    function hidemessage() {
+        var ht = $('.message').outerHeight();
+        $('.message').animate({ top: -ht }, 500);
+        $(".checkbox").prop("disabled", false);// Make status check box enable after message hides
+        setTimeout(function () {
+            $('#notifyDiv').hide();
+        }, 500);
+    }
+
+
+    ////Ajax Drop down Pagination Section starts
+    $('.ddlpgr').on('change', function () {
+        var url = $(this).val();
+        // Declare String object of model AjaxRequest
+        var objresult = {
+            ajaxcall: 'ddlPaging', //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                var pager = $(".ddlPgr").find("option:selected").prop("text");
+                if (pager) {
+                    $(".ddlPgr option[text=" + pager + "]").prop("selected", true);
+                }
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+                $(function () {
+                    $('table').footable();
+                });
+            }
+        });
+
+        return false;
+    });
+
+
+    //Ajax Next Previous Pagination Section starts
+    $('.paginationRight a').on('click', function () {
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+        }
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'paging',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { "objresult": JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+                $(function () {
+                    $('table').footable();
+                });
+            }
+        });
+
+        return false;
+    });
+
+    //Ajax Column sorting Section starts
+    $('.table thead tr th a').on('click', function (evt) {
+
+        var url = $(this).attr('href');
+        var url_new = url.substring(0, url.indexOf('&objresult'));
+        if (url_new != '') {
+            $(this).attr('href', url_new);
+            url = url_new;
+
+        }
+
+        var objresult = { // String object of model AjaxRequest
+            ajaxcall: 'sorting',    //ajaxcall parameter is used to define which ajax call if posted
+            hfid: '',
+            hfvalue: '',
+            qs_shownonhomevalue: '',
+            qs_checkboxselected: '',
+            qs_value: '',
+            qs_Type: ''
+        };
+        $.ajax({
+            url: url,
+            type: 'Get',
+            data: { objresult: JSON.stringify(objresult) },
+            cache: false,
+            success: function (result) {
+                objresult = null;
+                $('.Main_PartialHeader').replaceWith(result);
+                $(function () {
+                    $('table').footable();
+                });
+            }
+        });
+
+        return false;
+    });
+
+
+    // Ajax call for display order section
+
+    //.. for pager dropdown selectedvalue
+    var pager = '@pager';
+    if (pager) {
+        $("#ddlPager option[text=" + pager + "]").prop("selected", true);
+        $("#ddlPager1 option[text=" + pager + "]").prop("selected", true);
+    }
+
+    $(document).ready(function () {
+        var isuserAdmin = '@isLoginAdmin.FirstOrDefault()';
+        var LoginUser = '@User.Identity.Name.ToString()';//Current Login UserName
+        //Edit
+        $('.edit').click(function (e) {
+            var CurrentRowUsername = $(this).attr('value');
+            if (isuserAdmin == '1') {
+                return true;
+            }
+            else {
+                if (LoginUser.trim().toLowerCase() != CurrentRowUsername.trim().toLowerCase()) {
+                    alert("You have no privilege to edit this information.");
+                    e.preventDefault();
+                    return false;
+                }
+
+            }
+
+        });
+
+        //Status Checkbox
+        $('.checkbox').click(function (e) {
+            var CurrentRowUsername = $(this).attr('id');
+            var isuserAdmin = '@isLoginAdmin.FirstOrDefault()';
+            if (isuserAdmin == '1') {
+                var isAdminChangedHisStatus = 0;
+                if (LoginUser.trim().toLowerCase() == CurrentRowUsername.trim().toLowerCase()) {// Current Row
+                    if ('@Admin_count' == 1) {
+                        alert("Atleast one administrator is required to ba active.")
+                        return false;
+                    }
+                    if (confirm('Are you sure you want to inactive your account ?')) {
+                        isAdminChangedHisStatus = 1;
+                    }
+                    else {
+                        isAdminChangedHisStatus = 2;
+                        return false;
+                    }
+                }
+
+                if (isAdminChangedHisStatus == 0 || isAdminChangedHisStatus == 1) {
+                    var pager = $(".ddlPgr").find("option:selected").prop("text");
+                    var hfid; var hfvalue;
+                    if ($(this).is(':checked')) {
+                        hfid = $(this).attr('value')
+                        hfvalue = '1';
+                    } else {
+                        hfid = $(this).attr('value')
+                        hfvalue = '0';
+                    }
+                    var url = $(this).attr('text') + pager;
+                    var objresult = { // String object of model AjaxRequest
+                        ajaxcall: 'status',
+                        hfid: hfid,
+                        hfvalue: hfvalue,
+                        qs_shownonhomevalue: '',
+                        qs_checkboxselected: '',
+                        qs_value: '',
+                        qs_Type: ''
+                    };
+
+                    $.ajax({
+                        url: url,
+                        type: 'Get',
+                        data: { "objresult": JSON.stringify(objresult) },
+                        cache: false,
+                        success: function (result) {
+                            objresult = null;
+                            if (isAdminChangedHisStatus == 1) {
+                                var url = '@Url.Action("Login", "Account", new { isChanged = "2" })';
+                                window.location.href = url;
+                            }
+                            else {
+                                $('.Main_PartialHeader').replaceWith(result);
+                                $(function () {
+                                    $('table').footable();
+                                });
+                            }
+
+                        }
+                    });
+
+                    return false;
+                }
+
+            }
+            else {
+                if (LoginUser.trim().toLowerCase() != CurrentRowUsername.trim().toLowerCase()) {
+                    alert("You have no privilege to edit this information.");
+                    e.preventDefault();
+                    return false;
+                }
+                else {
+                    var pager = $(".ddlPgr").find("option:selected").prop("text");
+                    var hfid; var hfvalue;
+                    if ($(this).is(':checked')) {
+                        hfid = $(this).attr('value')
+                        hfvalue = '1';
+                    } else {
+                        hfid = $(this).attr('value')
+                        hfvalue = '0';
+                    }
+                    var url = $(this).attr('text') + pager;
+                    var objresult = { // String object of model AjaxRequest
+                        ajaxcall: 'status',    
+                        hfid: hfid,
+                        hfvalue: hfvalue,
+                        qs_shownonhomevalue: '',
+                        qs_checkboxselected: '',
+                        qs_value: '',
+                        qs_Type: ''
+                    };
+
+                    $.ajax({
+                        url: url,
+                        type: 'Get',
+                        data: { "objresult": JSON.stringify(objresult) },
+                        cache: false,
+                        success: function (result) {
+                            objresult = null;
+                            $('.Main_PartialHeader').replaceWith(result);
+                            $(function () {
+                                $('table').footable();
+                            });
+                        }
+                    });
+
+                    return false;
+                }
+
+            }
+        });
+
+        // Delete
+        $('a.PostLink').click(function (e) {
+            e.preventDefault();
+            var CurrentRowUsername = $(this).attr('val');
+            if (isuserAdmin == '1' && LoginUser.trim().toLowerCase() != CurrentRowUsername.trim().toLowerCase()) {
+                if (window.confirm('Are you sure you want to delete ' + $(this).attr('val') + '?')) {
+                    $.post($(this).attr("href"), function (data) {
+                        window.location.href = data;
+                    });
+                }
+            }
+            else {
+                alert("You have no privilege to delete this information.");
+                e.preventDefault();
+                return false;
+            }
+        });
+    });
+
+</script>

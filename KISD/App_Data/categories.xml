@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Categories>
+  <Category>
+    <CategoryID>1</CategoryID>
+    <CategoryNameTxt>New Cat</CategoryNameTxt>
+  </Category>
+  <Category>
+    <CategoryID>2</CategoryID>
+    <CategoryNameTxt>Second Category</CategoryNameTxt>
+  </Category>
+</Categories>
