@@ -46,7 +46,6 @@ D:\Gurmeet\Projects\images\KISD\KISD\bin\System.Web.Webpages.Deployment.xml
 D:\Gurmeet\Projects\images\KISD\KISD\bin\System.Web.Webpages.Razor.xml
 D:\Gurmeet\Projects\images\KISD\KISD\bin\System.Web.Helpers.xml
 D:\Gurmeet\Projects\images\KISD\KISD\bin\System.Web.Mvc.xml
-D:\Gurmeet\Projects\images\KISD\KISD\obj\Debug\KISD.csprojAssemblyReference.cache
 D:\Gurmeet\Projects\images\KISD\KISD\obj\Debug\KISD.csproj.CopyComplete
 D:\Gurmeet\Projects\images\KISD\KISD\obj\Debug\KISD.dll
 D:\Gurmeet\Projects\images\KISD\KISD\obj\Debug\KISD.pdb

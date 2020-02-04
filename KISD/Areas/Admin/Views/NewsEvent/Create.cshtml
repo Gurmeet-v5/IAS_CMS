@@ -100,7 +100,7 @@
                                         </a>
                                     </div>
                                 </div>
-                                @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News)
+                                @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews)
 || Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.Events)
 || Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.ManageEvents))
                                 {
@@ -109,7 +109,7 @@
                                     <div class="row">
                                         <div class="col20">
                                             <label>
-                                             @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                             @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                              { <text>News</text>}
                                              else
                                              {
@@ -123,9 +123,9 @@
                                             @Html.ValidationMessageFor(m => m.TitleTxt)
                                         </div>
                                     </div>
-                                    if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                    if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                     {
-                                        if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                        if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                         {
                                             <div class="row dvimage" id="dvimage">
                                                 <div class="col20">
@@ -380,7 +380,7 @@
                                                                    ondrop = "return false;",
                                                                    onpaste = "return false;"
                                                                })
-                                                                        @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                                        @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                                                         {
                                                                             <img src='@Href("~/scripts/Admin/images/tooltip.png")' title="News will be visible in website from the date specified in Display Start date " class="suggestion tooltipinfo" />
                                                                             <div class="mobiletooltip">
@@ -407,7 +407,7 @@
                                                                    ondrop = "return false;",
                                                                    onpaste = "return false;"
                                                                })
-                                                                        @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                                        @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                                                         {
                                                                             <img src='@Href("~/scripts/Admin/images/tooltip.png")' title="News will be visible in the website till the date specified in Display End date" class="suggestion tooltipinfo" />
                                                                             <div class="mobiletooltip">
@@ -550,7 +550,7 @@
                                                                    ondrop = "return false;",
                                                                    onpaste = "return false;"
                                                                })
-                                                                    @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                                    @if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                                                     {
                                                                         <img src='@Href("~/scripts/Admin/images/tooltip.png")' title="News will be sorted on the basis of Date Added in website" class="suggestion tooltipinfo" />
                                                                         <div class="mobiletooltip">
@@ -560,7 +560,7 @@
                                                                     @Html.ValidationMessageFor(m => m.EventCreateDate)
                                                                 </div>
                                                             </div>
-                                                            if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.News))
+                                                            if (Model.TypeMasterID == Convert.ToInt64(NewsEventTypeAlias.DailyNews))
                                                             {
                                                                 <div class="row metatitle">
                                                                     <div class="col20">
@@ -630,13 +630,13 @@
                                                                     var type = '@EncryptDecrypt.Decrypt(TypeMasterID)';
                                                                     if (type == "8") {
                                                                         $("#ankMasters").addClass('select');
-                                                                        $('#ankNews').addClass('select');
-                                                                        $('#ankNewsListing').addClass('select');
+                                                                        $('#ankDailyNews').addClass('select');
+                                                                        $('#ankDailyNewsListing').addClass('select');
                                                                     }
                                                                     else if (type == "9") {
                                                                         $('#ankMasters').addClass('select');
-                                                                        $('#ankEvents').addClass('select');
-                                                                        $('#ankEventsListing').addClass('select');
+                                                                        $('#ankDownloads').addClass('select');
+                                                                        $('#ankDownloadsListing').addClass('select');
                                                                     }
                                                                     else if (type == "18") {
                                                                         $('#ankDepartments').addClass('select');

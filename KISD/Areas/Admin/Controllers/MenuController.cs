@@ -47,14 +47,13 @@ namespace KISD.Areas.Admin.Controllers
 
                 #region Check Tab is Accessible or Not
                 int TabType = 0;
-                if (menutypeId == 13) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
-                if (menutypeId == 15) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutKISD); }
-                if (menutypeId == 17) { TabType = Convert.ToInt32(ModuleTypeAlias.School); }
-                if (menutypeId == 19) { TabType = Convert.ToInt32(ModuleTypeAlias.NewToKISD); }
-                if (menutypeId == 23) { TabType = Convert.ToInt32(ModuleTypeAlias.Departments); }
-                if (menutypeId == 21) { TabType = Convert.ToInt32(ModuleTypeAlias.ParentStudents); }
-                if (menutypeId == 26) { TabType = Convert.ToInt32(ModuleTypeAlias.SchoolBoard); }
-                if (menutypeId == 28) { TabType = Convert.ToInt32(ModuleTypeAlias.Employment); }
+                if (menutypeId == 2) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
+                if (menutypeId == 14) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutUs); }
+                if (menutypeId == 20) { TabType = Convert.ToInt32(ModuleTypeAlias.ContactUs); }
+                if (menutypeId == 19) { TabType = Convert.ToInt32(ModuleTypeAlias.DailyNews); }
+                if (menutypeId == 8) { TabType = Convert.ToInt32(ModuleTypeAlias.Downloads); }
+                if (menutypeId == 5) { TabType = Convert.ToInt32(ModuleTypeAlias.Syllabus); }
+                if (menutypeId == 17) { TabType = Convert.ToInt32(ModuleTypeAlias.Video); }
                 if (menutypeId == 25) { TabType = Convert.ToInt32(ModuleTypeAlias.FlyPages); }
 
                 var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
@@ -294,14 +293,13 @@ namespace KISD.Areas.Admin.Controllers
             {
                 #region Check Tab is Accessible or Not
                 int TabType = 0;
-                if (MenuTypeId == 13) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
-                if (MenuTypeId == 15) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutKISD); }
-                if (MenuTypeId == 17) { TabType = Convert.ToInt32(ModuleTypeAlias.School); }
-                if (MenuTypeId == 19) { TabType = Convert.ToInt32(ModuleTypeAlias.NewToKISD); }
-                if (MenuTypeId == 23) { TabType = Convert.ToInt32(ModuleTypeAlias.Departments); }
-                if (MenuTypeId == 21) { TabType = Convert.ToInt32(ModuleTypeAlias.ParentStudents); }
-                if (MenuTypeId == 26) { TabType = Convert.ToInt32(ModuleTypeAlias.SchoolBoard); }
-                if (MenuTypeId == 28) { TabType = Convert.ToInt32(ModuleTypeAlias.Employment); }
+                if (MenuTypeId == 2) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
+                if (MenuTypeId == 14) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutUs); }
+                if (MenuTypeId == 20) { TabType = Convert.ToInt32(ModuleTypeAlias.ContactUs); }
+                if (MenuTypeId == 19) { TabType = Convert.ToInt32(ModuleTypeAlias.DailyNews); }
+                if (MenuTypeId == 8) { TabType = Convert.ToInt32(ModuleTypeAlias.Downloads); }
+                if (MenuTypeId == 5) { TabType = Convert.ToInt32(ModuleTypeAlias.Syllabus); }
+                if (MenuTypeId == 17) { TabType = Convert.ToInt32(ModuleTypeAlias.Video); }
                 if (MenuTypeId == 25) { TabType = Convert.ToInt32(ModuleTypeAlias.FlyPages); }
 
                 var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
@@ -752,14 +750,13 @@ namespace KISD.Areas.Admin.Controllers
             {
                 #region Check Tab is Accessible or Not
                 int TabType = 0;
-                if (SubMenuTypeID == 14) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
-                if (SubMenuTypeID == 16) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutKISD); }
-                if (SubMenuTypeID == 18) { TabType = Convert.ToInt32(ModuleTypeAlias.School); }
-                if (SubMenuTypeID == 20) { TabType = Convert.ToInt32(ModuleTypeAlias.NewToKISD); }
-                if (SubMenuTypeID == 24) { TabType = Convert.ToInt32(ModuleTypeAlias.Departments); }
-                if (SubMenuTypeID == 22) { TabType = Convert.ToInt32(ModuleTypeAlias.ParentStudents); }
-                if (SubMenuTypeID == 27) { TabType = Convert.ToInt32(ModuleTypeAlias.SchoolBoard); }
-                if (SubMenuTypeID == 29) { TabType = Convert.ToInt32(ModuleTypeAlias.Employment); }
+                if (SubMenuTypeID == 3) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
+                if (SubMenuTypeID == 15) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutUs); }
+                if (SubMenuTypeID == 21) { TabType = Convert.ToInt32(ModuleTypeAlias.ContactUs); }
+                if (SubMenuTypeID == 20) { TabType = Convert.ToInt32(ModuleTypeAlias.DailyNews); }
+                if (SubMenuTypeID == 9) { TabType = Convert.ToInt32(ModuleTypeAlias.Downloads); }
+                if (SubMenuTypeID == 6) { TabType = Convert.ToInt32(ModuleTypeAlias.Syllabus); }
+                if (SubMenuTypeID == 18) { TabType = Convert.ToInt32(ModuleTypeAlias.Video); }
                 if (SubMenuTypeID == 25) { TabType = Convert.ToInt32(ModuleTypeAlias.FlyPages); }
 
                 var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
@@ -1011,14 +1008,13 @@ namespace KISD.Areas.Admin.Controllers
 
                 #region Check Tab is Accessible or Not
                 int TabType = 0;
-                if (SubMenuTypeID == 14) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
-                if (SubMenuTypeID == 16) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutKISD); }
-                if (SubMenuTypeID == 18) { TabType = Convert.ToInt32(ModuleTypeAlias.School); }
-                if (SubMenuTypeID == 20) { TabType = Convert.ToInt32(ModuleTypeAlias.NewToKISD); }
-                if (SubMenuTypeID == 24) { TabType = Convert.ToInt32(ModuleTypeAlias.Departments); }
-                if (SubMenuTypeID == 22) { TabType = Convert.ToInt32(ModuleTypeAlias.ParentStudents); }
-                if (SubMenuTypeID == 27) { TabType = Convert.ToInt32(ModuleTypeAlias.SchoolBoard); }
-                if (SubMenuTypeID == 29) { TabType = Convert.ToInt32(ModuleTypeAlias.Employment); }
+                if (SubMenuTypeID == 3) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
+                if (SubMenuTypeID == 15) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutUs); }
+                if (SubMenuTypeID == 21) { TabType = Convert.ToInt32(ModuleTypeAlias.ContactUs); }
+                if (SubMenuTypeID == 20) { TabType = Convert.ToInt32(ModuleTypeAlias.DailyNews); }
+                if (SubMenuTypeID == 9) { TabType = Convert.ToInt32(ModuleTypeAlias.Downloads); }
+                if (SubMenuTypeID == 6) { TabType = Convert.ToInt32(ModuleTypeAlias.Syllabus); }
+                if (SubMenuTypeID == 18) { TabType = Convert.ToInt32(ModuleTypeAlias.Video); }
                 if (SubMenuTypeID == 25) { TabType = Convert.ToInt32(ModuleTypeAlias.FlyPages); }
 
                 var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();

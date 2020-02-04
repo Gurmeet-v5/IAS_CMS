@@ -51,6 +51,7 @@ header {
     position: relative;
     height: 130px;
     transform: scale(1.04);
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, .5);
 }
 
 .header_scroll {

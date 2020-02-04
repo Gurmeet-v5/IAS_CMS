@@ -6,39 +6,28 @@
 
 @{
     db_KISDEntities objDB = new db_KISDEntities();
-    var userId = objDB.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
+     var userId = objDB.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
     var RoleID = objDB.UserRoles.Where(x => x.UserID == userId).Select(x => x.RoleID).FirstOrDefault();
     var AccessibleTabs = objDB.UserPermissions.Where(x => x.UserID == userId).Select(x => x.PageID).ToList();
     var IsSuperAdmin = RoleID == Convert.ToInt32(Common.UserType.SuperAdmin) ? true : false;
     var IsAdmin = RoleID == Convert.ToInt32(Common.UserType.Admin) ? true : false;
     var IsDeptUser = RoleID == Convert.ToInt32(Common.UserType.DepartmentUser) ? true : false;
     var IsUser = RoleID == Convert.ToInt32(Common.UserType.User) ? true : false;
-    var AboutKISDContent = Convert.ToInt64(ContentTypeAlias.AboutKISD);
+    var AboutKISDContent = Convert.ToInt64(ContentTypeAlias.AboutUs);
     var AboutKISDContentID = objDB.Contents.Where(x => x.ContentTypeID == AboutKISDContent).Select(x => x.ContentID).FirstOrDefault();
-    var NewToKISDContent = Convert.ToInt64(ContentTypeAlias.NewToKISD);
-    var NewToKISDContentID = objDB.Contents.Where(x => x.ContentTypeID == NewToKISDContent).Select(x => x.ContentID).FirstOrDefault();
-    var ExceptionalOppoContent = Convert.ToInt64(ContentTypeAlias.ExceptionalOpportunities);
-    var ExceptionalOppoContentID = objDB.Contents.Where(x => x.ContentTypeID == ExceptionalOppoContent).Select(x => x.ContentID).FirstOrDefault();
-    var DepartmentContent = Convert.ToInt64(ContentTypeAlias.Departments);
-    var DepartmentContentID = objDB.Contents.Where(x => x.ContentTypeID == DepartmentContent).Select(x => x.ContentID).FirstOrDefault();
-    var ParentStudentContent = Convert.ToInt64(ContentTypeAlias.ParentStudents);
-    var ParentStudentContentID = objDB.Contents.Where(x => x.ContentTypeID == ParentStudentContent).Select(x => x.ContentID).FirstOrDefault();
-    var StaffContent = Convert.ToInt64(ContentTypeAlias.Staff);
-    var StaffContentID = objDB.Contents.Where(x => x.ContentTypeID == StaffContent).Select(x => x.ContentID).FirstOrDefault();
-    var SchoolBoardContent = Convert.ToInt64(ContentTypeAlias.SchoolBoard);
-    var SchoolBoardContentID = objDB.Contents.Where(x => x.ContentTypeID == SchoolBoardContent).Select(x => x.ContentID).FirstOrDefault();
-    var BoardMemberContent = Convert.ToInt64(ContentTypeAlias.BoardMembers);
-    var BoardMemberContentID = objDB.Contents.Where(x => x.ContentTypeID == BoardMemberContent).Select(x => x.ContentID).FirstOrDefault();
-    var EmploymentContent = Convert.ToInt64(ContentTypeAlias.Employment);
-    var EmploymentContentID = objDB.Contents.Where(x => x.ContentTypeID == EmploymentContent).Select(x => x.ContentID).FirstOrDefault();
-    var NewsContent = Convert.ToInt64(ContentTypeAlias.News);
+    var SyllabusContent = Convert.ToInt64(ContentTypeAlias.Syllabus);
+    var SyllabusContentID = objDB.Contents.Where(x => x.ContentTypeID == SyllabusContent).Select(x => x.ContentID).FirstOrDefault();
+
+    var NewsContent = Convert.ToInt64(ContentTypeAlias.DailyNews);
     var NewsContentID = objDB.Contents.Where(x => x.ContentTypeID == NewsContent).Select(x => x.ContentID).FirstOrDefault();
-    var EventsContent = Convert.ToInt64(ContentTypeAlias.Events);
-    var EventsContentID = objDB.Contents.Where(x => x.ContentTypeID == EventsContent).Select(x => x.ContentID).FirstOrDefault();
-    var VideosContent = Convert.ToInt64(ContentTypeAlias.Videos);
+
+    var DownloadsContent = Convert.ToInt64(ContentTypeAlias.Downloads);
+    var DownloadsContentID = objDB.Contents.Where(x => x.ContentTypeID == DownloadsContent).Select(x => x.ContentID).FirstOrDefault();
+
+    var VideosContent = Convert.ToInt64(ContentTypeAlias.Video);
     var VideosContentID = objDB.Contents.Where(x => x.ContentTypeID == VideosContent).Select(x => x.ContentID).FirstOrDefault();
-    var BoardScheduleContent = Convert.ToInt64(ContentTypeAlias.BoardSchedule);
-    var BoardScheduleContentID = objDB.Contents.Where(x => x.ContentTypeID == BoardScheduleContent).Select(x => x.ContentID).FirstOrDefault();
+    
+
     if (IsSuperAdmin || IsAdmin)
     {
         AccessibleTabs.Add(1);
@@ -121,98 +110,18 @@
                             </li>
                         }
 
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.ListingParameters) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href='@Url.Action("ListingParameters", "ListingParameter", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ListingParameter).ToString()), smt = EncryptDecrypt.Encrypt("0"), Column = "ListingParameterTxt", Direction = "Ascending" })' id="ankListingParametrs"><i class="fa fa-check"></i>Listing Parameters</a>
-                            </li>
-                        }
-
                         if (tab == Convert.ToInt32(ModuleTypeAlias.Masters) || IsSuperAdmin || IsAdmin)
                         {
                             <li>
                                 <a href="#" id="ankMasters"><i class="fa fa-thumb-tack"></i>Manage Masters</a>
                                 <ul>
                                     <li>
-                                        @Html.ActionLink("Image Listing", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.ImageListing).ToString()) }, new { id = "ankimagelisting" })
-                                    </li>
-                                    <li>
                                         @Html.ActionLink("Important Information Images", "Index", "Image", new { it = EncryptDecrypt.Encrypt("3"), Column = "ImageCreateDate", Direction = "Descending" }, new { id = "ankImportantInfoImages" })
                                     </li>
                                     <li>
-                                        @Html.ActionLink("Icons", "Index", "Image", new { it = EncryptDecrypt.Encrypt("4"), Column = "ImageCreateDate", Direction = "Descending" }, new { id = "ankIcons" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Announcements", "Index", "Announcement", new { it = EncryptDecrypt.Encrypt(((Convert.ToInt64(GalleryListingService.TypeMaster.Announcement)).ToString())), Column = "AnnouncementCreateDate", Direction = "Descending" }, new { id = "ankAnnouncement" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Onscreen Alerts", "Index", "Announcement", new { it = EncryptDecrypt.Encrypt(((Convert.ToInt64(GalleryListingService.TypeMaster.OnscreenAlert)).ToString())), Column = "AnnouncementCreateDate", Direction = "Descending" }, new { id = "ankOnscreenAlert" })
-                                    </li>
-                                    <li>
-                                        <a href="#" id="ankNews">News</a>
-                                        <ul>
-                                            <li>
-                                                @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.News).ToString()) }, new { id = "ankNewsContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(NewsContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.News).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankNewsContentRightSecton", @class = (NewsContentID > 0 ? "" : "disabled_link") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Listing", "Index", "NewsEvent", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt32(TypeMasterAlias.News).ToString()), Column = "EventCreateDate", Direction = "Descending" }, new { id = "ankNewsListing" })
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        <a href="#" id="ankEvents">Events</a>
-                                        <ul>
-                                            <li>
-                                                @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Events).ToString()) }, new { id = "ankEventsContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(EventsContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Events).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankEventContentRightSecton", @class = (EventsContentID > 0 ? "" : "disabled_link") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Listing", "Index", "NewsEvent", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt32(TypeMasterAlias.Events).ToString()), Column = "EventCreateDate", Direction = "Descending" }, new { id = "ankEventsListing" })
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("School Category", "Index", "School", new { tmi = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.SchoolCategory).ToString()) }, new { id = "ankSchoolCategory" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Photo Gallery", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.PhotoGallery).ToString()) }, new { id = "ankPhotoGallery" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Podcast", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.Podcast).ToString()) }, new { id = "ankPodCast" })
-                                    </li>
-                                    <li>
-                                        <a href="#" id="ankVideo">Videos</a>
-                                        <ul>
-                                            <li>
-                                                @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Videos).ToString()) }, new { id = "ankVideosContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(VideosContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Video).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankVideoContentRightSecton", @class = (VideosContentID > 0 ? "" : "disabled_link") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Listing", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.Video).ToString()) }, new { id = "ankVideos" })
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("FAQ Category", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.FAQCategory).ToString()) }, new { id = "ankFAQ" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Document Viewer", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.DocumentViewer).ToString()) }, new { id = "ankDocumentViewer" })
+                                        @Html.ActionLink("Syllabus Icons", "Index", "Image", new { it = EncryptDecrypt.Encrypt("4"), Column = "ImageCreateDate", Direction = "Descending" }, new { id = "ankIcons" })
                                     </li>
                                 </ul>
-                            </li>
-                        }
-
-                        if (IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href='@Url.Action("Index", "UsersManagement", new { Column = "UserCreateDate", Direction = "Descending" })' id="ankUserManagement"><i class="fa fa-user"></i>User Management</a>
                             </li>
                         }
 
@@ -224,9 +133,9 @@
                                     <li>
                                         @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Home).ToString()) }, new { id = "ankHomeContent" })
                                     </li>
-                                    <li>
-                                        @Html.ActionLink("Home Page Right Section", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.HomeRightSection).ToString()) }, new { id = "ankHomeRightSection" })
-                                    </li>
+                                    @*<li>
+                                            @Html.ActionLink("Home Page Right Section", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.HomePageRightSection).ToString()) }, new { id = "ankHomeRightSection" })
+                                        </li>*@
                                     <li>
                                         @Html.ActionLink("Header", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Header).ToString()) }, new { id = "ankHeader" })
                                     </li>
@@ -240,220 +149,95 @@
                             </li>
                         }
 
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.AboutKISD) || IsSuperAdmin || IsAdmin)
+                        <li>
+                            <a href="#" id="ankSyllabus"><i class="fa fa-bookmark-o" aria-hidden="true"></i>Syllabus</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Syllabus).ToString()) }, new { id = "ankSyllabusContent" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(SyllabusContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Syllabus).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankSyllabusContentRightSecton", @class = (SyllabusContentID > 0 ? "" : "disabled_link") })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SyllabusMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SyllabusSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SyllabusMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SyllabusSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankSyllabusMenu" })
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" id="ankDailyNews"><i class="fa fa-clock-o" aria-hidden="true"></i>Daily News</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DailyNews).ToString()) }, new { id = "ankDailyNewsContent" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(NewsContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.DailyNews).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankDailyNewsContentRightSecton", @class = (NewsContentID > 0 ? "" : "disabled_link") })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Listing", "Index", "NewsEvent", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt32(TypeMasterAlias.DailyNews).ToString()), Column = "EventCreateDate", Direction = "Descending" }, new { id = "ankDailyNewsListing" })
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" id="ankDownloads"><i class="fa fa-download" aria-hidden="true"></i>Downloads</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Downloads).ToString()) }, new { id = "ankDownloadsContent" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(DownloadsContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Downloads).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankEventContentRightSecton", @class = (DownloadsContentID > 0 ? "" : "disabled_link") })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Listing", "Index", "NewsEvent", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt32(TypeMasterAlias.Downloads).ToString()), Column = "EventCreateDate", Direction = "Descending" }, new { id = "ankDownloadsListing" })
+                                </li>
+                            </ul>
+                        </li>
+
+                        <li>
+                            <a href="#" id="ankVideo"><i class="fa fa-circle-o-notch" aria-hidden="true"></i>Videos</a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Video).ToString()) }, new { id = "ankVideosContent" })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(VideosContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Video).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankVideoContentRightSecton", @class = (VideosContentID > 0 ? "" : "disabled_link") })
+                                </li>
+                                <li>
+                                    @Html.ActionLink("Listing", "Index", "GalleryListing", new { glid = EncryptDecrypt.Encrypt("0"), glt = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.Video).ToString()) }, new { id = "ankVideos" })
+                                </li>
+                            </ul>
+                        </li>
+
+                        if (tab == Convert.ToInt32(ModuleTypeAlias.AboutUs) || IsSuperAdmin || IsAdmin)
                         {
                             <li>
-                                <a href="#" id="ankAboutKISD"><i class="fa fa-envelope-o"></i>About KISD</a>
+                                <a href="#" id="ankAboutUs"><i class="fa fa-envelope-o"></i>About Us</a>
                                 <ul>
                                     <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutKISD).ToString()) }, new { id = "ankAboutKISDContent" })
+                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutUs).ToString()) }, new { id = "ankAboutUsContent" })
                                     </li>
                                     <li>
-                                        @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(AboutKISDContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.AboutKISD).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankAboutContentRightSecton", @class = (AboutKISDContentID > 0 ? "" : "disabled_link") })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutKISDMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutKISDSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.AboutKISDMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.AboutKISDSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankAboutKISDMenu" })
+                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutUsMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.AboutUsSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.AboutUsMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.AboutUsSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankAboutUsMenu" })
                                     </li>
                                 </ul>
                             </li>
                         }
 
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.School) || IsSuperAdmin || IsAdmin)
+                        if (tab == Convert.ToInt32(ModuleTypeAlias.ContactUs) || IsSuperAdmin || IsAdmin)
                         {
                             <li>
-                                <a href="#" id="ankSchool"><i class="fa fa-university"></i>School</a>
+                                <a href="#" id="ankContactUs"><i class="fa fa-university"></i>Contact Us</a>
                                 <ul>
                                     <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.School).ToString()) }, new { id = "ankSchoolContent" })
-                                    </li>
-
-                                    <li>
-                                        @Html.ActionLink("School Listing", "Index", "School", new { tmi = EncryptDecrypt.Encrypt(Convert.ToInt64(GalleryListingService.TypeMaster.School).ToString()) }, new { id = "ankSchoolListing" })
+                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ContactUs).ToString()) }, new { id = "ankContactUsContent" })
                                     </li>
                                     <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SchoolMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SchoolSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankSchoolMenu" })
+                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ContactUs).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ContactUsSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.ContactUsMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.ContactUsSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankContactUsMenu" })
                                     </li>
                                 </ul>
                             </li>
                         }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.NewToKISD) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href="#" id="ankNewToKISD"><i class="fa fa-plus"></i>New to KISD</a>
-                                <ul>
-                                    <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.NewToKISD).ToString()) }, new { id = "ankNewToKISDContent" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(NewToKISDContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.NewToKISD).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankNewToKISDContentRightSecton", @class = (NewToKISDContentID > 0 ? "" : "disabled_link") })
-                                    </li>
-                                    <li>
-                                        <a href="#" id="ankExceptionalOpportunities">Exceptional Opportunities</a>
-                                        <ul>
-                                            <li>
-                                                @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ExceptionalOpportunities).ToString()) }, new { id = "ankExceptionalOpportunitiesContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(ExceptionalOppoContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.ExceptionOpportunity).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankExceptionOppContentRightSecton", @class = (ExceptionalOppoContentID > 0 ? "" : "disabled_link") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Listing", "Index", "ExceptionOpportunity", new { Column = "ExOpportunityCreateDate", Direction = "Descending" }, new { id = "ankExceptionalOpportunitiesListing" })
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.NewToKISDMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.NewToKISDSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.NewToKISDMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.NewToKISDSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankNewToKISDMenu" })
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.Departments) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href="#" id="ankDepartments"><i class="fa fa-sort-alpha-asc"></i>Departments</a>
-                                <ul>
-                                    @if (!IsDeptUser)
-                                    {
-                                    <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Departments).ToString()) }, new { id = "ankDepartmentsContent" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(DepartmentContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Department).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankDepartmentContentRightSecton", @class = (DepartmentContentID > 0 ? "" : "disabled_link") })
-                                    </li>
-                                    }
-                                    @if (!IsUser)
-                                    {
-                                        <li>
-                                            @Html.ActionLink("Department Listing", "DepartmentListing", "Department", new { Column = "DepartmentCreateDate", Direction = "Descending" }, new { id = "ankDepartmentsListing" })
-                                        </li>
-                                    }
-                                    @*<li>
-                                            @Html.ActionLink("Manage Events", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Departments).ToString()) }, new { id = "ankManageEvents" })
-                                        </li>*@
-                                    @if (!IsDeptUser)
-                                    {
-                                    <li>
-                                        @Html.ActionLink("Personal Directory Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.PersonalDirectory).ToString()) }, new { id = "ankPersonalDirectoryContent" })
-                                    </li>
-                                    @*<li>
-                                        @Html.ActionLink("View Staff", "StaffListing", "Staff", null, new { @id = "ankManageStaff" })
-                                    </li>*@
-                                    <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DepartmentsMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.DepartmentsSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.DepartmentsMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.DepartmentsSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankDepartmentsMenu" })
-                                    </li>
-                                    }
-                                </ul>
-                            </li>
-                        }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.ParentStudents) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href="#" id="ankParentStudents"><i class="fa fa-users"></i>Parents & Students</a>
-                                <ul>
-                                    <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ParentStudents).ToString()) }, new { id = "ankParentStudentsContent" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(ParentStudentContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.ParentStudents).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankParentStudentContentRightSecton", @class = (ParentStudentContentID > 0 ? "" : "disabled_link") })
-                                    </li>
-                                    <li>
-                                        <a href="#" id="ankStaff">Staff</a>
-                                        <ul>
-                                            <li>
-                                                @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Staff).ToString()) }, new { id = "ankStaffContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(StaffContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Staff).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankStaffContentRightSecton", @class = (StaffContentID > 0 ? "" : "disabled_link") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Staff Listing", "Index", "Staff", new { }, new { id = "ankStaffListing" })
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ParentStudentsMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.ParentStudentsSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.ParentStudentsMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.ParentStudentsSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankParentStudentsMenu" })
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.SchoolBoard) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href="#" id="ankSchoolBoard"><i class="fa fa-bell"></i>School Board</a>
-                                <ul>
-                                    <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolBoard).ToString()) }, new { id = "ankSchoolBoardContent" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(SchoolBoardContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SchoolBoard).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankSchoolBoardContentRightSecton", @class = (SchoolBoardContentID > 0 ? "" : "disabled_link") })
-                                    </li>
-                                    <li>
-                                        <a href="#" id="ankBoardMembers">Board Members</a>
-                                        <ul>
-                                            <li>
-                                                @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.BoardMembers).ToString()) }, new { id = "ankBoardMembersContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(BoardMemberContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.BoardOfMembers).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankBoardMemberContentRightSecton", @class = (BoardMemberContentID > 0 ? "" : "disabled_link") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Board Members Listing", "Index", "BoardMembers", new { }, new { id = "ankBoardMembersListing" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Board Schedule Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.BoardSchedule).ToString()) }, new { id = "ankBoardScheduleContent" })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Board Schedule Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(BoardScheduleContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.BoardSchedule).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankBoardScheduleContentRightSecton", @disabled = (BoardScheduleContentID > 0 ? "none" : "disabled") })
-                                            </li>
-                                            <li>
-                                                @Html.ActionLink("Board Schedule Listing", "Index", "Announcement", new { it = EncryptDecrypt.Encrypt(((Convert.ToInt64(GalleryListingService.TypeMaster.BoardSchedule)).ToString())), Column = "AnnouncementCreateDate", Direction = "Descending" }, new { id = "ankBoardScheduleListing" })
-                                            </li>
-                                        </ul>
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolBoardMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.SchoolBoardSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SchoolBoardMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.SchoolBoardSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankSchoolBoardMenu" })
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.Employment) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href="#" id="ankEmployment"><i class="fa fa-edit"></i>Employment</a>
-                                <ul>
-                                    <li>
-                                        @Html.ActionLink("Content", "Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Employment).ToString()) }, new { id = "ankEmploymentContent" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Content Right Section", "RightSectionListing", "RightSection", new { ct = EncryptDecrypt.Encrypt(EmploymentContentID.ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Employment).ToString()), Column = "RightSectionCreateDate", Direction = "Descending" }, new { id = "ankEmploymentContentRightSecton", @class = (EmploymentContentID > 0 ? "" : "disabled_link") })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("Menu Pages", "MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.EmploymentMenu).ToString()), smt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.EmploymentSubMenu).ToString()), mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.EmploymentMenu).ToString()), smtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.EmploymentSubMenu).ToString()), Column = "ContentCreateDate", Direction = "Descending" }, new { id = "ankEmploymentMenu" })
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.Reports) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href="#" id="ankReports"><i class="fa fa-area-chart"></i>Reports</a>
-                                <ul>
-                                    <li>
-                                        @Html.ActionLink("System Access Log", "Index", "Reports", new { rt = EncryptDecrypt.Encrypt(Convert.ToInt64(ReportTypeAlias.SystemAccessLogReport).ToString()) }, new { id = "ankSystemAccessLog" })
-                                    </li>
-                                    <li>
-                                        @Html.ActionLink("System Change Log", "Index", "Reports", new { rt = EncryptDecrypt.Encrypt(Convert.ToInt64(ReportTypeAlias.SystemChangeLogReport).ToString()) }, new { id = "ankSystemChangeLog" })
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-
                         if (tab == Convert.ToInt32(ModuleTypeAlias.Search) || IsSuperAdmin || IsAdmin)
                         {
                             <li>
@@ -467,14 +251,6 @@
                                 <a href='@Url.Action("MenuListing", "Menu", new { mt = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.Fly).ToString()), smt = EncryptDecrypt.Encrypt("0"),mtid = EncryptDecrypt.Encrypt(Convert.ToInt64(TypeMasterAlias.Fly).ToString()), Column = "ContentCreateDate", Direction = "Descending" })' id="ankFlyPages"><i class="fa fa-plane"></i>Fly Pages</a>
                             </li>
                         }
-
-                        if (tab == Convert.ToInt32(ModuleTypeAlias.GoogleAnalytic) || IsSuperAdmin || IsAdmin)
-                        {
-                            <li>
-                                <a href='@Url.Action("Create", "Content", new { ct = EncryptDecrypt.Encrypt(Convert.ToInt64(ContentTypeAlias.GoogleAnalytics).ToString()) })' id="ankGoogleAnalytics"><i class="fa fa-google"></i>Google Analytics</a>
-                            </li>
-                        }
-
                         if (tab == Convert.ToInt32(ModuleTypeAlias.GoogleAnalytic) || IsSuperAdmin || IsAdmin)
                         {
                             <li>

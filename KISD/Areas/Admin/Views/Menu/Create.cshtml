@@ -98,15 +98,14 @@
             </div>
             @*@Model.ContentTypeID == @Convert.ToInt64(ContentTypeAlias.HomeMenu)*@
             @if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.HomeMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutKISDMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISDMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.DepartmentsMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ParentStudentsMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolBoardMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.EmploymentMenu)
-                                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Fly)
-                                    )
+                    || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutUsMenu)
+                     || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.DailyNewsMenu)
+                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.DownloadsMenu)
+                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.VideoMenu)
+                    || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContactUsMenu)
+                    || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SyllabusMenu)
+                    || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Fly)
+                )
             {
                 if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Fly))
                 {
@@ -423,33 +422,29 @@
             $("#ankHome").addClass('select');
             $("#ankHomeMenu").addClass('select');
         }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.AboutKISDMenu)') {
-            $("#ankAboutKISD").addClass('select');
-            $("#ankAboutKISDMenu").addClass('select');
+        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.AboutUsMenu)') {
+            $("#ankAboutUs").addClass('select');
+            $("#ankAboutUsMenu").addClass('select');
         }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.SchoolMenu)') {
-            $("#ankSchool").addClass('select');
-            $("#ankSchoolMenu").addClass('select');
+        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.ContactUsMenu)') {
+            $("#ankContactUs").addClass('select');
+            $("#ankContactUsMenu").addClass('select');
+        }     
+        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.SyllabusMenu)') {
+            $("#ankSyllabus").addClass('select');
+            $("#ankSyllabusMenu").addClass('select');
         }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.NewToKISDMenu)') {
-            $("#ankNewToKISD").addClass('select');
-            $("#ankNewToKISDMenu").addClass('select');
+            else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.DailyNewsMenu)') {
+            $("#ankDailyNews").addClass('select');
+            $("#ankDailyNewsMenu").addClass('select');
         }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.DepartmentsMenu)') {
-            $("#ankDepartments").addClass('select');
-            $("#ankDepartmentsMenu").addClass('select');
+            else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.DownloadsMenu)') {
+            $("#ankDownloads").addClass('select');
+            $("#ankDownloadsMenu").addClass('select');
         }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.ParentStudentsMenu)') {
-            $("#ankParentStudents").addClass('select');
-            $("#ankParentStudentsMenu").addClass('select');
-        }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.SchoolBoardMenu)') {
-            $("#ankSchoolBoard").addClass('select');
-            $("#ankSchoolBoardMenu").addClass('select');
-        }
-        else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.EmploymentMenu)') {
-            $("#ankEmployment").addClass('select');
-            $("#ankEmploymentMenu").addClass('select');
+            else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.VideoMenu)') {
+            $("#ankVideo").addClass('select');
+            $("#ankVideosMenu").addClass('select');
         }
         else if (menutypeId == '@Convert.ToInt32(ContentTypeAlias.Fly)') {
             $("#ankFlyPages").addClass('select');

@@ -162,9 +162,9 @@ namespace KISD.Controllers
                 #endregion
 
                 #region News
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.News))
+                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.DailyNews))
                 {
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.News);
+                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.DailyNews);
                     var item1 = objContext.NewsEvents.Where(x => x.StatusInd == true && x.TypeMasterID == obj.TypeMasterID && DateTime.Now >= x.DisplayStartDate && DateTime.Now < x.DisplayEndDate && (x.IsDeletedInd == false || x.IsDeletedInd == null)).OrderByDescending(x => x.EventCreateDate).ThenByDescending(x => x.NewsEventID).ToList();
                     obj.IsPagingVisible = item1.Count > pageSize;
                     obj.NewsEventResult = item1.ToPagedList(pageNumber, pageSize);
@@ -173,7 +173,7 @@ namespace KISD.Controllers
                 #endregion
 
                 #region Events
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Events))
+                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Downloads))
                 {
                     obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.Events);
                     var item1 = objContext.NewsEvents.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.TypeMasterID == obj.TypeMasterID && DateTime.Now >= x.DisplayStartDate && DateTime.Now < x.DisplayEndDate).OrderByDescending(x => x.EventCreateDate).ThenByDescending(x => x.NewsEventID).ToList();
@@ -184,7 +184,7 @@ namespace KISD.Controllers
                 #endregion
 
                 #region School 
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.School))
+                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.ContactUs))
                 {
                     obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.SchoolCategory);
                     var item1 = objContext.Schools.Where(x => x.StatusInd == true && x.IsDeletedInd == false && x.TypeMasterID == obj.TypeMasterID
@@ -199,74 +199,74 @@ namespace KISD.Controllers
                 #endregion
 
                 #region Parent & Students
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.ParentStudents))
-                {
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.SchoolCategory);
-                    var item1 = objContext.Schools.Where(x => x.StatusInd == true && x.TypeMasterID == obj.TypeMasterID && x.IsDeletedInd == false).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
-                    obj.SchoolCategoryResult = item1.ToPagedList(pageNumber, 10);
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.School);
-                    item1 = objContext.Schools.Where(x => x.StatusInd == true && x.TypeMasterID == obj.TypeMasterID && x.IsDeletedInd == false).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
-                    obj.SchoolResult = item1.ToPagedList(pageNumber, item1.Count == 0 ? 10 : item1.Count);
-                    var staffcontenttypeid = Convert.ToInt32(ContentTypeAlias.Staff);
-                    obj.PageURLTxt = objContext.Contents.Where(x => x.ContentTypeID == staffcontenttypeid && x.StatusInd == true).Select(x => x.PageURLTxt).FirstOrDefault();
-                    return View("ParentStudent", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.ParentStudents))
+                //{
+                //    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.SchoolCategory);
+                //    var item1 = objContext.Schools.Where(x => x.StatusInd == true && x.TypeMasterID == obj.TypeMasterID && x.IsDeletedInd == false).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
+                //    obj.SchoolCategoryResult = item1.ToPagedList(pageNumber, 10);
+                //    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.School);
+                //    item1 = objContext.Schools.Where(x => x.StatusInd == true && x.TypeMasterID == obj.TypeMasterID && x.IsDeletedInd == false).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
+                //    obj.SchoolResult = item1.ToPagedList(pageNumber, item1.Count == 0 ? 10 : item1.Count);
+                //    var staffcontenttypeid = Convert.ToInt32(ContentTypeAlias.Staff);
+                //    obj.PageURLTxt = objContext.Contents.Where(x => x.ContentTypeID == staffcontenttypeid && x.StatusInd == true).Select(x => x.PageURLTxt).FirstOrDefault();
+                //    return View("ParentStudent", obj);
+                //}
                 #endregion
 
                 #region Parent and Student Staff Listing
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Staff))
-                {
-                    var item = new List<Staff>();
-                    SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.ParentStudents));
-                    var schoolid = !string.IsNullOrEmpty(p) ? Convert.ToInt32(EncryptDecrypt.Decrypt(p)) : 0;
-                    if (schoolid > 0)
-                    {
-                        obj.SchoolList = objContext.Schools.Where(x => x.IsDeletedInd == false && x.StatusInd == true && x.SchoolID == schoolid).ToList();
-                        item = objContext.Staffs.Where(x => x.IsDeletedInd == false && x.StatusInd == true && x.SchoolID == schoolid).ToList();
-                        obj.StaffResult = item.ToPagedList(pageNumber, pageSize);
-                        obj.IsPagingVisible = item.Count() > pageSize;
-                    }
-                    else
-                    {
-                        Response.Redirect(AppPath);
-                    }
-                    return View("ParentStudentStaff", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Staff))
+                //{
+                //    var item = new List<Staff>();
+                //    SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.ParentStudents));
+                //    var schoolid = !string.IsNullOrEmpty(p) ? Convert.ToInt32(EncryptDecrypt.Decrypt(p)) : 0;
+                //    if (schoolid > 0)
+                //    {
+                //        obj.SchoolList = objContext.Schools.Where(x => x.IsDeletedInd == false && x.StatusInd == true && x.SchoolID == schoolid).ToList();
+                //        item = objContext.Staffs.Where(x => x.IsDeletedInd == false && x.StatusInd == true && x.SchoolID == schoolid).ToList();
+                //        obj.StaffResult = item.ToPagedList(pageNumber, pageSize);
+                //        obj.IsPagingVisible = item.Count() > pageSize;
+                //    }
+                //    else
+                //    {
+                //        Response.Redirect(AppPath);
+                //    }
+                //    return View("ParentStudentStaff", obj);
+                //}
                 #endregion
 
                 #region Department 
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Departments))
-                {
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.Department);
-                    var item1 = objContext.Departments.Where(x => x.StatusInd == true && x.IsDeletedInd == false && x.ParentID == null).OrderBy(x => x.DisplayOrderNbr).ToList();
-                    obj.DepartmentResult = item1.ToPagedList(pageNumber, item1.Count == 0 ? 10 : item1.Count);
-                    return View("Department", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Departments))
+                //{
+                //    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.Department);
+                //    var item1 = objContext.Departments.Where(x => x.StatusInd == true && x.IsDeletedInd == false && x.ParentID == null).OrderBy(x => x.DisplayOrderNbr).ToList();
+                //    obj.DepartmentResult = item1.ToPagedList(pageNumber, item1.Count == 0 ? 10 : item1.Count);
+                //    return View("Department", obj);
+                //}
                 #endregion
 
                 #region Board Members
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.BoardMembers))
-                {
-                    var item1 = objContext.BoardOfMembers.Where(x => x.StatusInd == true && x.IsDeletedInd == false).OrderByDescending(x => x.BOMCreateDate).ThenByDescending(x => x.BoardMemberID).ToList();
-                    obj.IsPagingVisible = item1.Count > 10;
-                    obj.BOMResult = item1.ToPagedList(pageNumber, 10);
-                    return View("BoardOfMembers", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.BoardMembers))
+                //{
+                //    var item1 = objContext.BoardOfMembers.Where(x => x.StatusInd == true && x.IsDeletedInd == false).OrderByDescending(x => x.BOMCreateDate).ThenByDescending(x => x.BoardMemberID).ToList();
+                //    obj.IsPagingVisible = item1.Count > 10;
+                //    obj.BOMResult = item1.ToPagedList(pageNumber, 10);
+                //    return View("BoardOfMembers", obj);
+                //}
                 #endregion
 
                 #region Board Schedule
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.BoardSchedule))
-                {
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.BoardSchedule);
-                    var item1 = objContext.Announcements.Where(x => x.StatusInd == true && x.IsDeletedInd == false && x.TypeMasterID == obj.TypeMasterID).OrderByDescending(x => x.AnnouncementCreateDate).ThenByDescending(x => x.AnnouncementID).ToList();
-                    obj.IsPagingVisible = item1.Count > 10;
-                    obj.BoardScheduleResult = item1.ToPagedList(pageNumber, 10);
-                    return View("BoardSchedule", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.BoardSchedule))
+                //{
+                //    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.BoardSchedule);
+                //    var item1 = objContext.Announcements.Where(x => x.StatusInd == true && x.IsDeletedInd == false && x.TypeMasterID == obj.TypeMasterID).OrderByDescending(x => x.AnnouncementCreateDate).ThenByDescending(x => x.AnnouncementID).ToList();
+                //    obj.IsPagingVisible = item1.Count > 10;
+                //    obj.BoardScheduleResult = item1.ToPagedList(pageNumber, 10);
+                //    return View("BoardSchedule", obj);
+                //}
                 #endregion
 
                 #region Videos
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Videos))
+                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.Video))
                 {
                     obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.Video);
                     var item1 = objContext.GalleryListings.Where(x => x.StatusInd == true
@@ -293,78 +293,78 @@ namespace KISD.Controllers
                 #endregion
 
                 #region Personal directory
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.PersonalDirectory))
-                {
-                    AjaxRequest objAjaxRequest = !string.IsNullOrEmpty(objresult) ? JsonConvert.DeserializeObject<AjaxRequest>(objresult) : null;
-                    var strsearch = objAjaxRequest != null ? objAjaxRequest.qs_value : "";
-                    var strtype = objAjaxRequest != null ? objAjaxRequest.qs_Type : "";
-                    obj.StaffResult = null;
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.SchoolCategory);
-                    var item = objContext.Schools.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.TypeMasterID == obj.TypeMasterID).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
-                    obj.SchoolCategoryResult = item.ToPagedList(pageNumber, item.Count);
-                    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.School);
-                    item = objContext.Schools.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.TypeMasterID == obj.TypeMasterID).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
-                    obj.SchoolResult = item.ToPagedList(pageNumber, item.Count);
-                    var dept = objContext.Departments.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.ParentID == null).OrderByDescending(x => x.DepartmentCreateDate).ThenByDescending(x => x.DepartmentID).ToList();
-                    obj.DepartmentResult = dept.ToPagedList(pageNumber, dept.Count);
-                    var item1 = objContext.Staffs.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null)).OrderByDescending(x => x.StaffCreateDate).ThenByDescending(x => x.StaffID).ToList();
-                    if (strtype == "1")
-                    {
-                        item1 = item1.Where(x => (x.LastNameTxt).Contains(strsearch.Trim())).ToList();
-                    }
-                    else if (strtype == "2")
-                    {
-                        var schoolid = Convert.ToInt32(strsearch);
-                        item1 = item1.Where(x => x.SchoolID == Convert.ToInt32(strsearch)).ToList();
-                        ViewBag.Name = objContext.Schools.Where(x => x.SchoolID == schoolid).Select(x => x.AddressTxt).FirstOrDefault();
-                        ViewBag.Phone = objContext.Schools.Where(x => x.SchoolID == schoolid).Select(x => x.PhoneNumberTxt).FirstOrDefault();
-                    }
-                    else if (strtype == "3")
-                    {
-                        var deptid = Convert.ToInt32(strsearch);
-                        var deptstaff = objContext.DepartmentStaffs.Where(x => x.DepartmentID == deptid).Select(x => x.StaffID).ToList();
-                        item1 = item1.Where(x => deptstaff.Contains(x.StaffID)).ToList();
-                        ViewBag.Name = objContext.Departments.Where(x => x.DepartmentID == deptid).Select(x => x.AddressTxt).FirstOrDefault();
-                        ViewBag.Phone = objContext.Departments.Where(x => x.DepartmentID == deptid).Select(x => x.PhoneNumberTxt).FirstOrDefault();
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.PersonalDirectory))
+                //{
+                //    AjaxRequest objAjaxRequest = !string.IsNullOrEmpty(objresult) ? JsonConvert.DeserializeObject<AjaxRequest>(objresult) : null;
+                //    var strsearch = objAjaxRequest != null ? objAjaxRequest.qs_value : "";
+                //    var strtype = objAjaxRequest != null ? objAjaxRequest.qs_Type : "";
+                //    obj.StaffResult = null;
+                //    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.SchoolCategory);
+                //    var item = objContext.Schools.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.TypeMasterID == obj.TypeMasterID).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
+                //    obj.SchoolCategoryResult = item.ToPagedList(pageNumber, item.Count);
+                //    obj.TypeMasterID = Convert.ToInt32(TypeMasterAlias.School);
+                //    item = objContext.Schools.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.TypeMasterID == obj.TypeMasterID).OrderByDescending(x => x.SchoolCreateDate).ThenByDescending(x => x.SchoolID).ToList();
+                //    obj.SchoolResult = item.ToPagedList(pageNumber, item.Count);
+                //    var dept = objContext.Departments.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.ParentID == null).OrderByDescending(x => x.DepartmentCreateDate).ThenByDescending(x => x.DepartmentID).ToList();
+                //    obj.DepartmentResult = dept.ToPagedList(pageNumber, dept.Count);
+                //    var item1 = objContext.Staffs.Where(x => x.StatusInd == true && (x.IsDeletedInd == false || x.IsDeletedInd == null)).OrderByDescending(x => x.StaffCreateDate).ThenByDescending(x => x.StaffID).ToList();
+                //    if (strtype == "1")
+                //    {
+                //        item1 = item1.Where(x => (x.LastNameTxt).Contains(strsearch.Trim())).ToList();
+                //    }
+                //    else if (strtype == "2")
+                //    {
+                //        var schoolid = Convert.ToInt32(strsearch);
+                //        item1 = item1.Where(x => x.SchoolID == Convert.ToInt32(strsearch)).ToList();
+                //        ViewBag.Name = objContext.Schools.Where(x => x.SchoolID == schoolid).Select(x => x.AddressTxt).FirstOrDefault();
+                //        ViewBag.Phone = objContext.Schools.Where(x => x.SchoolID == schoolid).Select(x => x.PhoneNumberTxt).FirstOrDefault();
+                //    }
+                //    else if (strtype == "3")
+                //    {
+                //        var deptid = Convert.ToInt32(strsearch);
+                //        var deptstaff = objContext.DepartmentStaffs.Where(x => x.DepartmentID == deptid).Select(x => x.StaffID).ToList();
+                //        item1 = item1.Where(x => deptstaff.Contains(x.StaffID)).ToList();
+                //        ViewBag.Name = objContext.Departments.Where(x => x.DepartmentID == deptid).Select(x => x.AddressTxt).FirstOrDefault();
+                //        ViewBag.Phone = objContext.Departments.Where(x => x.DepartmentID == deptid).Select(x => x.PhoneNumberTxt).FirstOrDefault();
 
-                    }
-                    if (Request.IsAjaxRequest())// check if request comes from ajax, then return Partial view
-                    {
-                        obj.IsPagingVisible = item1.Count > pageSize;
-                        obj.StaffResult = item1.ToPagedList(pageNumber, pageSize);
-                        ViewBag.Type = strtype;
-                        ViewBag.Search = strsearch;
-                        return View("PersonalDirectoryPartial", obj);// ("partial view name ")
-                    }
-                    else
-                    {
-                        return View("PersonalDirectory", obj);
-                    }
-                }
+                //    }
+                //    if (Request.IsAjaxRequest())// check if request comes from ajax, then return Partial view
+                //    {
+                //        obj.IsPagingVisible = item1.Count > pageSize;
+                //        obj.StaffResult = item1.ToPagedList(pageNumber, pageSize);
+                //        ViewBag.Type = strtype;
+                //        ViewBag.Search = strsearch;
+                //        return View("PersonalDirectoryPartial", obj);// ("partial view name ")
+                //    }
+                //    else
+                //    {
+                //        return View("PersonalDirectory", obj);
+                //    }
+                //}
                 #endregion
 
                 #region Department Events
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentEvents))
-                {
-                    obj.DepartmentID = content.DepartmentID.HasValue ? content.DepartmentID.Value : 0;
-                    obj.DescriptionTxt = content.DescriptionTxt;
-                    SetDepartmentBreadcrumbs(content.DepartmentID.Value);
-                    SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.Departments));
-                    return View("DepartmentEvents", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentEvents))
+                //{
+                //    obj.DepartmentID = content.DepartmentID.HasValue ? content.DepartmentID.Value : 0;
+                //    obj.DescriptionTxt = content.DescriptionTxt;
+                //    SetDepartmentBreadcrumbs(content.DepartmentID.Value);
+                //    SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.Departments));
+                //    return View("DepartmentEvents", obj);
+                //}
                 #endregion
 
                 #region Department Staff
-                if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentStaff))
-                {
-                    var item1 = objContext.DepartmentStaffs.Where(x => x.DepartmentID == content.DepartmentID).Select(x => x.Staff).ToList();
-                    obj.IsPagingVisible = item1.Count > 10;
-                    obj.StaffResult = item1.ToPagedList(pageNumber, 10);
-                    obj.DescriptionTxt = content.DescriptionTxt;
-                    SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.Departments));
-                    SetDepartmentBreadcrumbs(content.DepartmentID.Value);
-                    return View("DepartmentStaff", obj);
-                }
+                //if (obj.ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentStaff))
+                //{
+                //    var item1 = objContext.DepartmentStaffs.Where(x => x.DepartmentID == content.DepartmentID).Select(x => x.Staff).ToList();
+                //    obj.IsPagingVisible = item1.Count > 10;
+                //    obj.StaffResult = item1.ToPagedList(pageNumber, 10);
+                //    obj.DescriptionTxt = content.DescriptionTxt;
+                //    SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.Departments));
+                //    SetDepartmentBreadcrumbs(content.DepartmentID.Value);
+                //    return View("DepartmentStaff", obj);
+                //}
                 #endregion
 
                 return View(obj);
@@ -375,12 +375,12 @@ namespace KISD.Controllers
             {
                 NewsEventModel objNews = new NewsEventModel();
                 var Contnt = objContext.Images.Where(x => x.ImageID == newsListing.BannerImageID && x.StatusInd == true).FirstOrDefault();
-                var newscontenttypeid = Convert.ToInt32(ContentTypeAlias.News);
+                var newscontenttypeid = Convert.ToInt32(ContentTypeAlias.DailyNews);
                 ViewBag.InnerImgPath = Contnt != null ? Contnt.ImgPathTxt.Replace("~", "") : null;
                 ViewBag.InnerImgTitleTxt = Contnt != null ? Contnt.TitleTxt : null;
                 ViewBag.InnerImgAbstractTxt = !string.IsNullOrEmpty(newsListing.BannerImageAbstractTxt) ? newsListing.BannerImageAbstractTxt : null;
                 ViewBag.InnerImgAltImageTxt = !string.IsNullOrEmpty(newsListing.AltBannerImageTxt) ? newsListing.AltBannerImageTxt : null;
-                SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.News));
+                SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.DailyNews));
                 objNews.NewsEventID = newsListing.NewsEventID;
                 objNews.ImageURLTxt = newsListing.ImageURLTxt;
                 objNews.PageMetaTitleTxt = newsListing.PageMetaTitleTxt;
@@ -407,12 +407,12 @@ namespace KISD.Controllers
             {
                 DepartmentModel objdept = new DepartmentModel();
                 var Contnt = objContext.Images.Where(x => x.ImageID == obj.BannerImageID && x.StatusInd == true).FirstOrDefault();//Object will Change after bug fixes Admin section
-                var newscontenttypeid = Convert.ToInt32(ContentTypeAlias.News);
+                var newscontenttypeid = Convert.ToInt32(ContentTypeAlias.DailyNews);
                 ViewBag.InnerImgPath = Contnt != null ? Contnt.ImgPathTxt : null;
                 ViewBag.InnerImgTitleTxt = Contnt != null ? Contnt.TitleTxt : null;
                 ViewBag.InnerImgAbstractTxt = !string.IsNullOrEmpty(obj.BannerImageAbstractTxt) ? obj.BannerImageAbstractTxt : null;//Object will Change after bug fixes Admin section
                 ViewBag.InnerImgAltImageTxt = !string.IsNullOrEmpty(obj.AltBannerImageTxt) ? obj.AltBannerImageTxt : null;//Object will Change after bug fixes Admin section
-                SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.Departments));
+                //SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.Departments));
                 objdept.AddressTxt = deptListing.AddressTxt;
                 objdept.PageMetaTitleTxt = deptListing.PageMetaTitleTxt;
                 objdept.DepartmentCreateDate = deptListing.DepartmentCreateDate;
@@ -440,13 +440,13 @@ namespace KISD.Controllers
             {
                 BoardMembersModel objbom = new BoardMembersModel();
                 var Contnt = objContext.Images.Where(x => x.ImageID == obj.BannerImageID && x.StatusInd == true).FirstOrDefault();//Object will Change after bug fixes Admin section
-                var bomcontenttypeid = Convert.ToInt32(ContentTypeAlias.BoardMembers);
+                //var bomcontenttypeid = Convert.ToInt32(ContentTypeAlias.BoardMembers);
                 ViewBag.InnerImgPath = Contnt != null ? Contnt.ImgPathTxt : null;
                 ViewBag.InnerImgTitleTxt = Contnt != null ? Contnt.TitleTxt : null;
                 ViewBag.InnerImgAbstractTxt = !string.IsNullOrEmpty(obj.BannerImageAbstractTxt) ? obj.BannerImageAbstractTxt : null;//Object will Change after bug fixes Admin section
                 ViewBag.InnerImgAltImageTxt = !string.IsNullOrEmpty(obj.AltBannerImageTxt) ? obj.AltBannerImageTxt : null;//Object will Change after bug fixes Admin section
-                SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.SchoolBoard));
-                SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.BoardMembers));
+                //SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.SchoolBoard));
+                //SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.BoardMembers));
                 objbom.ImageURLTxt = bomListing.ImageURLTxt;
                 objbom.PageMetaTitleTxt = bomListing.PageMetaTitleTxt;
                 objbom.BoardMemberID = bomListing.BoardMemberID;
@@ -567,8 +567,8 @@ namespace KISD.Controllers
                     {
                         if (Request.QueryString["t"].ToString() == "c")
                         {
-                            SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.NewToKISD));
-                            SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities));
+                            //SetMainParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.NewToKISD));
+                            //SetSecondParentBreadcrumbs(Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities));
                         }
                     }
                 }
@@ -629,35 +629,35 @@ namespace KISD.Controllers
         private int GetMenuID(long ContentTypeID)
         {
             int MenuID = 0;
-            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.AboutKISDMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.AboutKISDSubMenu))
+            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.AboutUsMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.AboutUsSubMenu))
             {
-                MenuID = Convert.ToInt32(ContentTypeAlias.AboutKISD);
+                MenuID = Convert.ToInt32(ContentTypeAlias.AboutUs);
             }
 
-            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.SchoolMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.SchoolSubMenu))
+            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.ContactUsMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.ContactUsSubMenu))
             {
-                MenuID = Convert.ToInt32(ContentTypeAlias.School);
+                MenuID = Convert.ToInt32(ContentTypeAlias.ContactUs);
             }
 
-            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.NewToKISDMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.NewToKISDSubMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities))
-            {
-                MenuID = Convert.ToInt32(ContentTypeAlias.NewToKISD);
-            }
+            //if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.NewToKISDMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.NewToKISDSubMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities))
+            //{
+            //    MenuID = Convert.ToInt32(ContentTypeAlias.NewToKISD);
+            //}
 
-            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.ParentStudentsMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.ParentStudentsSubMenu))
-            {
-                MenuID = Convert.ToInt32(ContentTypeAlias.ParentStudents);
-            }
+            //if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.ParentStudentsMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.ParentStudentsSubMenu))
+            //{
+            //    MenuID = Convert.ToInt32(ContentTypeAlias.ParentStudents);
+            //}
 
-            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentsMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentsSubMenu))
-            {
-                MenuID = Convert.ToInt32(ContentTypeAlias.Departments);
-            }
+            //if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentsMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.DepartmentsSubMenu))
+            //{
+            //    MenuID = Convert.ToInt32(ContentTypeAlias.Departments);
+            //}
 
-            if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.SchoolBoardMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.SchoolBoardSubMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.BoardMembers))
-            {
-                MenuID = Convert.ToInt32(ContentTypeAlias.SchoolBoard);
-            }
+            //if (ContentTypeID == Convert.ToInt32(ContentTypeAlias.SchoolBoardMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.SchoolBoardSubMenu) || ContentTypeID == Convert.ToInt32(ContentTypeAlias.BoardMembers))
+            //{
+            //    MenuID = Convert.ToInt32(ContentTypeAlias.SchoolBoard);
+            //}
             return MenuID;
         }
 
@@ -736,7 +736,7 @@ namespace KISD.Controllers
                 }
             }
 
-            if (ModuleType == TypeMasterAlias.News.ToString())
+            if (ModuleType == TypeMasterAlias.DailyNews.ToString())
             {
                 var listing = objContext.NewsEvents.Where(x => x.NewsEventID == ListingID && x.StatusInd == true && x.IsDeletedInd == false).FirstOrDefault();
                 if (listing != null)
@@ -895,7 +895,7 @@ namespace KISD.Controllers
             }
             catch (Exception ex)
             {
-               
+
             }
             return result;
         }
@@ -1117,7 +1117,7 @@ namespace KISD.Controllers
                                                 }
                                             }
                                         }
-                                    } 
+                                    }
                                     #endregion
                                 }
                                 #endregion
@@ -1153,7 +1153,7 @@ namespace KISD.Controllers
             }
             catch (Exception ex)
             {
-                
+
             }
             return lst;
         }

@@ -6,7 +6,7 @@
     AppPath = KISD.Areas.Admin.Models.Common.ReturnValidPath(AppPath);
     db_KISDEntities objContext = new db_KISDEntities();
     var TypeMasterID = Convert.ToInt32(KISD.Areas.Admin.Models.GalleryListingService.TypeMaster.Video);
-    var ContentTypeID = Convert.ToInt32(KISD.Areas.Admin.Models.ContentType.Videos);
+    var ContentTypeID = Convert.ToInt32(KISD.Areas.Admin.Models.ContentType.Video);
     var VideoCount = objContext.GalleryListings.Where(x => x.IsDeletedInd == false && x.StatusInd == true && x.TypeMasterID == TypeMasterID).Count();
     var VideoURL = objContext.Contents.Where(x => x.ContentTypeID == ContentTypeID).Select(x => x.PageURLTxt).FirstOrDefault();
 }

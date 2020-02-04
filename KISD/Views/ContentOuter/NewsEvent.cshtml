@@ -75,9 +75,9 @@
                                     </a>
                                 </div>
                             }
-                            <div class="@if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.News)) {<text>list-content</text>} else if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.Events)) {<text>list-content-event</text> } ">
+                            <div class="@if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.DailyNews)) {<text>list-content</text>} else if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.Events)) {<text>list-content-event</text> } ">
                                 <div class="list-title">
-                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.News))
+                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.DailyNews))
                                     {
                                         <a href="@News.PageURLTxt">
                                             @News.TitleTxt
@@ -88,14 +88,14 @@
                                         @News.TitleTxt
                                     }
                                 </div>
-                                @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.Events))
+                                @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.Downloads))
                                 {
                                     <div class="list-share">
                                         <div class="date event-date">@(String.Format("{0:MM/dd/yyyy}", News.EventDate))</div>
                                     </div>
                                 }
                                 <div class="list-discruption">
-                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.News))
+                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.DailyNews))
                                     {
                                         <p>@Html.Raw(News.AbstractTxt)</p>
                                     }
@@ -105,11 +105,11 @@
                                     }
                                 </div>
                                 <div class="list-share">
-                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.News))
+                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.DailyNews))
                                     {
                                         <a class="list-btn" href="@News.PageURLTxt">Read More</a>
                                     }
-                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.News))
+                                    @if (Model.TypeMasterID == Convert.ToInt32(TypeMasterAlias.DailyNews))
                                     {
                                         <div class="date-author">
                                             <div class="date">@(String.Format("{0:MM/dd/yyyy}", News.EventCreateDate))</div>

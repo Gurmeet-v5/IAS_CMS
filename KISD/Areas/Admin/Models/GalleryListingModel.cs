@@ -130,9 +130,9 @@ namespace KISD.Areas.Admin.Models
                     TypeMasterID = x.TypeMasterID,
                     ParentID = x.ParentID,
                     DisplayOrderNbrSelect = GetDisplayOrder((x.DisplayOrderNbr != null ? x.DisplayOrderNbr.Value.ToString() : "0"), x.TypeMasterID.Value),
-                     BannerImageID = x.BannerImageID,
+                    BannerImageID = x.BannerImageID,
                     AltBannerImageTxt = x.AltBannerImageTxt,
-                    BannerImageAbstractTxt=x.BannerImageAbstractTxt
+                    BannerImageAbstractTxt = x.BannerImageAbstractTxt
                 });
             }
             return list;
@@ -227,7 +227,7 @@ namespace KISD.Areas.Admin.Models
             PhotoGallery = 5,
             FAQCategory = 6,
             OnscreenAlert = 7,
-            News = 8,
+            DailyNews = 8,
             Events = 9,
             FAQ = 10,
             SchoolCategory = 11,
@@ -242,8 +242,8 @@ namespace KISD.Areas.Admin.Models
             BoardOfMembers = 20,
             HomeMenu = 21,
             HomeSubMenu = 22,
-            AboutKISDMenu = 23,
-            AboutKISDSubMenu = 24,
+            AboutUsMenu = 23,
+            AboutUsSubMenu = 24,
             SchoolMenu = 25,
             SchoolSubMenu = 26,
             NewToKISDMenu = 27,
@@ -263,10 +263,21 @@ namespace KISD.Areas.Admin.Models
             SchoolBoard = 41,
             BoardMembersListing = 42,
             Employment = 43,
-            NewsListing=44,
-            ExceptionalOpportunityListing=45,
-            DepartmentListing=46,
+            NewsListing = 44,
+            ExceptionalOpportunityListing = 45,
+            DepartmentListing = 46,
             Fly = 47,
+            Syllabus = 48,
+            Downloads = 49,
+            ContactUs = 50,
+            ContactUsMenu = 51,
+            ContactUsSubMenu = 52,
+            SyllabusMenu = 53,
+            SyllabusSubMenu = 54,
+            DownloadsMenu = 55,
+            DownloadsSubMenu = 56,
+            DailyNewsMenu = 57,
+            DailyNewsSubMenu = 58,
         }
 
         public SelectList GetDisplayOrder(string value, long TypeMasterID)

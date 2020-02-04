@@ -51,7 +51,7 @@
             {
                 @Html.Grid(Model.PagedList).Columns(column =>
            {
-               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.News).ToString())
+               if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.DailyNews).ToString())
                {
                    column.For(x => !string.IsNullOrEmpty(x.ImageURLTxt) ?
                        "<img width='100px' height='70px' src='" + @Href(x.ImageURLTxt).Replace("~/", "").Replace("images", "thumbnails") + "' title='" + x.TitleTxt + "' alt='" + (!string.IsNullOrEmpty(x.AltBannerImageTxt) ? x.AltBannerImageTxt : x.TitleTxt) + "'>" :      /**/
@@ -68,7 +68,7 @@
                }
                column.For(x => Html.CheckBox("mycheckbox", x.StatusInd.Value, new { @class = "checkbox", @value = x.NewsEventID, @text = AppPath })).Encode(false).Header("<th data-hide='phone' style='width:10%' align='center'>Status</th>").Attributes(@align => "center");
                column.For(x => x.EventCreateDate.Value.ToShortDateString()).Named("Date Added").SortColumnName("EventCreateDate").HeaderAttributes(@class => "sort", @style => "width:15%", @align => "center").Attributes(@align => "center");
-               //if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.News).ToString())
+               //if (EncryptDecrypt.Decrypt(TypeMasterID) == Convert.ToInt32(NewsEventTypeAlias.DailyNews).ToString())
                //{
                //    column.For(x => Html.ActionLink("Manage", "RightSectionListing", "RightSection"
                //                              , new

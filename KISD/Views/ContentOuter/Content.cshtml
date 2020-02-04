@@ -77,10 +77,10 @@
                     {
                        @Html.Raw(Model.DescriptionTxt)
                     }
-                    @if (Model.ContentTypeID == Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities))
+                    @*@if (Model.ContentTypeID == Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities))
                     {
                         Html.RenderAction("ExceptionalOppertunity", "ContentOuter");
-                    }
+                    }*@
 
                 </div>
                 <!--content container end here-->
@@ -104,19 +104,19 @@
     $("#ankHome").addClass('active');
     </text>
     }
-    else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutKISD) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutKISDMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutKISDSubMenu))
+    else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutUs) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutUsMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutUsSubMenu))
     {
         <text>
-    $("#ankAboutKISD").addClass('active');
+    $("#ankAboutUs").addClass('active');
     </text>
     }
-    else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.School) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolSubMenu))
+    else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContactUs) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContactUsMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContactUsSubMenu))
     {
         <text>
-    $("#ankSchool").addClass('active');
+    $("#ankContactUs").addClass('active');
     </text>
     }
-    else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISD) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISDMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISDSubMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ExceptionalOpportunities))
+    @*else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISD) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISDMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISDSubMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ExceptionalOpportunities))
     {
         <text>
     $("#ankNewToKISD").addClass('active');
@@ -137,14 +137,14 @@
     else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolBoard) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolBoardMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolBoardSubMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolBoard))
     {
         <text>
-    $("#ankSchoolBoard").addClass('active');
+    $("#ankContactUsBoard").addClass('active');
     </text>
     }
     else if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Employment) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.EmploymentMenu) || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.EmploymentSubMenu))
     {
         <text>
-    $("#ankEmployment").addClass('active');
+    $("#ankSyllabus").addClass('active');
         </text>
-    }
+    }*@
 
 </script>

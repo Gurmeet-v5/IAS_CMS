@@ -40,7 +40,7 @@ namespace KISD.Areas.Admin.Models
             Masters = 3,
             Users = 4,
             Home = 5,
-            AboutKISD = 6,
+            AboutUs = 6,
             School = 7,
             NewToKISD = 8,
             Departments = 9,
@@ -54,7 +54,12 @@ namespace KISD.Areas.Admin.Models
             GoogleAnalytic = 17,
             FlyPages = 18,
             RightSection = 19,
-            ListingParameters = 20
+            ListingParameters = 20,
+            ContactUs = 21,
+            Syllabus = 22,
+            DailyNews = 23,
+            Video = 24,
+            Downloads = 25
         }
 
         public const int _pageSize = 10;
@@ -147,7 +152,7 @@ namespace KISD.Areas.Admin.Models
                     File.Delete(path.Trim());
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
@@ -364,13 +369,13 @@ namespace KISD.Areas.Admin.Models
         /// <returns></returns>
         public static string ReturnValidPath(string path)
         {
-            if (path.ToLower().Contains("http://kisd.centextechdemo3.com/kisd/"))
+            if (path.ToLower().Contains("http://KISD.centextechdemo3.com/KISD/"))
             {
-                path = path.Replace("http://kisd.centextechdemo3.com/kisd/", "http://kisd.centextechdemo3.com/");
+                path = path.Replace("http://KISD.centextechdemo3.com/KISD/", "http://KISD.centextechdemo3.com/");
             }
-            if (path.ToLower().Contains("http://kisd.centextechdemo3.com/kisd"))
+            if (path.ToLower().Contains("http://KISD.centextechdemo3.com/KISD"))
             {
-                path = path.Replace("http://kisd.centextechdemo3.com/kisd", "http://kisd.centextechdemo3.com");
+                path = path.Replace("http://KISD.centextechdemo3.com/KISD", "http://KISD.centextechdemo3.com");
             }
             return path;
         }

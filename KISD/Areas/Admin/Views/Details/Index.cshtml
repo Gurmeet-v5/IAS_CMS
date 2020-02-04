@@ -102,7 +102,7 @@
                     </li>
 
                     <li>
-                        <a href='@Url.Action("Index", "NewsEvent", new {mt = EncryptDecrypt.Encrypt(Convert.ToInt32(GalleryListingService.TypeMaster.News).ToString()), Column = "EventCreateDate", Direction = "Descending" })' id="ankNews">
+                        <a href='@Url.Action("Index", "NewsEvent", new {mt = EncryptDecrypt.Encrypt(Convert.ToInt32(GalleryListingService.TypeMaster.News).ToString()), Column = "EventCreateDate", Direction = "Descending" })' id="ankDailyNews">
                             <img class="icons-list-img" src="~/scripts/Admin/images/news-icon.png">
                             News
                         </a>
@@ -213,7 +213,7 @@
                     </li>
                 }
 
-                @if (ID == Convert.ToInt32(ModuleTypeAlias.AboutKISD).ToString())
+                @if (ID == Convert.ToInt32(ModuleTypeAlias.AboutUs).ToString())
                 {
                     <li>
                         <a href='@Url.Action("Create", "Content", new {ct = EncryptDecrypt.Encrypt(Convert.ToInt32(ContentTypeAlias.AboutKISD).ToString())})' id="ankBannerImages1">
@@ -454,10 +454,10 @@
         $("#ankHome").addClass('select');
     }
     else if (mid == "6") {
-        $("#ankAboutKISD").addClass('select');
+        $("#ankAboutUs").addClass('select');
     }
     else if (mid == "7") {
-        $("#ankSchool").addClass('select');
+        $("#ankContactUs").addClass('select');
     }
     else if (mid == "8") {
         $("#ankNewToKISD").addClass('select');
@@ -469,10 +469,10 @@
         $("#ankParentStudents").addClass('select');
     }
     else if (mid == "11") {
-        $("#ankSchoolBoard").addClass('select');
+        $("#ankContactUsBoard").addClass('select');
     }
     else if (mid == "12") {
-        $("#ankEmployment").addClass('select');
+        $("#ankSyllabus").addClass('select');
     }
     else if (mid == "13") {
         $("#ankReports").addClass('select');

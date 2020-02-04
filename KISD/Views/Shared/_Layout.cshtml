@@ -4,8 +4,8 @@
           (":" + HttpContext.Current.Request.Url.Port.ToString()) : "");
 
     db_KISDEntities objContext = new db_KISDEntities();
-    var ContentTypeID = Convert.ToInt32(ContetntTypeAlias.GoogleAnalytics);
-    var GoogleAnalyticsCode = objContext.Contents.Where(x => x.ContentTypeID == ContentTypeID).Select(x => x.DescriptionTxt).FirstOrDefault();
+    //var ContentTypeID = Convert.ToInt32(ContetntTypeAlias.GoogleAnalytics);
+   // var GoogleAnalyticsCode = objContext.Contents.Where(x => x.ContentTypeID == ContentTypeID).Select(x => x.DescriptionTxt).FirstOrDefault();
 }
 
 <!DOCTYPE html>
@@ -34,10 +34,10 @@
     <script src="@AppPath/scripts/js/owl.carousel.js"></script>
     <script src="@AppPath/scripts/js/custom.js"></script>
 
-    @if (!string.IsNullOrEmpty(GoogleAnalyticsCode))
+    @*@if (!string.IsNullOrEmpty(GoogleAnalyticsCode))
     {
         @Html.Raw(GoogleAnalyticsCode)
-    }
+    }*@
 </head>
 <body>
     <div id="pre-div">

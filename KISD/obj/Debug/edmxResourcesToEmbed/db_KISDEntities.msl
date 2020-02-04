@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="db_KISDModelStoreContainer" CdmEntityContainer="db_KISDEntities">
+  <EntityContainerMapping StorageEntityContainer="db_RanbirIASCircleModelStoreContainer" CdmEntityContainer="db_RanbirIASCircleEntities">
     <EntitySetMapping Name="Announcements">
-      <EntityTypeMapping TypeName="db_KISDModel.Announcement">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Announcement">
         <MappingFragment StoreEntitySet="Announcement">
           <ScalarProperty Name="AnnouncementID" ColumnName="AnnouncementID" />
           <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
@@ -26,7 +26,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="BoardOfMembers">
-      <EntityTypeMapping TypeName="db_KISDModel.BoardOfMember">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.BoardOfMember">
         <MappingFragment StoreEntitySet="BoardOfMember">
           <ScalarProperty Name="BoardMemberID" ColumnName="BoardMemberID" />
           <ScalarProperty Name="ImageURLTxt" ColumnName="ImageURLTxt" />
@@ -55,7 +55,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Contents">
-      <EntityTypeMapping TypeName="db_KISDModel.Content">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Content">
         <MappingFragment StoreEntitySet="Content">
           <ScalarProperty Name="ContentID" ColumnName="ContentID" />
           <ScalarProperty Name="ParentID" ColumnName="ParentID" />
@@ -91,7 +91,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ContentTypes">
-      <EntityTypeMapping TypeName="db_KISDModel.ContentType">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.ContentType">
         <MappingFragment StoreEntitySet="ContentType">
           <ScalarProperty Name="ContentTypeID" ColumnName="ContentTypeID" />
           <ScalarProperty Name="ContentTypeNameTxt" ColumnName="ContentTypeNameTxt" />
@@ -100,7 +100,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Departments">
-      <EntityTypeMapping TypeName="db_KISDModel.Department">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Department">
         <MappingFragment StoreEntitySet="Department">
           <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
           <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
@@ -129,7 +129,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="DepartmentStaffs">
-      <EntityTypeMapping TypeName="db_KISDModel.DepartmentStaff">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.DepartmentStaff">
         <MappingFragment StoreEntitySet="DepartmentStaff">
           <ScalarProperty Name="DeptStaffID" ColumnName="DeptStaffID" />
           <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
@@ -141,7 +141,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Emails">
-      <EntityTypeMapping TypeName="db_KISDModel.Email">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Email">
         <MappingFragment StoreEntitySet="Email">
           <ScalarProperty Name="EmailID" ColumnName="EmailID" />
           <ScalarProperty Name="EmailTxt" ColumnName="EmailTxt" />
@@ -155,7 +155,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="EmailTypes">
-      <EntityTypeMapping TypeName="db_KISDModel.EmailType">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.EmailType">
         <MappingFragment StoreEntitySet="EmailType">
           <ScalarProperty Name="EmailTypeID" ColumnName="EmailTypeID" />
           <ScalarProperty Name="EmailTypeNameTxt" ColumnName="EmailTypeNameTxt" />
@@ -163,7 +163,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ExceptionOpportunities">
-      <EntityTypeMapping TypeName="db_KISDModel.ExceptionOpportunity">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.ExceptionOpportunity">
         <MappingFragment StoreEntitySet="ExceptionOpportunity">
           <ScalarProperty Name="ExOpportunityID" ColumnName="ExOpportunityID" />
           <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
@@ -193,7 +193,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="FormEmails">
-      <EntityTypeMapping TypeName="db_KISDModel.FormEmail">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.FormEmail">
         <MappingFragment StoreEntitySet="FormEmail">
           <ScalarProperty Name="FormEmailID" ColumnName="FormEmailID" />
           <ScalarProperty Name="EmailID" ColumnName="EmailID" />
@@ -203,7 +203,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="GalleryListings">
-      <EntityTypeMapping TypeName="db_KISDModel.GalleryListing">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.GalleryListing">
         <MappingFragment StoreEntitySet="GalleryListing">
           <ScalarProperty Name="ListingID" ColumnName="ListingID" />
           <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
@@ -236,7 +236,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Images">
-      <EntityTypeMapping TypeName="db_KISDModel.Image">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Image">
         <MappingFragment StoreEntitySet="Images">
           <ScalarProperty Name="ImageID" ColumnName="ImageID" />
           <ScalarProperty Name="ImageTypeID" ColumnName="ImageTypeID" />
@@ -260,7 +260,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ImageTypes">
-      <EntityTypeMapping TypeName="db_KISDModel.ImageType">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.ImageType">
         <MappingFragment StoreEntitySet="ImageType">
           <ScalarProperty Name="ImageTypeID" ColumnName="ImageTypeID" />
           <ScalarProperty Name="ImageTypeNameTxt" ColumnName="ImageTypeNameTxt" />
@@ -268,7 +268,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="ListingParameters">
-      <EntityTypeMapping TypeName="db_KISDModel.ListingParameter">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.ListingParameter">
         <MappingFragment StoreEntitySet="ListingParameters">
           <ScalarProperty Name="ListingParameterID" ColumnName="ListingParameterID" />
           <ScalarProperty Name="ListingParameterTxt" ColumnName="ListingParameterTxt" />
@@ -277,7 +277,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="NewsEvents">
-      <EntityTypeMapping TypeName="db_KISDModel.NewsEvent">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.NewsEvent">
         <MappingFragment StoreEntitySet="NewsEvent">
           <ScalarProperty Name="NewsEventID" ColumnName="NewsEventID" />
           <ScalarProperty Name="TitleTxt" ColumnName="TitleTxt" />
@@ -329,7 +329,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="RightSections">
-      <EntityTypeMapping TypeName="db_KISDModel.RightSection">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.RightSection">
         <MappingFragment StoreEntitySet="RightSection">
           <ScalarProperty Name="RightSectionID" ColumnName="RightSectionID" />
           <ScalarProperty Name="IsParentTitleInd" ColumnName="IsParentTitleInd" />
@@ -364,7 +364,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Roles">
-      <EntityTypeMapping TypeName="db_KISDModel.Role">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Role">
         <MappingFragment StoreEntitySet="Roles">
           <ScalarProperty Name="RoleID" ColumnName="RoleID" />
           <ScalarProperty Name="RoleNameTxt" ColumnName="RoleNameTxt" />
@@ -374,7 +374,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Schools">
-      <EntityTypeMapping TypeName="db_KISDModel.School">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.School">
         <MappingFragment StoreEntitySet="School">
           <ScalarProperty Name="SchoolID" ColumnName="SchoolID" />
           <ScalarProperty Name="SchoolCategoryID" ColumnName="SchoolCategoryID" />
@@ -395,7 +395,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="SocialSharingSettings">
-      <EntityTypeMapping TypeName="db_KISDModel.SocialSharingSetting">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.SocialSharingSetting">
         <MappingFragment StoreEntitySet="SocialSharingSetting">
           <ScalarProperty Name="SocialSharingID" ColumnName="SocialSharingID" />
           <ScalarProperty Name="IsFacebookSharingInd" ColumnName="IsFacebookSharingInd" />
@@ -409,7 +409,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Staffs">
-      <EntityTypeMapping TypeName="db_KISDModel.Staff">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.Staff">
         <MappingFragment StoreEntitySet="Staff">
           <ScalarProperty Name="StaffID" ColumnName="StaffID" />
           <ScalarProperty Name="FirstNameTxt" ColumnName="FirstNameTxt" />
@@ -431,7 +431,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="SystemAccessLogs">
-      <EntityTypeMapping TypeName="db_KISDModel.SystemAccessLog">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.SystemAccessLog">
         <MappingFragment StoreEntitySet="SystemAccessLog">
           <ScalarProperty Name="SystemAccessLogID" ColumnName="SystemAccessLogID" />
           <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
@@ -443,7 +443,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="SystemChangeLogs">
-      <EntityTypeMapping TypeName="db_KISDModel.SystemChangeLog">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.SystemChangeLog">
         <MappingFragment StoreEntitySet="SystemChangeLog">
           <ScalarProperty Name="ChangeLogID" ColumnName="ChangeLogID" />
           <ScalarProperty Name="NameTxt" ColumnName="NameTxt" />
@@ -457,7 +457,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="SystemChangeLogDetails">
-      <EntityTypeMapping TypeName="db_KISDModel.SystemChangeLogDetail">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.SystemChangeLogDetail">
         <MappingFragment StoreEntitySet="SystemChangeLogDetail">
           <ScalarProperty Name="ChangeLogDetailID" ColumnName="ChangeLogDetailID" />
           <ScalarProperty Name="ChangeLogID" ColumnName="ChangeLogID" />
@@ -468,7 +468,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="TypeMasters">
-      <EntityTypeMapping TypeName="db_KISDModel.TypeMaster">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.TypeMaster">
         <MappingFragment StoreEntitySet="TypeMaster">
           <ScalarProperty Name="TypeMasterID" ColumnName="TypeMasterID" />
           <ScalarProperty Name="TypeMasterName" ColumnName="TypeMasterName" />
@@ -476,7 +476,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="UserDepartments">
-      <EntityTypeMapping TypeName="db_KISDModel.UserDepartment">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.UserDepartment">
         <MappingFragment StoreEntitySet="UserDepartment">
           <ScalarProperty Name="UserDepartmentID" ColumnName="UserDepartmentID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -486,7 +486,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="UserPermissions">
-      <EntityTypeMapping TypeName="db_KISDModel.UserPermission">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.UserPermission">
         <MappingFragment StoreEntitySet="UserPermission">
           <ScalarProperty Name="UserPermissionID" ColumnName="UserPermissionID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -501,7 +501,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="UserRoles">
-      <EntityTypeMapping TypeName="db_KISDModel.UserRole">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.UserRole">
         <MappingFragment StoreEntitySet="UserRoles">
           <ScalarProperty Name="UserRoleID" ColumnName="UserRoleID" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
@@ -510,7 +510,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="db_KISDModel.User">
+      <EntityTypeMapping TypeName="db_RanbirIASCircleModel.User">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="UserID" ColumnName="UserID" />
           <ScalarProperty Name="FirstNameTxt" ColumnName="FirstNameTxt" />
@@ -528,9 +528,9 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="pr_search_all_paged" FunctionName="db_KISDModel.Store.pr_search_all_paged">
+    <FunctionImportMapping FunctionImportName="pr_search_all_paged" FunctionName="db_RanbirIASCircleModel.Store.pr_search_all_paged">
       <ResultMapping>
-        <ComplexTypeMapping TypeName="db_KISDModel.pr_search_all_paged_Result">
+        <ComplexTypeMapping TypeName="db_RanbirIASCircleModel.pr_search_all_paged_Result">
           <ScalarProperty Name="MenuTitleTxt" ColumnName="MenuTitleTxt" />
           <ScalarProperty Name="URLTxt" ColumnName="URLTxt" />
           <ScalarProperty Name="Description" ColumnName="Description" />

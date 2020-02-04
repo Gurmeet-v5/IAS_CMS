@@ -78,7 +78,7 @@ namespace KISD.Areas.Admin.Controllers
                 pid = "0";
             }
             TempData["CroppedImage"] = null;
-            var NewsEventType = mt != null ? Convert.ToInt64(mt) : Convert.ToInt64(NewsEventTypeAlias.News);
+            var NewsEventType = mt != null ? Convert.ToInt64(mt) : Convert.ToInt64(NewsEventTypeAlias.DailyNews);
             ViewBag.TypeMasterID = NewsEventType;
 
             #region Ajax Call
@@ -164,7 +164,7 @@ namespace KISD.Areas.Admin.Controllers
                                 NewsEvent.ShowOnHomeInd = objAjaxRequest.hfvalue == "1";
                                 var TypeMasterID= Convert.ToInt64(mt);
                                 var showhomemax = objContext.NewsEvents.Where(m => m.TypeMasterID == TypeMasterID && (m.IsDeletedInd == null || m.IsDeletedInd == false) && m.StatusInd == true && m.ShowOnHomeInd == true).ToList();
-                                if (showhomemax.Count >= 4 && NewsEvent.ShowOnHomeInd.Value && (TypeMasterID== Convert.ToInt32(NewsEventTypeAlias.News) || TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.Events)))
+                                if (showhomemax.Count >= 4 && NewsEvent.ShowOnHomeInd.Value && (TypeMasterID== Convert.ToInt32(NewsEventTypeAlias.DailyNews) || TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.Events)))
                                 {
                                     NewsEvent.ShowOnHomeInd = false;
                                     //TempData["Message"] = "Only 4 " + _service.GetNewsEventType(NewsEventType) + " can be shown at home.";
@@ -546,12 +546,12 @@ namespace KISD.Areas.Admin.Controllers
                     else
                         ShowonHomeInd = objContext.NewsEvents.Where(x => x.ShowOnHomeInd == true && x.TypeMasterID == model.TypeMasterID && x.StatusInd == true && x.NewsEventID != model.NewsEventID && (x.IsDeletedInd == false || x.IsDeletedInd == null)).Count();
                     ViewBag.ismorethanthree = ShowonHomeInd;
-                    if (ShowonHomeInd > 4 && (model.ShowOnHomeInd == true || fm["ShowonHomeInd"] == "True") && model.NewsEventID==0 && (model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.Events) || model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.News)))
+                    if (ShowonHomeInd > 4 && (model.ShowOnHomeInd == true || fm["ShowonHomeInd"] == "True") && model.NewsEventID==0 && (model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.Events) || model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.DailyNews)))
                     {
                         TempData["Message"] = "More than four "+ _service.GetNewsEventType(model.TypeMasterID.Value) + " cannot be set as Active on Home.";
                         return View(model);
                     }
-                    else if(ShowonHomeInd >= 4 && (model.ShowOnHomeInd == true || fm["ShowonHomeInd"] == "True") && model.NewsEventID > 0 && (model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.Events) || model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.News)))
+                    else if(ShowonHomeInd >= 4 && (model.ShowOnHomeInd == true || fm["ShowonHomeInd"] == "True") && model.NewsEventID > 0 && (model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.Events) || model.TypeMasterID == Convert.ToInt32(NewsEventTypeAlias.DailyNews)))
                     {
                         TempData["Message"] = "More than four " + _service.GetNewsEventType(model.TypeMasterID.Value) + " cannot be set as Active on Home.";
                         return View(model);

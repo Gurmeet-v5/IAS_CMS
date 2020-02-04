@@ -18,7 +18,7 @@ namespace KISD.Areas.Admin.Controllers
             {
                 ViewBag.DashboardTitle = "Email Dashboard";
             }
-            else if (ID == Convert.ToInt32(ModuleTypeAlias.AboutKISD).ToString())
+            else if (ID == Convert.ToInt32(ModuleTypeAlias.AboutUs).ToString())
             {
                 ViewBag.DashboardTitle = "About KISD Dashboard";
             }

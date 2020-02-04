@@ -36,15 +36,13 @@ namespace KISD.Areas.Admin.Controllers
 
                 #region Check Tab is Accessible or Not
                 int TabType = 0;
-                if (ContentTypeID == 1 || ContentTypeID == 2 || ContentTypeID == 3) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
-                if (ContentTypeID == 4) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutKISD); }
-                if (ContentTypeID == 5) { TabType = Convert.ToInt32(ModuleTypeAlias.School); }
-                if (ContentTypeID == 6) { TabType = Convert.ToInt32(ModuleTypeAlias.NewToKISD); }
-                if (ContentTypeID == 7 || ContentTypeID == 35) { TabType = Convert.ToInt32(ModuleTypeAlias.ParentStudents); }
-                if (ContentTypeID == 8) { TabType = Convert.ToInt32(ModuleTypeAlias.Departments); }
-                if (ContentTypeID == 9 || ContentTypeID == 34) { TabType = Convert.ToInt32(ModuleTypeAlias.SchoolBoard); }
-                if (ContentTypeID == 10) { TabType = Convert.ToInt32(ModuleTypeAlias.Employment); }
-                if (ContentTypeID == 11) { TabType = Convert.ToInt32(ModuleTypeAlias.GoogleAnalytic); }
+                if (ContentTypeID == 1 || ContentTypeID == 22 || ContentTypeID == 23 || ContentTypeID == 26) { TabType = Convert.ToInt32(ModuleTypeAlias.Home); }
+                if (ContentTypeID == 13) { TabType = Convert.ToInt32(ModuleTypeAlias.AboutUs); }
+                if (ContentTypeID == 19) { TabType = Convert.ToInt32(ModuleTypeAlias.ContactUs); }
+                if (ContentTypeID == 4) { TabType = Convert.ToInt32(ModuleTypeAlias.Syllabus); }
+                if (ContentTypeID == 7) { TabType = Convert.ToInt32(ModuleTypeAlias.DailyNews); }
+                if (ContentTypeID == 16) { TabType = Convert.ToInt32(ModuleTypeAlias.Video); }
+                if (ContentTypeID == 10) { TabType = Convert.ToInt32(ModuleTypeAlias.Downloads); }
 
                 var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
                 var RoleID = objContext.UserRoles.Where(x => x.UserID == userId).Select(x => x.RoleID).FirstOrDefault();
@@ -136,8 +134,7 @@ namespace KISD.Areas.Admin.Controllers
         {
             return ((Convert.ToInt32(ContentTypeAlias.Header) == contenttype)
                      || (Convert.ToInt32(ContentTypeAlias.Footer) == contenttype)
-                     || (Convert.ToInt32(ContentTypeAlias.GoogleAnalytics) == contenttype)
-                     || (Convert.ToInt32(ContentTypeAlias.HomeRightSection) == contenttype)
+                     || (Convert.ToInt32(ContentTypeAlias.HomePageRightSection) == contenttype)
                     );
         }
 

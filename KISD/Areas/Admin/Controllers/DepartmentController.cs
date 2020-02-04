@@ -1109,8 +1109,8 @@ namespace KISD.Areas.Admin.Controllers
             {
                 #region Check Tab is Accessible or Not
                 int TabType = 0;
-                if (DepartmentContenttypeId == 41) { TabType = Convert.ToInt32(ContentTypeAlias.DepartmentEvents); }
-                if (DepartmentContenttypeId == 42) { TabType = Convert.ToInt32(ContentTypeAlias.DepartmentStaff); }
+                //if (DepartmentContenttypeId == 41) { TabType = Convert.ToInt32(ContentTypeAlias.DepartmentEvents); }
+                //if (DepartmentContenttypeId == 42) { TabType = Convert.ToInt32(ContentTypeAlias.DepartmentStaff); }
 
                 var userId = objContext.Users.Where(x => x.UserNameTxt == User.Identity.Name).Select(x => x.UserID).FirstOrDefault();
                 var RoleID = objContext.UserRoles.Where(x => x.UserID == userId).Select(x => x.RoleID).FirstOrDefault();

@@ -305,7 +305,7 @@ footer {
 }
 
 .submit {
-    background: #004990;
+    background: #1F3442;
     color: #fff;
     font-size: 13px;
     cursor: pointer;
@@ -316,7 +316,7 @@ footer {
 }
 
     .submit:hover {
-        background: rgba(0, 78, 144, 0.81);
+        background: #2d4656;
     }
 
 .cancel {
@@ -562,7 +562,7 @@ footer {
 /************ Login Page ************/
 .login {
     padding-top: 4%;
-    background: #028aaa;
+    background: #1F3442;
 }
 
     .login .logo {
@@ -574,11 +574,11 @@ footer {
 
     .login .box {
         margin: 0 auto;
-        width:340px;
+        width: 340px;
         background: #fff;
         overflow: hidden;
         border: 1px solid #ddd;
-        border-top: 5px solid #dc0816;
+        border-top: 5px solid #d6d1d1;
     }
 
     .login .row {

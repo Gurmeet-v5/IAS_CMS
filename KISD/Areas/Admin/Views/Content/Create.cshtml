@@ -55,41 +55,27 @@
             </div>
             @if (Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Home)
                                                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContactUs)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.GoogleAnalytics)
                                                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Footer)
                                                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Header)
                                                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ContactUs)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutKISD)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.School)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.NewToKISD)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ParentStudents)
+                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.AboutUs)
                                                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Search)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Departments)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.SchoolBoard)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Employment)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.HomeRightSection)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.ExceptionalOpportunities)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.BoardMembers)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Staff)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.News)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Events)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Videos)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.BoardSchedule)
-                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.PersonalDirectory)
+                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Syllabus)
+                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.HomePageRightSection)
+                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.DailyNews)
+                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Downloads)
+                                                      || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.Video)
                                                       || Model.ContentTypeID == Convert.ToInt64(ContentTypeAlias.GenericError)
                                                       )
             {
                 if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Footer)
                        && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Header)
                        && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Search)
-                       && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GoogleAnalytics)
-                       && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomeRightSection)
+                       && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomePageRightSection)
                        && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GenericError)
                   )
                 {
-                    if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Videos)
-                        && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.BoardSchedule) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.BoardMembers)
-                        && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Staff) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.PersonalDirectory))
+                    if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Video))
                     {
                         <div class="row">
                             <div class="col20">
@@ -110,9 +96,7 @@
                         </div>
 
                                         }
-                                        if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Videos) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.BoardSchedule)
-                                            && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.BoardMembers) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Staff)
-                                            && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.PersonalDirectory))
+                                        if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Video) )
                                         {
                                          <div class="row">
                                             <div class="col20">
@@ -127,7 +111,7 @@
                                             </div>
                                         </div>
                                         }
-                                        if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Videos))
+                                        if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Video))
                                         {
                                             <div class="row tblexternalLink">
                                                 <div class="col20">
@@ -169,8 +153,7 @@
                                                             if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Footer)
                                                                    && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home)
                                                                    && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Header)
-                                                                   && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GoogleAnalytics)
-                                                                   && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomeRightSection)
+                                                                   && Model.ContentTypeID != Convert.ToInt64                (ContentTypeAlias.HomePageRightSection)
                                                               //&& Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.FoundationSideDescription)
                                                               )
                                                             {
@@ -203,8 +186,7 @@
                                             </div>
                                                             }
 
-                                                            if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Search) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.School)
-                                                                && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.PersonalDirectory)
+                                                            if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Search) && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.ContactUs)
                                                                 && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GenericError)
                                                                 )
                                                             {
@@ -235,8 +217,7 @@
                                             }
                                             if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Header)
                                              && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home)
-                                             && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GoogleAnalytics)
-                                             && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomeRightSection)
+                                             && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomePageRightSection)
                                              //&& Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GenericError)
                                              )
                                             {
@@ -396,8 +377,7 @@
                                                                 }
                                                                 if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Footer)
                                                                     && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Header)
-                                                                    && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.GoogleAnalytics)
-                                                                    && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomeRightSection)
+                                                                    && Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.HomePageRightSection)
                                                                     )
                                                                 {
                                                                     if (Model.ContentTypeID != Convert.ToInt64(ContentTypeAlias.Home)
@@ -523,91 +503,41 @@
         $("#ankHome").addClass('select');
         $("#ankHomeContent").addClass('select');
     }
-    else if (contentType == '2') {
+    else if (contentType == '22') {
         $("#ankHome").addClass('select');
         $("#ankHeader").addClass('select');
     }
-    else if (contentType == '3') {
+    else if (contentType == '23') {
         $("#ankHome").addClass('select');
         $("#ankFooter").addClass('select');
     }
+    else if (contentType == '13') {
+        $("#ankAboutUs").addClass('select');
+        $("#ankAboutUsContent").addClass('select');
+    }
+    else if (contentType == '19') {
+        $("#ankContactUs").addClass('select');
+        $("#ankContactUsContent").addClass('select');
+    }
     else if (contentType == '4') {
-        $("#ankAboutKISD").addClass('select');
-        $("#ankAboutKISDContent").addClass('select');
+        $("#ankSyllabus").addClass('select');
+        $("#ankSyllabusContent").addClass('select');
     }
-    else if (contentType == '5') {
-        $("#ankSchool").addClass('select');
-        $("#ankSchoolContent").addClass('select');
-    }
-    else if (contentType == '6') {
-        $("#ankNewToKISD").addClass('select');
-        $("#ankNewToKISDContent").addClass('select');
-    }
-    else if (contentType == '7') {
-        $("#ankParentStudents").addClass('select');
-        $("#ankParentStudentsContent").addClass('select');
-    }
-    else if (contentType == '8') {
-        $("#ankDepartments").addClass('select');
-        $("#ankDepartmentsContent").addClass('select');
-    }
-    else if (contentType == '9') {
-        $("#ankSchoolBoard").addClass('select');
-        $("#ankSchoolBoardContent").addClass('select');
-    }
-    else if (contentType == '10') {
-        $("#ankEmployment").addClass('select');
-        $("#ankEmploymentContent").addClass('select');
-    }
-    else if (contentType == '11') {
-        $("#ankGoogleAnalytics").addClass('select');
-    }
-    else if (contentType == '30') {
+    else if (contentType == '24') {
         $("#ankSerach").addClass('select');
     }
-    else if (contentType == '32') {
-        $("#ankHome").addClass('select');
-        $("#ankHomeRightSection").addClass('select');
+    else if (contentType == '7') {
+        $("#ankDailyNews").addClass('select');
+        $("#ankDailyNewsContent").addClass('select');
     }
-    else if (contentType == '33') {
-        $("#ankNewToKISD").addClass('select');
-        $("#ankExceptionalOpportunities").addClass('select');
-        $("#ankExceptionalOpportunitiesContent").addClass('select');
+    else if (contentType == '10') {
+        $("#ankDownloads").addClass('select');
+        $("#ankDownloadsContent").addClass('select');
     }
-    else if (contentType == '34') {
-        $("#ankSchoolBoard").addClass('select');
-        $("#ankBoardMembers").addClass('select');
-        $("#ankBoardMembersContent").addClass('select');
-    }
-    else if (contentType == '35') {
-        $("#ankParentStudents").addClass('select');
-        $("#ankStaff").addClass('select');
-        $("#ankStaffContent").addClass('select');
-    }
-    else if (contentType == '36') {
-        $("#ankMasters").addClass('select');
-        $("#ankNews").addClass('select');
-        $("#ankNewsContent").addClass('select');
-    }
-    else if (contentType == '37') {
-        $("#ankMasters").addClass('select');
-        $("#ankEvents").addClass('select');
-        $("#ankEventsContent").addClass('select');
-    }
-    else if (contentType == '40') {
-        $("#ankDepartments").addClass('select');
-        $("#ankPersonalDirectoryContent").addClass('select');
-    }
-    else if (contentType == '43') {
+    else if (contentType == '27') {
         $("#ankGenericError").addClass('select');
     }
-    else if (contentType == '38') {
-        $("#ankSchoolBoard").addClass('select');
-        $("#ankBoardMembers").addClass('select');
-        $("#ankBoardScheduleContent").addClass('select');
-    }
-    else if (contentType == '39') {
-        $("#ankMasters").addClass('select');
+    else if (contentType == '16') {
         $("#ankVideo").addClass('select');
         $("#ankVideosContent").addClass('select');
     }
@@ -629,8 +559,7 @@
             }
         });
     });
-    if (contentType == '@Convert.ToInt32(ContentTypeAlias.Search)' || contentType == '@Convert.ToInt32(ContentTypeAlias.PersonalDirectory)'
-        || contentType == '@Convert.ToInt32(ContentTypeAlias.ExceptionalOpportunities)' || contentType == '@Convert.ToInt32(ContentTypeAlias.BoardMembers)') {
+    if (contentType == '@Convert.ToInt32(ContentTypeAlias.Search)' ) {
         $('#PageTitleTxt').on('change keyup', function () {
             var url = this.value;
             $.ajax({

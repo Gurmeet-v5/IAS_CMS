@@ -72,7 +72,7 @@ namespace KISD.Controllers
 
         public ActionResult News()
         {
-            int TypeMasterID = Convert.ToInt32(TypeMasterAlias.News);
+            int TypeMasterID = Convert.ToInt32(TypeMasterAlias.DailyNews);
             var objWithDates = objContext.NewsEvents.Where(x => x.StatusInd == true
                       && (x.IsDeletedInd == false || x.IsDeletedInd == null) && x.TypeMasterID == TypeMasterID
                       && x.ShowOnHomeInd == true && x.DisplayStartDate.Value <= DateTime.Now
@@ -85,11 +85,11 @@ namespace KISD.Controllers
 
             var obj = objWithDates.Union(objWithoutDates);
 
-            int HomeRightSectionContentType = Convert.ToInt32(ContentTypeAlias.HomeRightSection);
+            int HomeRightSectionContentType = Convert.ToInt32(ContentTypeAlias.HomePageRightSection);
             var data = objContext.Contents.Where(x => x.ContentTypeID == HomeRightSectionContentType).Select(x => x.DescriptionTxt).FirstOrDefault();
             ViewBag.HomeRightSection = data;
 
-            int NewsContentType = Convert.ToInt32(ContentTypeAlias.News);
+            int NewsContentType = Convert.ToInt32(ContentTypeAlias.DailyNews);
             var NewsData = objContext.Contents.Where(x => x.ContentTypeID == NewsContentType).Select(x => x.PageURLTxt).FirstOrDefault();
             ViewBag.NewsURL = NewsData;
 
@@ -113,11 +113,11 @@ namespace KISD.Controllers
 
             var obj = objWithDate.Union(objWithoutDate);
 
-            int NewToKISDContentType = Convert.ToInt32(ContentTypeAlias.NewToKISD);
-            int EventsContentType = Convert.ToInt32(ContentTypeAlias.Events);
+            //int NewToKISDContentType = Convert.ToInt32(ContentTypeAlias.NewToKISD);
+            int DownloadsContentType = Convert.ToInt32(ContentTypeAlias.Downloads);
 
-            ViewBag.MoreEventsURL = objContext.Contents.Where(x => x.ContentTypeID == EventsContentType).Select(x => x.PageURLTxt).FirstOrDefault();
-            ViewBag.NewToKISDURL = objContext.Contents.Where(x => x.ContentTypeID == NewToKISDContentType).Select(x => x.PageURLTxt).FirstOrDefault();
+            ViewBag.MoreEventsURL = objContext.Contents.Where(x => x.ContentTypeID == DownloadsContentType).Select(x => x.PageURLTxt).FirstOrDefault();
+            //ViewBag.NewToKISDURL = objContext.Contents.Where(x => x.ContentTypeID == NewToKISDContentType).Select(x => x.PageURLTxt).FirstOrDefault();
 
             return View(obj);
         }
